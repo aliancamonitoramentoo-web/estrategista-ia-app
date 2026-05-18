@@ -161,7 +161,7 @@ h1 span{color:var(--accent);}
     <div class="card-label">Sobre o negócio</div>
     <div class="form-grid">
       <div class="field"><label>Nome do negócio</label><input type="text" id="biz-name" placeholder="Ex: Barbearia do João"></div>
-      <div class="field"><label>Segmento</label><select id="biz-segment"><option value="">Selecione...</option><option>Barbearia</option><option>Salão de beleza</option><option>Móveis planejados</option><option>Restaurante / Lanchonete</option><option>Moda e vestuário</option><option>Estética e bem-estar</option><option>Construção e reforma</option><option>Tecnologia e serviços digitais</option><option>Educação e cursos</option><option>Saúde e fitness</option><option>Pet shop e veterinário</option><option>Outro</option></select></div>
+      <div class="field"><label>Segmento</label><input type="text" id="biz-segment" placeholder="Ex: Barbearia, Padaria, Loja de roupas..." list="segmentos-list"><datalist id="segmentos-list"><option value="Barbearia"><option value="Salão de beleza"><option value="Móveis planejados"><option value="Restaurante / Lanchonete"><option value="Padaria / Confeitaria"><option value="Moda e vestuário"><option value="Estética e bem-estar"><option value="Construção e reforma"><option value="Tecnologia e serviços digitais"><option value="Educação e cursos"><option value="Saúde e fitness"><option value="Pet shop e veterinário"><option value="Farmácia"><option value="Mercado / Mercearia"><option value="Academia"><option value="Clínica médica / Odontológica"><option value="Transporte e logística"><option value="Agropecuária"><option value="Serviços domésticos"><option value="Fotografia e vídeo"><option value="Advocacia / Contabilidade"><option value="Imobiliária"><option value="Auto peças / Mecânica"><option value="Loja de eletrônicos"><option value="Outra"></datalist></div>
       <div class="field"><label>Cidade / Estado</label><input type="text" id="biz-city" placeholder="Ex: Recife, PE"></div>
       <div class="field"><label>Tempo no mercado</label><select id="biz-time"><option value="">Selecione...</option><option>Menos de 6 meses</option><option>6 meses a 1 ano</option><option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
     </div>
@@ -233,6 +233,7 @@ h1 span{color:var(--accent);}
     <button class="stab" onclick="showSection('vendas',this)">Vendas</button>
     <button class="stab" onclick="showSection('tendencias',this)">Tendências</button>
     <button class="stab" onclick="showSection('publico',this)">Público</button>
+    <button class="stab" onclick="showSection('geografia',this)">Expansão</button>
   </div>
   <div id="sec-tarefas" class="section-content visible"></div>
   <div id="sec-marketing" class="section-content"></div>
@@ -240,6 +241,7 @@ h1 span{color:var(--accent);}
   <div id="sec-vendas" class="section-content"></div>
   <div id="sec-tendencias" class="section-content"></div>
   <div id="sec-publico" class="section-content"></div>
+  <div id="sec-geografia" class="section-content"></div>
 </div>
 
 <!-- TRACKING -->
@@ -286,7 +288,18 @@ async function startGeneration(){
     const resp=await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:'Você é um estrategista especializado em micro e pequenas empresas brasileiras. Responda APENAS em JSON válido, sem markdown.',messages:[{role:'user',content:`Analise este perfil e gere um plano estratégico:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resumo":"2 frases","tarefas":{"semana1":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"semana2":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]},"marketing":{"estrategia_geral":"...","canais":[{"canal":"...","porque":"...","como":"..."}],"conteudo":"...","acao_imediata":"..."},"branding":{"posicionamento":"...","voz":"...","diferenciais":"...","nome_slogan":"..."},"vendas":{"abordagem":"...","tecnicas":["...","...","..."],"fidelizacao":"...","meta_90dias":"..."},"tendencias":{"do_segmento":[{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."}],"referencia_mercado":[{"empresa":"...","aprendizado":"..."},{"empresa":"...","aprendizado":"..."}]},"publico":{"perfil_detalhado":"...","dores":["...","...","..."],"desejos":["...","...","..."],"onde_encontrar":["...","...","..."],"como_comunicar":"..."}}`}]})
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:'Você é um estrategista de negócios sênior especializado em micro e pequenas empresas brasileiras. Você conhece profundamente o mercado de cada cidade e região do Brasil, incluindo cidades vizinhas e potencial de expansão regional e nacional. NUNCA dê respostas genéricas. SEMPRE personalize cada estratégia para o problema específico, cidade, segmento e realidade do empreendedor. Responda APENAS em JSON válido, sem markdown, sem texto fora do JSON.',messages:[{role:'user',content:`Analise este perfil com profundidade e crie um plano estratégico ULTRA PERSONALIZADO e ESPECÍFICO. NUNCA seja genérico. Cada resposta deve ser cirúrgica para a realidade desse empreendedor.
+
+INSTRUÇÕES OBRIGATÓRIAS:
+1. Use a cidade informada para criar estratégias LOCAIS específicas (bairros, pontos de referência, perfil da cidade)
+2. Identifique as cidades vizinhas e região que esse negócio pode alcançar
+3. Se o segmento permite escala nacional (e-commerce, digital, produtos), crie estratégia de expansão nacional
+4. Para cada dificuldade informada, crie uma solução ESPECÍFICA e PRÁTICA, não genérica
+5. As tarefas devem ser ações concretas que o empreendedor pode fazer HOJE ou ESSA SEMANA
+6. Pesquise e cite exemplos reais de empresas do mesmo segmento que funcionam bem nessa região do Brasil
+7. Considere o ticket médio e faturamento para sugerir investimentos realistas
+
+Analise este perfil:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resumo":"diagnóstico específico de 2 frases sobre a situação real desse negócio nessa cidade","geografia":{"cidade_foco":"estratégia específica para a cidade informada com pontos de referência locais","cidades_vizinhas":["cidade vizinha 1 com potencial","cidade vizinha 2","cidade vizinha 3"],"raio_atuacao":"como expandir o raio de atuação local","escala_nacional":"se aplicável ao segmento, como escalar nacionalmente"},"tarefas":{"semana1":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"semana2":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]},"marketing":{"estrategia_geral":"...","canais":[{"canal":"...","porque":"...","como":"..."}],"conteudo":"...","acao_imediata":"..."},"branding":{"posicionamento":"...","voz":"...","diferenciais":"...","nome_slogan":"..."},"vendas":{"abordagem":"...","tecnicas":["...","...","..."],"fidelizacao":"...","meta_90dias":"..."},"tendencias":{"do_segmento":[{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."}],"referencia_mercado":[{"empresa":"...","aprendizado":"..."},{"empresa":"...","aprendizado":"..."}]},"publico":{"perfil_detalhado":"...","dores":["...","...","..."],"desejos":["...","...","..."],"onde_encontrar":["...","...","..."],"como_comunicar":"..."}}`}]})
     });
     const raw=await resp.json();
     const text=raw.content?.map(c=>c.text||'').join('');
@@ -321,6 +334,15 @@ function renderResult(data,name){
   const dores=(pb.dores||[]).map(d=>`<li>${d}</li>`).join('');
   const desejos=(pb.desejos||[]).map(d=>`<li>${d}</li>`).join('');
   const onde=(pb.onde_encontrar||[]).map(o=>`<span class="insight-pill">${o}</span>`).join('');
+  // GEOGRAFIA
+  const geo=data.geografia||{};
+  const vizinhas=(geo.cidades_vizinhas||[]).map(c=>`<span class="insight-pill">${c}</span>`).join('');
+  document.getElementById('sec-geografia').innerHTML=
+    resultBlock('Estratégia local','Sua cidade','badge-green',`<p>${geo.cidade_foco||''}</p>`)+
+    resultBlock('Cidades vizinhas','Expansão regional','badge-teal',`<p style="margin-bottom:10px">Mercados que você pode alcançar:</p>${vizinhas}`)+
+    resultBlock('Como expandir o raio','Crescimento local','badge-orange',`<p>${geo.raio_atuacao||''}</p>`)+
+    resultBlock('Escala nacional','Se aplicável','badge-purple',`<p>${geo.escala_nacional||''}</p>`);
+  
   document.getElementById('sec-publico').innerHTML=resultBlock('Cliente ideal','Perfil','badge-green',`<p>${pb.perfil_detalhado||''}</p>`)+resultBlock('Dores e desejos','O que move','badge-teal',`<strong style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">DORES</strong><ul>${dores}</ul><strong style="font-size:11px;color:var(--muted);display:block;margin:12px 0 6px;">DESEJOS</strong><ul>${desejos}</ul>`)+resultBlock('Onde encontrar','Canais','badge-orange',onde)+resultBlock('Como comunicar','Tom certo','badge-purple',`<p>${pb.como_comunicar||''}</p>`);
 }
 
