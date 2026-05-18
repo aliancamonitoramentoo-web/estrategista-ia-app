@@ -127,6 +127,40 @@ h1 span{color:var(--accent);}
 .empty-state{text-align:center;padding:4rem 1rem;color:var(--muted);}
 .empty-state strong{color:var(--text);display:block;font-family:'Syne',sans-serif;font-size:16px;margin-bottom:.5rem;}
 @media(max-width:500px){.form-grid{grid-template-columns:1fr;}h1{font-size:24px;}}
+
+/* PROGRESSO SEMANAL */
+.weekly-progress{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
+.weekly-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.weekly-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.weekly-weeks{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;padding-bottom:4px;}
+.week-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.week-btn.active{background:var(--accent);border-color:var(--accent);color:#0e0e10;}
+.week-btn.completed{background:rgba(96,212,200,0.12);border-color:var(--accent2);color:var(--accent2);}
+.progress-ring{display:flex;align-items:center;gap:12px;}
+.ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);}
+.ring-info{flex:1;}
+.ring-label{font-size:12px;color:var(--muted);margin-bottom:2px;}
+.ring-count{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+
+/* CONQUISTAS */
+.achievement{display:inline-flex;align-items:center;gap:6px;background:rgba(200,240,96,0.1);border:1px solid rgba(200,240,96,0.2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-family:'Syne',sans-serif;font-weight:600;margin:3px;}
+
+/* NOVA SEMANA */
+.new-week-card{background:linear-gradient(135deg,rgba(200,240,96,0.1),rgba(96,212,200,0.08));border:1px solid rgba(200,240,96,0.2);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;text-align:center;}
+.new-week-card h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:.4rem;}
+.new-week-card p{font-size:13px;color:var(--muted);margin-bottom:1rem;}
+
+/* MOBILE MELHORADO */
+@media(max-width:768px){
+  .nav{padding:.6rem 1rem;}
+  .nav-logo span{display:none;}
+  .result-actions{gap:6px;}
+  .result-actions .btn{font-size:11px;padding:8px 12px;}
+  .section-tabs{gap:6px;}
+  .stab{padding:6px 10px;font-size:10px;}
+}
 </style>
 </head>
 <body>
@@ -206,11 +240,11 @@ h1 span{color:var(--accent);}
     <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:.4rem;">Analisando seu negócio...</p>
     <p style="font-size:13px;color:var(--muted);">Isso leva alguns segundos</p>
     <ul class="loading-steps">
-      <li id="ls1"><div class="ls-dot"></div>Lendo seu perfil</li>
-      <li id="ls2"><div class="ls-dot"></div>Buscando tendências do segmento</li>
-      <li id="ls3"><div class="ls-dot"></div>Analisando empresas de referência</li>
-      <li id="ls4"><div class="ls-dot"></div>Cruzando dados e oportunidades</li>
-      <li id="ls5"><div class="ls-dot"></div>Gerando sua estratégia</li>
+      <li id="ls1"><div class="ls-dot"></div>Lendo seu perfil e negócio</li>
+      <li id="ls2"><div class="ls-dot"></div>Buscando tendências do segmento em 2025</li>
+      <li id="ls3"><div class="ls-dot"></div>Pesquisando mercado da sua cidade</li>
+      <li id="ls4"><div class="ls-dot"></div>Analisando empresas de referência na região</li>
+      <li id="ls5"><div class="ls-dot"></div>Gerando estratégia personalizada com dados reais</li>
     </ul>
   </div>
 </div>
@@ -273,7 +307,24 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 function val(id){return document.getElementById(id)?.value||'';}
 function animateLoading(){const steps=['ls1','ls2','ls3','ls4','ls5'];let i=0;steps.forEach(id=>{const el=document.getElementById(id);el.classList.remove('active','done');});return new Promise(resolve=>{function next(){if(i>0)document.getElementById(steps[i-1]).classList.replace('active','done');if(i<steps.length){document.getElementById(steps[i]).classList.add('active');i++;setTimeout(next,800+Math.random()*500);}else setTimeout(resolve,300);}next();});}
 function renderTasks(tasks){return tasks.map(t=>`<div class="task-check-item" onclick="toggleTask(this)"><div class="task-chk"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0e0e10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-text"><strong>${t.title}</strong><span>${t.desc}</span></div></div>`).join('');}
-function toggleTask(el){el.querySelector('.task-chk').classList.toggle('on');el.classList.toggle('done-task');}
+function toggleTask(el){
+  el.querySelector('.task-chk').classList.toggle('on');
+  el.classList.toggle('done-task');
+  updateProgressRing();
+}
+
+function updateProgressRing(){
+  const total = document.querySelectorAll('.task-check-item').length;
+  const done = document.querySelectorAll('.task-check-item.done-task').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  const circle = document.getElementById('progress-ring-circle');
+  const pctEl = document.getElementById('ring-pct');
+  const countEl = document.getElementById('ring-count');
+  if(circle){ const offset = 138.2 - (138.2 * pct / 100); circle.style.strokeDashoffset = offset; circle.style.stroke = pct===100?'var(--accent2)':pct>50?'var(--accent)':'var(--accent3)'; }
+  if(pctEl) pctEl.textContent = pct+'%';
+  if(countEl) countEl.textContent = done+' de '+total+' tarefas';
+  if(pct===100) toast('🎉 Semana concluída! Parabéns!');
+}
 function resultBlock(title,badge,badgeClass,body){return `<div class="result-block"><div class="rb-header"><div class="rb-title">${title}</div><span class="rb-badge ${badgeClass}">${badge}</span></div><div class="rb-body">${body}</div></div>`;}
 
 async function startGeneration(){
@@ -313,13 +364,82 @@ Analise este perfil:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resum
   saveToHistory(name,segment,data);
   showScreen('result');setStep(3);
   updateBadges();
+
+async function generateNextWeek(weekNum){
+  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
+  toast('Gerando semana '+weekNum+' com base no seu progresso...');
+  
+  const done = document.querySelectorAll('.task-check-item.done-task').length;
+  const total = document.querySelectorAll('.task-check-item').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  
+  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+  
+  try{
+    const resp = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const raw = await resp.json();
+    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
+    const text = textBlocks[textBlocks.length-1]?.text||'';
+    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
+    
+    const newTasks = renderTasks(data.tarefas||[]);
+    const weekCard = document.querySelector('.new-week-card');
+    if(weekCard){
+      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
+    }
+    toast('Semana '+weekNum+' gerada!');
+    updateProgressRing();
+  }catch(e){
+    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
+  }
+}
 }
 
 function renderResult(data,name){
   document.getElementById('result-title').innerHTML=`Plano pronto, <span style="color:var(--accent)">${name}</span>`;
+  
+  // Adicionar card de progresso semanal no topo
+  const heroDiv = document.querySelector('.result-hero');
+  const existingProgress = document.getElementById('weekly-progress-card');
+  if(existingProgress) existingProgress.remove();
+  
+  const progressCard = document.createElement('div');
+  progressCard.id = 'weekly-progress-card';
+  progressCard.className = 'weekly-progress';
+  progressCard.innerHTML = `
+    <div class="weekly-header">
+      <div class="weekly-title">Seu progresso</div>
+      <div style="font-size:11px;color:var(--muted);font-family:'Syne',sans-serif;">SEMANA 1 DE 4</div>
+    </div>
+    <div class="progress-ring">
+      <div class="ring-wrap">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle cx="28" cy="28" r="22" fill="none" stroke="var(--bg3)" stroke-width="5"/>
+          <circle id="progress-ring-circle" cx="28" cy="28" r="22" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round" style="transition:stroke-dashoffset .5s ease"/>
+        </svg>
+        <div class="ring-pct" id="ring-pct">0%</div>
+      </div>
+      <div class="ring-info">
+        <div class="ring-label">Tarefas concluídas</div>
+        <div class="ring-count" id="ring-count">0 de 12 tarefas</div>
+      </div>
+    </div>
+  `;
+  heroDiv.insertAdjacentElement('afterend', progressCard);
   document.getElementById('result-sub').textContent=data.resumo||'';
   const tw1=data.tarefas?.semana1||[],tw2=data.tarefas?.semana2||[];
-  document.getElementById('sec-tarefas').innerHTML=resultBlock('Semana 1 — Ação imediata','Esta semana','badge-green',`<div>${renderTasks(tw1)}</div>`)+resultBlock('Semana 2 — Aprofundar','Próxima semana','badge-teal',`<div>${renderTasks(tw2)}</div>`);
+  const semana1Block = resultBlock('Semana 1 — Ação imediata','Esta semana','badge-green',`<div>${renderTasks(tw1)}</div>`);
+  const semana2Block = resultBlock('Semana 2 — Aprofundar','Próxima semana','badge-teal',`<div>${renderTasks(tw2)}</div>`);
+  const semana3Block = `<div class="new-week-card"><h3>Semana 3 — Consolidar</h3><p>Complete as semanas 1 e 2 para desbloquear as tarefas da semana 3 geradas pela IA com base no seu progresso.</p><button class="btn btn-teal" style="width:auto;padding:10px 20px;font-size:12px;" onclick="generateNextWeek(3)">Gerar semana 3 com IA</button></div>`;
+  const semana4Block = `<div class="new-week-card" style="opacity:.5"><h3>Semana 4 — Escalar</h3><p>Complete a semana 3 para desbloquear.</p></div>`;
+  document.getElementById('sec-tarefas').innerHTML = semana1Block + semana2Block + semana3Block + semana4Block;
   const mk=data.marketing||{};
   const canais=(mk.canais||[]).map(c=>`<p><strong>${c.canal}</strong> — ${c.porque} ${c.como}</p>`).join('');
   document.getElementById('sec-marketing').innerHTML=resultBlock('Estratégia geral','Marketing','badge-green',`<p>${mk.estrategia_geral||''}</p>`)+resultBlock('Canais','Onde atuar','badge-teal',canais)+resultBlock('Conteúdo','Como criar','badge-orange',`<p>${mk.conteudo||''}</p>`)+resultBlock('Ação desta semana','Faça agora','badge-purple',`<p>${mk.acao_imediata||''}</p>`);
@@ -348,8 +468,80 @@ function renderResult(data,name){
   document.getElementById('sec-publico').innerHTML=resultBlock('Cliente ideal','Perfil','badge-green',`<p>${pb.perfil_detalhado||''}</p>`)+resultBlock('Dores e desejos','O que move','badge-teal',`<strong style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">DORES</strong><ul>${dores}</ul><strong style="font-size:11px;color:var(--muted);display:block;margin:12px 0 6px;">DESEJOS</strong><ul>${desejos}</ul>`)+resultBlock('Onde encontrar','Canais','badge-orange',onde)+resultBlock('Como comunicar','Tom certo','badge-purple',`<p>${pb.como_comunicar||''}</p>`);
 }
 
-function saveToHistory(name,segment,data){const plans=getPlans();plans.unshift({id:'plan_'+Date.now(),name,segment,date:new Date().toLocaleDateString('pt-BR'),data,taskProgress:{}});savePlans(plans);updateBadges();}
-function saveToTracking(){toast('Plano salvo em Acompanhamento!');updateBadges();}
+function saveToHistory(name,segment,data){const plans=getPlans();plans.unshift({id:'plan_'+Date.now(),name,segment,date:new Date().toLocaleDateString('pt-BR'),data,taskProgress:{}});savePlans(plans);updateBadges();
+
+async function generateNextWeek(weekNum){
+  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
+  toast('Gerando semana '+weekNum+' com base no seu progresso...');
+  
+  const done = document.querySelectorAll('.task-check-item.done-task').length;
+  const total = document.querySelectorAll('.task-check-item').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  
+  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+  
+  try{
+    const resp = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const raw = await resp.json();
+    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
+    const text = textBlocks[textBlocks.length-1]?.text||'';
+    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
+    
+    const newTasks = renderTasks(data.tarefas||[]);
+    const weekCard = document.querySelector('.new-week-card');
+    if(weekCard){
+      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
+    }
+    toast('Semana '+weekNum+' gerada!');
+    updateProgressRing();
+  }catch(e){
+    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
+  }
+}}
+function saveToTracking(){toast('Plano salvo em Acompanhamento!');updateBadges();
+
+async function generateNextWeek(weekNum){
+  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
+  toast('Gerando semana '+weekNum+' com base no seu progresso...');
+  
+  const done = document.querySelectorAll('.task-check-item.done-task').length;
+  const total = document.querySelectorAll('.task-check-item').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  
+  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+  
+  try{
+    const resp = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const raw = await resp.json();
+    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
+    const text = textBlocks[textBlocks.length-1]?.text||'';
+    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
+    
+    const newTasks = renderTasks(data.tarefas||[]);
+    const weekCard = document.querySelector('.new-week-card');
+    if(weekCard){
+      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
+    }
+    toast('Semana '+weekNum+' gerada!');
+    updateProgressRing();
+  }catch(e){
+    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
+  }
+}}
 
 function renderHistory(){
   const plans=getPlans();const el=document.getElementById('history-list');
@@ -358,7 +550,43 @@ function renderHistory(){
 }
 
 function loadPlan(id){const plan=getPlans().find(p=>p.id===id);if(!plan)return;currentData=plan.data;currentProfile={name:plan.name,segment:plan.segment};renderResult(plan.data,plan.name);showScreen('result');setStep(3);}
-function deletePlan(id){if(!confirm('Excluir?'))return;savePlans(getPlans().filter(p=>p.id!==id));updateBadges();renderHistory();toast('Excluído.');}
+function deletePlan(id){if(!confirm('Excluir?'))return;savePlans(getPlans().filter(p=>p.id!==id));updateBadges();
+
+async function generateNextWeek(weekNum){
+  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
+  toast('Gerando semana '+weekNum+' com base no seu progresso...');
+  
+  const done = document.querySelectorAll('.task-check-item.done-task').length;
+  const total = document.querySelectorAll('.task-check-item').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  
+  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+  
+  try{
+    const resp = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const raw = await resp.json();
+    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
+    const text = textBlocks[textBlocks.length-1]?.text||'';
+    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
+    
+    const newTasks = renderTasks(data.tarefas||[]);
+    const weekCard = document.querySelector('.new-week-card');
+    if(weekCard){
+      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
+    }
+    toast('Semana '+weekNum+' gerada!');
+    updateProgressRing();
+  }catch(e){
+    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
+  }
+}renderHistory();toast('Excluído.');}
 
 function renderTracking(){
   const plans=getPlans();const el=document.getElementById('tracking-list');
@@ -382,6 +610,42 @@ function renderPDF(lines,filename){const{jsPDF}=window.jspdf;const doc=new jsPDF
 function downloadPDF(){if(!currentData||!currentProfile)return;renderPDF(buildPDF(currentData,currentProfile.name,currentProfile.segment),`plano-${currentProfile.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);toast('PDF baixando...');}
 function downloadPlanPDF(id){const p=getPlans().find(p=>p.id===id);if(!p)return;renderPDF(buildPDF(p.data,p.name,p.segment),`plano-${p.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);toast('PDF baixando...');}
 updateBadges();
+
+async function generateNextWeek(weekNum){
+  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
+  toast('Gerando semana '+weekNum+' com base no seu progresso...');
+  
+  const done = document.querySelectorAll('.task-check-item.done-task').length;
+  const total = document.querySelectorAll('.task-check-item').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  
+  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+  
+  try{
+    const resp = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const raw = await resp.json();
+    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
+    const text = textBlocks[textBlocks.length-1]?.text||'';
+    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
+    
+    const newTasks = renderTasks(data.tarefas||[]);
+    const weekCard = document.querySelector('.new-week-card');
+    if(weekCard){
+      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
+    }
+    toast('Semana '+weekNum+' gerada!');
+    updateProgressRing();
+  }catch(e){
+    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
+  }
+}
 </script>
 </body>
 </html>
