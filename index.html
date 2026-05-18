@@ -9,28 +9,61 @@
 <style>
 :root{--bg:#0e0e10;--bg2:#18181c;--bg3:#222228;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#f0efe8;--muted:#888880;--accent:#c8f060;--accent2:#60d4c8;--accent3:#f0a060;--purple:#a090f8;--red:#f06060;--radius:16px;--radius-sm:10px;}
 *{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
 .orb1{width:400px;height:400px;background:rgba(200,240,96,0.07);top:-100px;right:-80px;}
 .orb2{width:300px;height:300px;background:rgba(96,212,200,0.06);bottom:100px;left:-60px;}
+
+/* NAV */
 .nav{position:sticky;top:0;z-index:100;background:rgba(14,14,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;}
 .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
 .nav-icon{width:28px;height:28px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
-.nav-actions{display:flex;gap:8px;}
+.nav-actions{display:flex;gap:8px;align-items:center;}
 .nav-btn{padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
 .nav-btn:hover{color:var(--text);}
 .badge-count{background:var(--accent);color:#0e0e10;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:800;}
+.nav-user{font-size:12px;color:var(--muted);font-family:'Syne',sans-serif;}
+.nav-user span{color:var(--accent);}
+
+/* LAYOUT */
 .app{position:relative;z-index:1;max-width:740px;margin:0 auto;padding:0 1.25rem 4rem;}
 .screen{display:none;}.screen.visible{display:block;}
-.header{padding:2.5rem 0 2rem;text-align:center;}
-h1{font-family:'Syne',sans-serif;font-size:clamp(24px,6vw,36px);font-weight:800;line-height:1.15;margin-bottom:.75rem;letter-spacing:-.02em;}
+
+/* AUTH SCREEN */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem;}
+.auth-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;width:100%;max-width:420px;animation:fadeUp .4s ease both;}
+.auth-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:2rem;}
+.auth-logo-icon{width:40px;height:40px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.auth-logo-text{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
+.auth-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.4rem;text-align:center;}
+.auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:1.75rem;line-height:1.6;}
+.auth-field{margin-bottom:1rem;}
+.auth-field label{display:block;font-size:11px;font-weight:600;color:var(--muted);font-family:'Syne',sans-serif;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
+.auth-field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;}
+.auth-field input:focus{border-color:var(--accent);}
+.auth-field input::placeholder{color:var(--muted);}
+.auth-btn{width:100%;padding:13px;background:var(--accent);color:#0e0e10;border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:.5rem;}
+.auth-btn:hover{background:#d8ff70;}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
+.auth-switch{text-align:center;margin-top:1.25rem;font-size:13px;color:var(--muted);}
+.auth-switch a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:500;}
+.auth-error{background:rgba(240,96,96,0.1);border:1px solid rgba(240,96,96,0.2);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:13px;color:var(--red);margin-bottom:1rem;display:none;}
+
+/* MAIN HEADER */
+.header{padding:2rem 0 1.5rem;text-align:center;}
+h1{font-family:'Syne',sans-serif;font-size:clamp(22px,5vw,34px);font-weight:800;line-height:1.15;margin-bottom:.6rem;letter-spacing:-.02em;}
 h1 span{color:var(--accent);}
-.header-sub{font-size:15px;color:var(--muted);line-height:1.6;max-width:440px;margin:0 auto;}
-.steps{display:flex;justify-content:center;gap:0;margin:1.5rem 0;}
+.header-sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:440px;margin:0 auto;}
+
+/* STEPS */
+.steps{display:flex;justify-content:center;gap:0;margin:1.25rem 0;}
 .step-item{display:flex;align-items:center;gap:6px;font-size:11px;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);transition:color .3s;}
 .step-item.active{color:var(--accent);}.step-item.done{color:var(--accent2);}
 .step-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;}
 .step-line{width:28px;height:1px;background:var(--border2);margin:0 4px;}
+
+/* CARDS E FORM */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;animation:fadeUp .4s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 .card-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
@@ -44,6 +77,8 @@ h1 span{color:var(--accent);}
 .field select option{background:var(--bg3);}
 .field textarea{resize:vertical;min-height:72px;line-height:1.55;}
 .field input::placeholder,.field textarea::placeholder{color:var(--muted);}
+
+/* BOTÕES */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.03em;cursor:pointer;border:none;transition:all .2s;}
 .btn-primary{background:var(--accent);color:#0e0e10;width:100%;margin-top:.75rem;}
 .btn-primary:hover{background:#d8ff70;transform:translateY(-1px);}
@@ -51,19 +86,24 @@ h1 span{color:var(--accent);}
 .btn-ghost:hover{color:var(--text);}
 .btn-teal{background:rgba(96,212,200,0.12);border:1px solid rgba(96,212,200,0.25);color:var(--accent2);font-size:12px;padding:9px 16px;}
 .btn-orange{background:rgba(240,160,96,0.12);border:1px solid rgba(240,160,96,0.25);color:var(--accent3);font-size:12px;padding:9px 16px;}
+.btn-red{background:rgba(240,96,96,0.1);border:1px solid rgba(240,96,96,0.2);color:var(--red);font-size:12px;padding:9px 16px;}
+
+/* LOADING */
 .spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1.5rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .loading-steps{list-style:none;text-align:left;max-width:300px;margin:1.5rem auto 0;}
 .loading-steps li{font-size:13px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:10px;transition:color .3s;}
 .loading-steps li.active{color:var(--accent);}.loading-steps li.done{color:var(--accent2);}
 .ls-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
-.result-hero{text-align:center;padding:1.25rem 0 1.5rem;}
+
+/* RESULTADO */
+.result-hero{text-align:center;padding:1.25rem 0 1.25rem;}
 .result-hero h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.4rem;}
 .result-hero p{font-size:13px;color:var(--muted);line-height:1.6;}
 .result-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1rem;}
-.section-tabs{display:flex;gap:8px;margin-bottom:1.25rem;overflow-x:auto;padding-bottom:4px;}
+.section-tabs{display:flex;gap:6px;margin-bottom:1.25rem;overflow-x:auto;padding-bottom:4px;}
 .section-tabs::-webkit-scrollbar{display:none;}
-.stab{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.stab{padding:7px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;}
 .stab.active{background:var(--accent);border-color:var(--accent);color:#0e0e10;}
 .section-content{display:none;}.section-content.visible{display:block;}
 .result-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.375rem;margin-bottom:10px;animation:fadeUp .35s ease both;}
@@ -78,6 +118,8 @@ h1 span{color:var(--accent);}
 .rb-body p{margin-bottom:.5rem;}.rb-body p:last-child{margin-bottom:0;}
 .rb-body ul{padding-left:1.1rem;display:flex;flex-direction:column;gap:5px;}
 .rb-body strong{color:var(--text);font-weight:500;}
+
+/* TAREFAS */
 .task-check-item{display:flex;align-items:flex-start;gap:12px;padding:.75rem 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none;}
 .task-check-item:last-child{border-bottom:none;padding-bottom:0;}
 .task-check-item:first-child{padding-top:0;}
@@ -87,12 +129,29 @@ h1 span{color:var(--accent);}
 .task-chk.on svg{display:block;}.task-chk svg{display:none;}
 .task-text strong{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
 .task-text span{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* PROGRESSO */
+.progress-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
+.progress-ring-wrap{display:flex;align-items:center;gap:16px;}
+.ring-svg-wrap{position:relative;width:64px;height:64px;flex-shrink:0;}
+.ring-svg-wrap svg{transform:rotate(-90deg);}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);}
+.ring-details{flex:1;}
+.ring-label{font-size:11px;color:var(--muted);font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.ring-count{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.new-week-card{background:linear-gradient(135deg,rgba(200,240,96,0.08),rgba(96,212,200,0.06));border:1px solid rgba(200,240,96,0.15);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;text-align:center;}
+.new-week-card h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:.4rem;}
+.new-week-card p{font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.55;}
+
+/* TENDÊNCIAS */
 .trend-item{display:flex;gap:12px;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border);}
 .trend-item:last-child{border-bottom:none;}
 .trend-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--border2);min-width:28px;line-height:1;}
 .trend-text strong{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
 .trend-text span{font-size:12px;color:var(--muted);line-height:1.55;}
 .insight-pill{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted);margin:3px;}
+
+/* HISTÓRICO */
 .hist-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;animation:fadeUp .3s ease both;}
 .hc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.75rem;}
 .hc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
@@ -100,12 +159,8 @@ h1 span{color:var(--accent);}
 .hc-date{font-size:11px;color:var(--muted);white-space:nowrap;}
 .hc-summary{font-size:13px;color:#a0a098;line-height:1.6;margin-bottom:.875rem;}
 .hc-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.hc-del{background:rgba(240,96,96,0.1);border:1px solid rgba(240,96,96,0.2);color:var(--red);font-size:11px;padding:7px 13px;border-radius:var(--radius-sm);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;transition:all .2s;}
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:.75rem 1.25rem;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text);z-index:999;transition:transform .3s ease;white-space:nowrap;}
-.toast.show{transform:translateX(-50%) translateY(0);}
-.tracking-header,.history-header{padding:1.5rem 0 1rem;}
-.tracking-header h2,.history-header h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.3rem;}
-.tracking-header p,.history-header p{font-size:13px;color:var(--muted);}
+
+/* TRACKING */
 .plan-track-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;}
 .ptc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.875rem;}
 .ptc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
@@ -124,65 +179,80 @@ h1 span{color:var(--accent);}
 .week-toggle{display:flex;gap:6px;margin-bottom:.875rem;}
 .wtab{padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;color:var(--muted);background:transparent;transition:all .2s;}
 .wtab.on{background:var(--bg3);color:var(--text);border-color:var(--border2);}
-.empty-state{text-align:center;padding:4rem 1rem;color:var(--muted);}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);}
 .empty-state strong{color:var(--text);display:block;font-family:'Syne',sans-serif;font-size:16px;margin-bottom:.5rem;}
-@media(max-width:500px){.form-grid{grid-template-columns:1fr;}h1{font-size:24px;}}
 
-/* PROGRESSO SEMANAL */
-.weekly-progress{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
-.weekly-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
-.weekly-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
-.weekly-weeks{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;padding-bottom:4px;}
-.week-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;}
-.week-btn.active{background:var(--accent);border-color:var(--accent);color:#0e0e10;}
-.week-btn.completed{background:rgba(96,212,200,0.12);border-color:var(--accent2);color:var(--accent2);}
-.progress-ring{display:flex;align-items:center;gap:12px;}
-.ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0;}
-.ring-wrap svg{transform:rotate(-90deg);}
-.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);}
-.ring-info{flex:1;}
-.ring-label{font-size:12px;color:var(--muted);margin-bottom:2px;}
-.ring-count{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:.75rem 1.25rem;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text);z-index:999;transition:transform .3s ease;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
 
-/* CONQUISTAS */
-.achievement{display:inline-flex;align-items:center;gap:6px;background:rgba(200,240,96,0.1);border:1px solid rgba(200,240,96,0.2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-family:'Syne',sans-serif;font-weight:600;margin:3px;}
-
-/* NOVA SEMANA */
-.new-week-card{background:linear-gradient(135deg,rgba(200,240,96,0.1),rgba(96,212,200,0.08));border:1px solid rgba(200,240,96,0.2);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;text-align:center;}
-.new-week-card h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:.4rem;}
-.new-week-card p{font-size:13px;color:var(--muted);margin-bottom:1rem;}
-
-/* MOBILE MELHORADO */
-@media(max-width:768px){
-  .nav{padding:.6rem 1rem;}
-  .nav-logo span{display:none;}
-  .result-actions{gap:6px;}
-  .result-actions .btn{font-size:11px;padding:8px 12px;}
-  .section-tabs{gap:6px;}
-  .stab{padding:6px 10px;font-size:10px;}
-}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr;}h1{font-size:22px;}.result-actions .btn{font-size:11px;padding:8px 10px;}.stab{padding:6px 10px;font-size:10px;}}
 </style>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div>
-<nav class="nav">
+
+<!-- NAV -->
+<nav class="nav" id="main-nav" style="display:none">
   <div class="nav-logo">
     <div class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.6 5L13 7L8.6 9L7 13L5.4 9L1 7L5.4 5L7 1Z" fill="#0e0e10"/></svg></div>
     Estrategista IA
   </div>
   <div class="nav-actions">
-    <button class="nav-btn" onclick="showScreen('tracking')">✓ Tarefas <span class="badge-count" id="badge-tracking">0</span></button>
-    <button class="nav-btn" onclick="showScreen('history')">≡ Histórico <span class="badge-count" id="badge-history">0</span></button>
+    <div class="nav-user">Olá, <span id="nav-name">...</span></div>
+    <button class="nav-btn" onclick="showScreen('tracking')">✓ <span class="badge-count" id="badge-tracking">0</span></button>
+    <button class="nav-btn" onclick="showScreen('history')">≡ <span class="badge-count" id="badge-history">0</span></button>
+    <button class="nav-btn" onclick="logout()">Sair</button>
   </div>
 </nav>
-<div class="app">
+
 <div class="toast" id="toast"></div>
+
+<!-- ==================== AUTH SCREEN ==================== -->
+<div id="screen-auth" style="display:block">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#0e0e10"/></svg></div>
+        <span class="auth-logo-text">Estrategista IA</span>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="auth-login">
+        <h2 class="auth-title">Entrar na conta</h2>
+        <p class="auth-sub">Seu plano de crescimento personalizado com IA</p>
+        <div class="auth-error" id="login-error"></div>
+        <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="seu@email.com"></div>
+        <div class="auth-field"><label>Senha</label><input type="password" id="login-password" placeholder="••••••••"></div>
+        <button class="auth-btn" onclick="login()">Entrar</button>
+        <div class="auth-switch">Não tem conta? <a onclick="showAuth('register')">Criar conta grátis</a></div>
+      </div>
+
+      <!-- CADASTRO -->
+      <div id="auth-register" style="display:none">
+        <h2 class="auth-title">Criar conta grátis</h2>
+        <p class="auth-sub">Comece a crescer com estratégias personalizadas por IA</p>
+        <div class="auth-error" id="register-error"></div>
+        <div class="auth-field"><label>Seu nome</label><input type="text" id="register-name" placeholder="João Silva"></div>
+        <div class="auth-field"><label>Email</label><input type="email" id="register-email" placeholder="seu@email.com"></div>
+        <div class="auth-field"><label>Senha</label><input type="password" id="register-password" placeholder="Mínimo 6 caracteres"></div>
+        <button class="auth-btn" onclick="register()">Criar conta grátis</button>
+        <div class="auth-switch">Já tem conta? <a onclick="showAuth('login')">Entrar</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== APP SCREENS ==================== -->
+<div class="app" id="app-screens" style="display:none">
 
 <!-- FORM -->
 <div class="screen visible" id="screen-form">
   <div class="header">
     <h1>Seu plano de<br><span>crescimento</span> personalizado</h1>
-    <p class="header-sub">Preencha seu perfil. A IA analisa, cruza com tendências do mercado e gera sua estratégia completa.</p>
+    <p class="header-sub">Preencha seu perfil. A IA busca tendências reais e gera sua estratégia completa.</p>
   </div>
   <div class="steps">
     <div class="step-item active" id="step1-ind"><div class="step-dot"></div>Perfil</div>
@@ -191,15 +261,17 @@ h1 span{color:var(--accent);}
     <div class="step-line"></div>
     <div class="step-item" id="step3-ind"><div class="step-dot"></div>Estratégia</div>
   </div>
+
   <div class="card">
     <div class="card-label">Sobre o negócio</div>
     <div class="form-grid">
       <div class="field"><label>Nome do negócio</label><input type="text" id="biz-name" placeholder="Ex: Barbearia do João"></div>
-      <div class="field"><label>Segmento</label><input type="text" id="biz-segment" placeholder="Ex: Barbearia, Padaria, Loja de roupas..." list="segmentos-list"><datalist id="segmentos-list"><option value="Barbearia"><option value="Salão de beleza"><option value="Móveis planejados"><option value="Restaurante / Lanchonete"><option value="Padaria / Confeitaria"><option value="Moda e vestuário"><option value="Estética e bem-estar"><option value="Construção e reforma"><option value="Tecnologia e serviços digitais"><option value="Educação e cursos"><option value="Saúde e fitness"><option value="Pet shop e veterinário"><option value="Farmácia"><option value="Mercado / Mercearia"><option value="Academia"><option value="Clínica médica / Odontológica"><option value="Transporte e logística"><option value="Agropecuária"><option value="Serviços domésticos"><option value="Fotografia e vídeo"><option value="Advocacia / Contabilidade"><option value="Imobiliária"><option value="Auto peças / Mecânica"><option value="Loja de eletrônicos"><option value="Outra"></datalist></div>
+      <div class="field"><label>Segmento</label><input type="text" id="biz-segment" placeholder="Ex: Barbearia, Padaria..." list="seg-list"><datalist id="seg-list"><option value="Barbearia"><option value="Salão de beleza"><option value="Móveis planejados"><option value="Restaurante / Lanchonete"><option value="Padaria / Confeitaria"><option value="Moda e vestuário"><option value="Estética e bem-estar"><option value="Construção e reforma"><option value="Tecnologia e serviços digitais"><option value="Educação e cursos"><option value="Saúde e fitness"><option value="Pet shop e veterinário"><option value="Farmácia"><option value="Mercado / Mercearia"><option value="Academia"><option value="Clínica médica / Odontológica"><option value="Auto peças / Mecânica"><option value="Loja de eletrônicos"><option value="Advocacia / Contabilidade"><option value="Imobiliária"><option value="Agropecuária"><option value="Fotografia e vídeo"></datalist></div>
       <div class="field"><label>Cidade / Estado</label><input type="text" id="biz-city" placeholder="Ex: Recife, PE"></div>
       <div class="field"><label>Tempo no mercado</label><select id="biz-time"><option value="">Selecione...</option><option>Menos de 6 meses</option><option>6 meses a 1 ano</option><option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
     </div>
   </div>
+
   <div class="card">
     <div class="card-label">Situação atual</div>
     <div class="form-grid">
@@ -208,6 +280,7 @@ h1 span{color:var(--accent);}
       <div class="field full"><label>Maior dificuldade hoje</label><select id="biz-pain"><option value="">Selecione...</option><option>Atrair novos clientes</option><option>Fidelizar clientes existentes</option><option>Organização e processos internos</option><option>Precificação e margem</option><option>Presença online e redes sociais</option><option>Gestão de tempo</option><option>Fluxo de caixa</option><option>Diferenciação da concorrência</option></select></div>
     </div>
   </div>
+
   <div class="card">
     <div class="card-label">Público e posicionamento</div>
     <div class="form-grid">
@@ -216,6 +289,7 @@ h1 span{color:var(--accent);}
       <div class="field full"><label>Posicionamento</label><select id="biz-position"><option value="">Selecione...</option><option>Preço mais acessível da região</option><option>Melhor custo-benefício</option><option>Qualidade premium</option><option>Especialista em nicho específico</option><option>Atendimento personalizado</option><option>Ainda não tenho posicionamento claro</option></select></div>
     </div>
   </div>
+
   <div class="card">
     <div class="card-label">Presença digital</div>
     <div class="form-grid">
@@ -224,12 +298,14 @@ h1 span{color:var(--accent);}
       <div class="field full"><label>Diferenciais (opcional)</label><textarea id="biz-diff" placeholder="Ex: atendimento domiciliar, produtos naturais..."></textarea></div>
     </div>
   </div>
+
   <div class="card">
     <div class="card-label">Meta de crescimento</div>
     <div class="form-grid full">
       <div class="field"><label>Meta nos próximos 90 dias</label><select id="biz-goal"><option value="">Selecione...</option><option>Dobrar o número de clientes</option><option>Aumentar o faturamento em 30%</option><option>Construir uma marca reconhecida</option><option>Estruturar processos para crescer</option><option>Reduzir dependência de indicações</option><option>Contratar meu primeiro colaborador</option><option>Criar uma presença digital forte</option></select></div>
     </div>
   </div>
+
   <button class="btn btn-primary" onclick="startGeneration()">⭐ Gerar minha estratégia completa</button>
 </div>
 
@@ -238,13 +314,13 @@ h1 span{color:var(--accent);}
   <div style="text-align:center;padding:3rem 0;">
     <div class="spinner"></div>
     <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:.4rem;">Analisando seu negócio...</p>
-    <p style="font-size:13px;color:var(--muted);">Isso leva alguns segundos</p>
+    <p style="font-size:13px;color:var(--muted);">Buscando dados reais do mercado</p>
     <ul class="loading-steps">
       <li id="ls1"><div class="ls-dot"></div>Lendo seu perfil e negócio</li>
       <li id="ls2"><div class="ls-dot"></div>Buscando tendências do segmento em 2025</li>
       <li id="ls3"><div class="ls-dot"></div>Pesquisando mercado da sua cidade</li>
-      <li id="ls4"><div class="ls-dot"></div>Analisando empresas de referência na região</li>
-      <li id="ls5"><div class="ls-dot"></div>Gerando estratégia personalizada com dados reais</li>
+      <li id="ls4"><div class="ls-dot"></div>Analisando empresas de referência</li>
+      <li id="ls5"><div class="ls-dot"></div>Gerando estratégia com dados reais</li>
     </ul>
   </div>
 </div>
@@ -255,11 +331,14 @@ h1 span{color:var(--accent);}
     <h2 id="result-title">Plano pronto!</h2>
     <p id="result-sub"></p>
     <div class="result-actions">
-      <button class="btn btn-teal" onclick="downloadPDF()">↓ Baixar PDF</button>
-      <button class="btn btn-orange" onclick="saveToTracking()">✓ Acompanhar tarefas</button>
+      <button class="btn btn-teal" onclick="downloadPDF()">↓ PDF</button>
+      <button class="btn btn-orange" onclick="showScreen('tracking')">✓ Tarefas</button>
       <button class="btn btn-ghost" onclick="showScreen('form')">Novo plano</button>
     </div>
   </div>
+
+  <div id="progress-card-wrap"></div>
+
   <div class="section-tabs">
     <button class="stab active" onclick="showSection('tarefas',this)">Tarefas</button>
     <button class="stab" onclick="showSection('marketing',this)">Marketing</button>
@@ -269,6 +348,7 @@ h1 span{color:var(--accent);}
     <button class="stab" onclick="showSection('publico',this)">Público</button>
     <button class="stab" onclick="showSection('geografia',this)">Expansão</button>
   </div>
+
   <div id="sec-tarefas" class="section-content visible"></div>
   <div id="sec-marketing" class="section-content"></div>
   <div id="sec-branding" class="section-content"></div>
@@ -280,37 +360,261 @@ h1 span{color:var(--accent);}
 
 <!-- TRACKING -->
 <div class="screen" id="screen-tracking">
-  <div class="tracking-header"><h2>Acompanhamento de tarefas</h2><p>Marque as tarefas conforme for concluindo.</p></div>
+  <div style="padding:1.5rem 0 1rem"><h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.3rem;">Acompanhamento</h2><p style="font-size:13px;color:var(--muted)">Marque as tarefas conforme for concluindo.</p></div>
   <div id="tracking-list"></div>
 </div>
 
 <!-- HISTORY -->
 <div class="screen" id="screen-history">
-  <div class="history-header"><h2>Histórico de planos</h2><p>Todos os planos gerados ficam salvos aqui.</p></div>
+  <div style="padding:1.5rem 0 1rem"><h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.3rem;">Histórico</h2><p style="font-size:13px;color:var(--muted)">Todos os seus planos salvos.</p></div>
   <div id="history-list"></div>
 </div>
-</div>
+
+</div><!-- /app-screens -->
 
 <script>
-// COLOQUE SUA CHAVE AQUI
-const API_KEY = 'PLACEHOLDER' // chave via função;
+let currentData=null, currentProfile=null, currentPlanId=null;
+let authToken = localStorage.getItem('auth_token');
+let currentUser = null;
 
-let currentData=null,currentProfile=null;
-const SK='estrategista_plans';
-function getPlans(){try{return JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){return[];}}
-function savePlans(p){localStorage.setItem(SK,JSON.stringify(p));}
-function updateBadges(){const p=getPlans();document.getElementById('badge-history').textContent=p.length;document.getElementById('badge-tracking').textContent=p.length;}
-function showScreen(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));document.getElementById('screen-'+n).classList.add('visible');window.scrollTo({top:0,behavior:'smooth'});if(n==='history')renderHistory();if(n==='tracking')renderTracking();}
-function showSection(n,btn){document.querySelectorAll('.section-content').forEach(s=>s.classList.remove('visible'));document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));document.getElementById('sec-'+n).classList.add('visible');btn.classList.add('active');}
-function setStep(n){['step1-ind','step2-ind','step3-ind'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','done');if(i+1<n)el.classList.add('done');else if(i+1===n)el.classList.add('active');});}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+// ==================== AUTH ====================
+function showAuth(type){
+  document.getElementById('auth-login').style.display = type==='login'?'block':'none';
+  document.getElementById('auth-register').style.display = type==='register'?'block':'none';
+}
+
+async function login(){
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display='none';
+
+  try{
+    const resp = await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data = await resp.json();
+    if(!resp.ok){errEl.textContent=data.error;errEl.style.display='block';return;}
+    authToken = data.token;
+    localStorage.setItem('auth_token', authToken);
+    currentUser = data.user;
+    enterApp();
+  }catch(e){errEl.textContent='Erro de conexão.';errEl.style.display='block';}
+}
+
+async function register(){
+  const name = document.getElementById('register-name').value;
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
+  const errEl = document.getElementById('register-error');
+  errEl.style.display='none';
+
+  try{
+    const resp = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
+    const data = await resp.json();
+    if(!resp.ok){errEl.textContent=data.error;errEl.style.display='block';return;}
+    authToken = data.token;
+    localStorage.setItem('auth_token', authToken);
+    currentUser = data.user;
+    enterApp();
+  }catch(e){errEl.textContent='Erro de conexão.';errEl.style.display='block';}
+}
+
+async function logout(){
+  await fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+authToken}});
+  authToken = null;
+  currentUser = null;
+  localStorage.removeItem('auth_token');
+  document.getElementById('screen-auth').style.display='block';
+  document.getElementById('app-screens').style.display='none';
+  document.getElementById('main-nav').style.display='none';
+}
+
+function enterApp(){
+  document.getElementById('screen-auth').style.display='none';
+  document.getElementById('app-screens').style.display='block';
+  document.getElementById('main-nav').style.display='flex';
+  document.getElementById('nav-name').textContent = currentUser?.name?.split(' ')[0] || '';
+  showScreen('form');
+  loadPlansFromServer();
+}
+
+async function checkAuth(){
+  if(!authToken) return;
+  try{
+    const resp = await fetch('/api/auth/me',{headers:{'Authorization':'Bearer '+authToken}});
+    if(!resp.ok){localStorage.removeItem('auth_token');authToken=null;return;}
+    currentUser = await resp.json();
+    enterApp();
+  }catch(e){}
+}
+
+// ==================== NAVIGATION ====================
+function showScreen(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));
+  document.getElementById('screen-'+n).classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n==='history') renderHistory();
+  if(n==='tracking') renderTracking();
+}
+
+function showSection(n,btn){
+  document.querySelectorAll('.section-content').forEach(s=>s.classList.remove('visible'));
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+n).classList.add('visible');
+  btn.classList.add('active');
+}
+
+function setStep(n){
+  ['step1-ind','step2-ind','step3-ind'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('active','done');
+    if(i+1<n)el.classList.add('done');
+    else if(i+1===n)el.classList.add('active');
+  });
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
 function val(id){return document.getElementById(id)?.value||'';}
-function animateLoading(){const steps=['ls1','ls2','ls3','ls4','ls5'];let i=0;steps.forEach(id=>{const el=document.getElementById(id);el.classList.remove('active','done');});return new Promise(resolve=>{function next(){if(i>0)document.getElementById(steps[i-1]).classList.replace('active','done');if(i<steps.length){document.getElementById(steps[i]).classList.add('active');i++;setTimeout(next,800+Math.random()*500);}else setTimeout(resolve,300);}next();});}
-function renderTasks(tasks){return tasks.map(t=>`<div class="task-check-item" onclick="toggleTask(this)"><div class="task-chk"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0e0e10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-text"><strong>${t.title}</strong><span>${t.desc}</span></div></div>`).join('');}
+
+function animateLoading(){
+  const steps=['ls1','ls2','ls3','ls4','ls5'];
+  let i=0;
+  steps.forEach(id=>{const el=document.getElementById(id);el.classList.remove('active','done');});
+  return new Promise(resolve=>{
+    function next(){
+      if(i>0)document.getElementById(steps[i-1]).classList.replace('active','done');
+      if(i<steps.length){document.getElementById(steps[i]).classList.add('active');i++;setTimeout(next,900+Math.random()*600);}
+      else setTimeout(resolve,300);
+    }
+    next();
+  });
+}
+
+// ==================== PLANS ====================
+let localPlans = [];
+
+async function loadPlansFromServer(){
+  try{
+    const resp = await fetch('/api/plans',{headers:{'Authorization':'Bearer '+authToken}});
+    if(resp.ok){ localPlans = await resp.json(); updateBadges(); }
+  }catch(e){}
+}
+
+async function savePlanToServer(name, segment, data){
+  try{
+    const resp = await fetch('/api/plans/save',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({name, segment, date: new Date().toLocaleDateString('pt-BR'), data, taskProgress:{}})
+    });
+    if(resp.ok){
+      const result = await resp.json();
+      localPlans.unshift(result.plan);
+      updateBadges();
+      return result.plan.id;
+    }
+  }catch(e){}
+  return null;
+}
+
+async function updateTaskProgress(planId, taskProgress){
+  try{
+    await fetch(`/api/plans/${planId}/progress`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({taskProgress})
+    });
+    const plan = localPlans.find(p=>p.id===planId);
+    if(plan) plan.taskProgress = taskProgress;
+  }catch(e){}
+}
+
+async function deletePlanFromServer(id){
+  if(!confirm('Excluir este plano?')) return;
+  try{
+    await fetch(`/api/plans/${id}`,{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}});
+    localPlans = localPlans.filter(p=>p.id!==id);
+    updateBadges();
+    renderHistory();
+    toast('Plano excluído.');
+  }catch(e){}
+}
+
+function updateBadges(){
+  document.getElementById('badge-history').textContent = localPlans.length;
+  document.getElementById('badge-tracking').textContent = localPlans.length;
+}
+
+// ==================== GENERATE ====================
+async function startGeneration(){
+  const name=val('biz-name'), segment=val('biz-segment'), city=val('biz-city'),
+    time=val('biz-time'), team=val('biz-team'), revenue=val('biz-revenue'),
+    pain=val('biz-pain'), age=val('biz-age'), ticket=val('biz-ticket'),
+    position=val('biz-position'), social=val('biz-social'), posts=val('biz-posts'),
+    diff=val('biz-diff'), goal=val('biz-goal');
+
+  if(!name||!segment||!pain||!goal){toast('Preencha: nome, segmento, dificuldade e meta.');return;}
+
+  currentProfile={name,segment,city,time,team,revenue,pain,age,ticket,position,social,posts,diff,goal};
+  showScreen('loading'); setStep(2);
+
+  const profileText=`Nome: ${name}\nSegmento: ${segment}\nCidade: ${city}\nTempo: ${time}\nColaboradores: ${team}\nFaturamento: ${revenue}\nDificuldade principal: ${pain}\nFaixa etária do público: ${age}\nTicket médio: ${ticket}\nPosicionamento: ${position}\nPresença digital: ${social}\nFrequência de posts: ${posts}\nDiferenciais: ${diff}\nMeta 90 dias: ${goal}`;
+
+  const loadPromise = animateLoading();
+  let data;
+  try{
+    const resp = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({
+        system:`Você é um estrategista de negócios sênior especializado em micro e pequenas empresas brasileiras. Use web_search para buscar: 1) tendências atuais do segmento ${segment} no Brasil em 2025, 2) perfil econômico e oportunidades em ${city}, 3) cidades vizinhas e região de ${city} com potencial de expansão, 4) empresas de referência do segmento ${segment} no Brasil. Use esses dados reais para criar estratégias ULTRA ESPECÍFICAS. NUNCA seja genérico. Responda APENAS em JSON válido, sem markdown.`,
+        messages:[{role:'user',content:`Analise este perfil e gere um plano estratégico PERSONALIZADO com dados reais:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resumo":"diagnóstico específico de 2 frases","geografia":{"cidade_foco":"estratégia específica para ${city} com referências locais reais","cidades_vizinhas":["cidade vizinha 1","cidade vizinha 2","cidade vizinha 3"],"raio_atuacao":"como expandir o raio de atuação","escala_nacional":"estratégia de escala nacional se aplicável"},"tarefas":{"semana1":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"semana2":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]},"marketing":{"estrategia_geral":"...","canais":[{"canal":"...","porque":"...","como":"..."}],"conteudo":"...","acao_imediata":"..."},"branding":{"posicionamento":"...","voz":"...","diferenciais":"...","nome_slogan":"..."},"vendas":{"abordagem":"...","tecnicas":["...","...","..."],"fidelizacao":"...","meta_90dias":"..."},"tendencias":{"do_segmento":[{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."}],"referencia_mercado":[{"empresa":"...","aprendizado":"..."},{"empresa":"...","aprendizado":"..."}]},"publico":{"perfil_detalhado":"...","dores":["...","...","..."],"desejos":["...","...","..."],"onde_encontrar":["...","...","..."],"como_comunicar":"..."}}`}]
+      })
+    });
+    const rawText = await resp.text();
+    const raw = JSON.parse(rawText);
+    const textBlocks = (raw.content||[]).filter(c=>c.type==='text');
+    const text = (textBlocks[textBlocks.length-1]?.text||rawText).replace(/```json|```/g,'').trim();
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    data = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+  }catch(e){
+    console.error(e);
+    toast('Erro ao gerar. Tente novamente.');
+    showScreen('form'); setStep(1); return;
+  }
+
+  await loadPromise;
+  currentData = data;
+
+  const planId = await savePlanToServer(name, segment, data);
+  currentPlanId = planId;
+
+  renderResult(data, name);
+  showScreen('result'); setStep(3);
+}
+
+// ==================== RENDER ====================
+function renderTasks(tasks){
+  return tasks.map(t=>`
+    <div class="task-check-item" onclick="toggleTask(this)">
+      <div class="task-chk"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0e0e10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-text"><strong>${t.title}</strong><span>${t.desc}</span></div>
+    </div>`).join('');
+}
+
 function toggleTask(el){
   el.querySelector('.task-chk').classList.toggle('on');
   el.classList.toggle('done-task');
   updateProgressRing();
+  if(currentPlanId){
+    const prog = {};
+    document.querySelectorAll('.task-check-item').forEach((item,i)=>{prog['t'+i]=item.classList.contains('done-task');});
+    updateTaskProgress(currentPlanId, prog);
+  }
 }
 
 function updateProgressRing(){
@@ -320,332 +624,278 @@ function updateProgressRing(){
   const circle = document.getElementById('progress-ring-circle');
   const pctEl = document.getElementById('ring-pct');
   const countEl = document.getElementById('ring-count');
-  if(circle){ const offset = 138.2 - (138.2 * pct / 100); circle.style.strokeDashoffset = offset; circle.style.stroke = pct===100?'var(--accent2)':pct>50?'var(--accent)':'var(--accent3)'; }
-  if(pctEl) pctEl.textContent = pct+'%';
-  if(countEl) countEl.textContent = done+' de '+total+' tarefas';
+  if(circle){ const offset=138.2-(138.2*pct/100); circle.style.strokeDashoffset=offset; circle.style.stroke=pct===100?'var(--accent2)':pct>50?'var(--accent)':'var(--accent3)'; }
+  if(pctEl) pctEl.textContent=pct+'%';
+  if(countEl) countEl.textContent=done+' de '+total+' tarefas';
   if(pct===100) toast('🎉 Semana concluída! Parabéns!');
 }
-function resultBlock(title,badge,badgeClass,body){return `<div class="result-block"><div class="rb-header"><div class="rb-title">${title}</div><span class="rb-badge ${badgeClass}">${badge}</span></div><div class="rb-body">${body}</div></div>`;}
 
-async function startGeneration(){
-  const name=val('biz-name'),segment=val('biz-segment'),city=val('biz-city'),time=val('biz-time'),team=val('biz-team'),revenue=val('biz-revenue'),pain=val('biz-pain'),age=val('biz-age'),ticket=val('biz-ticket'),position=val('biz-position'),social=val('biz-social'),posts=val('biz-posts'),diff=val('biz-diff'),goal=val('biz-goal');
-  if(!name||!segment||!pain||!goal){toast('Preencha: nome, segmento, dificuldade e meta.');return;}
-  currentProfile={name,segment,city,time,team,revenue,pain,age,ticket,position,social,posts,diff,goal};
-  showScreen('loading');setStep(2);
-  const profileText=`Nome: ${name}\nSegmento: ${segment}\nCidade: ${city}\nTempo: ${time}\nColaboradores: ${team}\nFaturamento: ${revenue}\nDificuldade: ${pain}\nFaixa etária: ${age}\nTicket: ${ticket}\nPosicionamento: ${position}\nPresença digital: ${social}\nPosts: ${posts}\nDiferenciais: ${diff}\nMeta: ${goal}`;
-  const loadPromise=animateLoading();
-  let data;
-  try{
-    const resp=await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,system:'Você é um estrategista de negócios sênior especializado em micro e pequenas empresas brasileiras. Antes de gerar o plano, use a ferramenta web_search para buscar: 1) tendências atuais do segmento informado no Brasil em 2025, 2) mercado e perfil econômico da cidade informada, 3) empresas de referência do mesmo segmento que funcionam bem na região. Use esses dados reais para criar estratégias específicas e atualizadas. NUNCA dê respostas genéricas. Após as buscas, responda APENAS com o JSON solicitado, sem markdown, sem texto fora do JSON.',messages:[{role:'user',content:`Analise este perfil com profundidade e crie um plano estratégico ULTRA PERSONALIZADO e ESPECÍFICO. NUNCA seja genérico. Cada resposta deve ser cirúrgica para a realidade desse empreendedor.
-
-INSTRUÇÕES OBRIGATÓRIAS:
-1. Use a cidade informada para criar estratégias LOCAIS específicas (bairros, pontos de referência, perfil da cidade)
-2. Identifique as cidades vizinhas e região que esse negócio pode alcançar
-3. Se o segmento permite escala nacional (e-commerce, digital, produtos), crie estratégia de expansão nacional
-4. Para cada dificuldade informada, crie uma solução ESPECÍFICA e PRÁTICA, não genérica
-5. As tarefas devem ser ações concretas que o empreendedor pode fazer HOJE ou ESSA SEMANA
-6. Pesquise e cite exemplos reais de empresas do mesmo segmento que funcionam bem nessa região do Brasil
-7. Considere o ticket médio e faturamento para sugerir investimentos realistas
-
-Analise este perfil:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resumo":"diagnóstico específico de 2 frases sobre a situação real desse negócio nessa cidade","geografia":{"cidade_foco":"estratégia específica para a cidade informada com pontos de referência locais","cidades_vizinhas":["cidade vizinha 1 com potencial","cidade vizinha 2","cidade vizinha 3"],"raio_atuacao":"como expandir o raio de atuação local","escala_nacional":"se aplicável ao segmento, como escalar nacionalmente"},"tarefas":{"semana1":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"semana2":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]},"marketing":{"estrategia_geral":"...","canais":[{"canal":"...","porque":"...","como":"..."}],"conteudo":"...","acao_imediata":"..."},"branding":{"posicionamento":"...","voz":"...","diferenciais":"...","nome_slogan":"..."},"vendas":{"abordagem":"...","tecnicas":["...","...","..."],"fidelizacao":"...","meta_90dias":"..."},"tendencias":{"do_segmento":[{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."}],"referencia_mercado":[{"empresa":"...","aprendizado":"..."},{"empresa":"...","aprendizado":"..."}]},"publico":{"perfil_detalhado":"...","dores":["...","...","..."],"desejos":["...","...","..."],"onde_encontrar":["...","...","..."],"como_comunicar":"..."}}`}]})
-    });
-    const raw=await resp.json();
-    // Pegar o último bloco de texto (após web_search)
-    const textBlocks = raw.content?.filter(c => c.type === 'text') || [];
-    const text = textBlocks[textBlocks.length - 1]?.text || raw.content?.map(c=>c.text||'').join('');
-    data=JSON.parse(text.replace(/```json|```/g,'').trim());
-  }catch(e){console.error(e);toast('Erro ao gerar. Verifique sua chave de API.');showScreen('form');setStep(1);return;}
-  await loadPromise;
-  currentData=data;
-  renderResult(data,name);
-  saveToHistory(name,segment,data);
-  showScreen('result');setStep(3);
-  updateBadges();
-
-async function generateNextWeek(weekNum){
-  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
-  toast('Gerando semana '+weekNum+' com base no seu progresso...');
-  
-  const done = document.querySelectorAll('.task-check-item.done-task').length;
-  const total = document.querySelectorAll('.task-check-item').length;
-  const pct = total ? Math.round((done/total)*100) : 0;
-  
-  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
-  
-  try{
-    const resp = await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const raw = await resp.json();
-    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
-    const text = textBlocks[textBlocks.length-1]?.text||'';
-    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
-    
-    const newTasks = renderTasks(data.tarefas||[]);
-    const weekCard = document.querySelector('.new-week-card');
-    if(weekCard){
-      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
-    }
-    toast('Semana '+weekNum+' gerada!');
-    updateProgressRing();
-  }catch(e){
-    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
-  }
-}
+function resultBlock(title,badge,badgeClass,body){
+  return `<div class="result-block"><div class="rb-header"><div class="rb-title">${title}</div><span class="rb-badge ${badgeClass}">${badge}</span></div><div class="rb-body">${body}</div></div>`;
 }
 
-function renderResult(data,name){
+function renderResult(data, name){
   document.getElementById('result-title').innerHTML=`Plano pronto, <span style="color:var(--accent)">${name}</span>`;
-  
-  // Adicionar card de progresso semanal no topo
-  const heroDiv = document.querySelector('.result-hero');
-  const existingProgress = document.getElementById('weekly-progress-card');
-  if(existingProgress) existingProgress.remove();
-  
-  const progressCard = document.createElement('div');
-  progressCard.id = 'weekly-progress-card';
-  progressCard.className = 'weekly-progress';
-  progressCard.innerHTML = `
-    <div class="weekly-header">
-      <div class="weekly-title">Seu progresso</div>
-      <div style="font-size:11px;color:var(--muted);font-family:'Syne',sans-serif;">SEMANA 1 DE 4</div>
-    </div>
-    <div class="progress-ring">
-      <div class="ring-wrap">
-        <svg width="56" height="56" viewBox="0 0 56 56">
-          <circle cx="28" cy="28" r="22" fill="none" stroke="var(--bg3)" stroke-width="5"/>
-          <circle id="progress-ring-circle" cx="28" cy="28" r="22" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round" style="transition:stroke-dashoffset .5s ease"/>
-        </svg>
-        <div class="ring-pct" id="ring-pct">0%</div>
-      </div>
-      <div class="ring-info">
-        <div class="ring-label">Tarefas concluídas</div>
-        <div class="ring-count" id="ring-count">0 de 12 tarefas</div>
-      </div>
-    </div>
-  `;
-  heroDiv.insertAdjacentElement('afterend', progressCard);
   document.getElementById('result-sub').textContent=data.resumo||'';
-  const tw1=data.tarefas?.semana1||[],tw2=data.tarefas?.semana2||[];
-  const semana1Block = resultBlock('Semana 1 — Ação imediata','Esta semana','badge-green',`<div>${renderTasks(tw1)}</div>`);
-  const semana2Block = resultBlock('Semana 2 — Aprofundar','Próxima semana','badge-teal',`<div>${renderTasks(tw2)}</div>`);
-  const semana3Block = `<div class="new-week-card"><h3>Semana 3 — Consolidar</h3><p>Complete as semanas 1 e 2 para desbloquear as tarefas da semana 3 geradas pela IA com base no seu progresso.</p><button class="btn btn-teal" style="width:auto;padding:10px 20px;font-size:12px;" onclick="generateNextWeek(3)">Gerar semana 3 com IA</button></div>`;
-  const semana4Block = `<div class="new-week-card" style="opacity:.5"><h3>Semana 4 — Escalar</h3><p>Complete a semana 3 para desbloquear.</p></div>`;
-  document.getElementById('sec-tarefas').innerHTML = semana1Block + semana2Block + semana3Block + semana4Block;
+
+  // Anel de progresso
+  document.getElementById('progress-card-wrap').innerHTML=`
+    <div class="progress-card">
+      <div class="progress-ring-wrap">
+        <div class="ring-svg-wrap">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="22" fill="none" stroke="var(--bg3)" stroke-width="5"/>
+            <circle id="progress-ring-circle" cx="32" cy="32" r="22" fill="none" stroke="var(--accent3)" stroke-width="5" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round" style="transition:stroke-dashoffset .5s ease"/>
+          </svg>
+          <div class="ring-pct" id="ring-pct">0%</div>
+        </div>
+        <div class="ring-details">
+          <div class="ring-label">Progresso das tarefas</div>
+          <div class="ring-count" id="ring-count">0 de 12 tarefas</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Tarefas com semanas progressivas
+  const tw1=data.tarefas?.semana1||[], tw2=data.tarefas?.semana2||[];
+  document.getElementById('sec-tarefas').innerHTML=
+    resultBlock('Semana 1 — Ação imediata','Esta semana','badge-green',`<div>${renderTasks(tw1)}</div>`)+
+    resultBlock('Semana 2 — Aprofundar','Próxima semana','badge-teal',`<div>${renderTasks(tw2)}</div>`)+
+    `<div class="new-week-card"><h3>Semana 3 — Consolidar</h3><p>Complete as semanas 1 e 2 para desbloquear. A IA gera novas tarefas baseadas no seu progresso real.</p><button class="btn btn-teal" style="width:auto;padding:10px 20px;font-size:12px;" onclick="generateNextWeek(3)">Gerar semana 3 com IA</button></div>`+
+    `<div class="new-week-card" style="opacity:.5"><h3>Semana 4 — Escalar</h3><p>Disponível após concluir a semana 3.</p></div>`;
+
+  // Marketing
   const mk=data.marketing||{};
   const canais=(mk.canais||[]).map(c=>`<p><strong>${c.canal}</strong> — ${c.porque} ${c.como}</p>`).join('');
-  document.getElementById('sec-marketing').innerHTML=resultBlock('Estratégia geral','Marketing','badge-green',`<p>${mk.estrategia_geral||''}</p>`)+resultBlock('Canais','Onde atuar','badge-teal',canais)+resultBlock('Conteúdo','Como criar','badge-orange',`<p>${mk.conteudo||''}</p>`)+resultBlock('Ação desta semana','Faça agora','badge-purple',`<p>${mk.acao_imediata||''}</p>`);
+  document.getElementById('sec-marketing').innerHTML=
+    resultBlock('Estratégia geral','Marketing','badge-green',`<p>${mk.estrategia_geral||''}</p>`)+
+    resultBlock('Canais','Onde atuar','badge-teal',canais)+
+    resultBlock('Conteúdo','Como criar','badge-orange',`<p>${mk.conteudo||''}</p>`)+
+    resultBlock('Ação desta semana','Faça agora','badge-purple',`<p>${mk.acao_imediata||''}</p>`);
+
+  // Branding
   const br=data.branding||{};
-  document.getElementById('sec-branding').innerHTML=resultBlock('Posicionamento','Destaque','badge-green',`<p>${br.posicionamento||''}</p>`)+resultBlock('Voz e tom','Personalidade','badge-teal',`<p>${br.voz||''}</p>`)+resultBlock('Diferenciais','Pontos fortes','badge-orange',`<p>${br.diferenciais||''}</p>`)+resultBlock('Slogan','Tagline','badge-purple',`<p style="font-size:17px;font-style:italic;color:var(--accent);">"${br.nome_slogan||''}"</p>`);
+  document.getElementById('sec-branding').innerHTML=
+    resultBlock('Posicionamento','Destaque','badge-green',`<p>${br.posicionamento||''}</p>`)+
+    resultBlock('Voz e tom','Personalidade','badge-teal',`<p>${br.voz||''}</p>`)+
+    resultBlock('Diferenciais','Pontos fortes','badge-orange',`<p>${br.diferenciais||''}</p>`)+
+    resultBlock('Slogan','Tagline','badge-purple',`<p style="font-size:16px;font-style:italic;color:var(--accent);">"${br.nome_slogan||''}"</p>`);
+
+  // Vendas
   const vn=data.vendas||{};
   const tec=(vn.tecnicas||[]).map(t=>`<li>${t}</li>`).join('');
-  document.getElementById('sec-vendas').innerHTML=resultBlock('Abordagem','Estratégia','badge-green',`<p>${vn.abordagem||''}</p>`)+resultBlock('Técnicas','Como vender','badge-teal',`<ul>${tec}</ul>`)+resultBlock('Fidelização','Reter clientes','badge-orange',`<p>${vn.fidelizacao||''}</p>`)+resultBlock('Meta 90 dias','Foco','badge-purple',`<p style="font-size:15px;font-weight:500;color:var(--accent);">${vn.meta_90dias||''}</p>`);
+  document.getElementById('sec-vendas').innerHTML=
+    resultBlock('Abordagem','Estratégia','badge-green',`<p>${vn.abordagem||''}</p>`)+
+    resultBlock('Técnicas','Como vender','badge-teal',`<ul>${tec}</ul>`)+
+    resultBlock('Fidelização','Reter clientes','badge-orange',`<p>${vn.fidelizacao||''}</p>`)+
+    resultBlock('Meta 90 dias','Foco','badge-purple',`<p style="font-size:15px;font-weight:500;color:var(--accent);">${vn.meta_90dias||''}</p>`);
+
+  // Tendências
   const tr=data.tendencias||{};
   const trendItems=(tr.do_segmento||[]).map((t,i)=>`<div class="trend-item"><div class="trend-num">0${i+1}</div><div class="trend-text"><strong>${t.tendencia}</strong><span>${t.impacto} — ${t.oportunidade}</span></div></div>`).join('');
   const refItems=(tr.referencia_mercado||[]).map(r=>`<p><strong>${r.empresa}</strong> — ${r.aprendizado}</p>`).join('');
-  document.getElementById('sec-tendencias').innerHTML=resultBlock('Tendências','Em alta','badge-green',trendItems)+resultBlock('Referências','Aprenda com quem cresceu','badge-teal',refItems);
+  document.getElementById('sec-tendencias').innerHTML=
+    resultBlock('Tendências reais','Em alta agora','badge-green',trendItems)+
+    resultBlock('Referências','Aprenda com quem cresceu','badge-teal',refItems);
+
+  // Público
   const pb=data.publico||{};
   const dores=(pb.dores||[]).map(d=>`<li>${d}</li>`).join('');
   const desejos=(pb.desejos||[]).map(d=>`<li>${d}</li>`).join('');
   const onde=(pb.onde_encontrar||[]).map(o=>`<span class="insight-pill">${o}</span>`).join('');
-  // GEOGRAFIA
+  document.getElementById('sec-publico').innerHTML=
+    resultBlock('Cliente ideal','Perfil','badge-green',`<p>${pb.perfil_detalhado||''}</p>`)+
+    resultBlock('Dores e desejos','O que move','badge-teal',`<strong style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">DORES</strong><ul>${dores}</ul><strong style="font-size:11px;color:var(--muted);display:block;margin:12px 0 6px;">DESEJOS</strong><ul>${desejos}</ul>`)+
+    resultBlock('Onde encontrar','Canais','badge-orange',onde)+
+    resultBlock('Como comunicar','Tom certo','badge-purple',`<p>${pb.como_comunicar||''}</p>`);
+
+  // Geografia
   const geo=data.geografia||{};
   const vizinhas=(geo.cidades_vizinhas||[]).map(c=>`<span class="insight-pill">${c}</span>`).join('');
   document.getElementById('sec-geografia').innerHTML=
-    resultBlock('Estratégia local','Sua cidade','badge-green',`<p>${geo.cidade_foco||''}</p>`)+
-    resultBlock('Cidades vizinhas','Expansão regional','badge-teal',`<p style="margin-bottom:10px">Mercados que você pode alcançar:</p>${vizinhas}`)+
-    resultBlock('Como expandir o raio','Crescimento local','badge-orange',`<p>${geo.raio_atuacao||''}</p>`)+
-    resultBlock('Escala nacional','Se aplicável','badge-purple',`<p>${geo.escala_nacional||''}</p>`);
-  
-  document.getElementById('sec-publico').innerHTML=resultBlock('Cliente ideal','Perfil','badge-green',`<p>${pb.perfil_detalhado||''}</p>`)+resultBlock('Dores e desejos','O que move','badge-teal',`<strong style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">DORES</strong><ul>${dores}</ul><strong style="font-size:11px;color:var(--muted);display:block;margin:12px 0 6px;">DESEJOS</strong><ul>${desejos}</ul>`)+resultBlock('Onde encontrar','Canais','badge-orange',onde)+resultBlock('Como comunicar','Tom certo','badge-purple',`<p>${pb.como_comunicar||''}</p>`);
+    resultBlock('Estratégia local',`${currentProfile?.city||'Sua cidade'}`,'badge-green',`<p>${geo.cidade_foco||''}</p>`)+
+    resultBlock('Cidades vizinhas','Expansão regional','badge-teal',`<p style="margin-bottom:8px">Mercados que você pode alcançar:</p>${vizinhas}`)+
+    resultBlock('Expandir o raio','Crescimento local','badge-orange',`<p>${geo.raio_atuacao||''}</p>`)+
+    resultBlock('Escala nacional','Próximo nível','badge-purple',`<p>${geo.escala_nacional||''}</p>`);
 }
 
-function saveToHistory(name,segment,data){const plans=getPlans();plans.unshift({id:'plan_'+Date.now(),name,segment,date:new Date().toLocaleDateString('pt-BR'),data,taskProgress:{}});savePlans(plans);updateBadges();
-
+// ==================== SEMANA PROGRESSIVA ====================
 async function generateNextWeek(weekNum){
   if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
-  toast('Gerando semana '+weekNum+' com base no seu progresso...');
-  
+  toast('Gerando semana '+weekNum+'...');
+
   const done = document.querySelectorAll('.task-check-item.done-task').length;
   const total = document.querySelectorAll('.task-check-item').length;
   const pct = total ? Math.round((done/total)*100) : 0;
-  
-  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
-  
+
+  const prompt=`Com base no perfil: Segmento: ${currentProfile.segment}, Cidade: ${currentProfile.city}, Dificuldade: ${currentProfile.pain}. O empreendedor completou ${pct}% das tarefas anteriores. Gere 6 tarefas ESPECÍFICAS e AVANÇADAS para a SEMANA ${weekNum}, construindo sobre o progresso feito. Retorne APENAS este JSON sem markdown: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+
   try{
     const resp = await fetch('/api/generate',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body:JSON.stringify({
-        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
+        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido, sem markdown.',
         messages:[{role:'user',content:prompt}]
       })
     });
-    const raw = await resp.json();
-    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
-    const text = textBlocks[textBlocks.length-1]?.text||'';
-    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
-    
+    const rawText = await resp.text();
+    const raw = JSON.parse(rawText);
+    const textBlocks = (raw.content||[]).filter(c=>c.type==='text');
+    const text = (textBlocks[textBlocks.length-1]?.text||rawText).replace(/```json|```/g,'').trim();
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const data = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+
     const newTasks = renderTasks(data.tarefas||[]);
-    const weekCard = document.querySelector('.new-week-card');
-    if(weekCard){
-      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
+    const weekCards = document.querySelectorAll('.new-week-card');
+    if(weekCards.length>0){
+      weekCards[0].outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
     }
     toast('Semana '+weekNum+' gerada!');
     updateProgressRing();
   }catch(e){
+    console.error(e);
     toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
   }
-}}
-function saveToTracking(){toast('Plano salvo em Acompanhamento!');updateBadges();
+}
 
-async function generateNextWeek(weekNum){
-  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
-  toast('Gerando semana '+weekNum+' com base no seu progresso...');
-  
-  const done = document.querySelectorAll('.task-check-item.done-task').length;
-  const total = document.querySelectorAll('.task-check-item').length;
-  const pct = total ? Math.round((done/total)*100) : 0;
-  
-  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
-  
-  try{
-    const resp = await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const raw = await resp.json();
-    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
-    const text = textBlocks[textBlocks.length-1]?.text||'';
-    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
-    
-    const newTasks = renderTasks(data.tarefas||[]);
-    const weekCard = document.querySelector('.new-week-card');
-    if(weekCard){
-      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
-    }
-    toast('Semana '+weekNum+' gerada!');
-    updateProgressRing();
-  }catch(e){
-    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
-  }
-}}
-
+// ==================== HISTORY ====================
 function renderHistory(){
-  const plans=getPlans();const el=document.getElementById('history-list');
-  if(!plans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano ainda</strong><p>Gere seu primeiro plano estratégico.</p></div>`;return;}
-  el.innerHTML=plans.map(p=>{const done=Object.values(p.taskProgress||{}).filter(Boolean).length;const total=(p.data?.tarefas?.semana1||[]).length+(p.data?.tarefas?.semana2||[]).length;const pct=total?Math.round((done/total)*100):0;return `<div class="hist-card"><div class="hc-top"><div><div class="hc-name">${p.name}</div><div class="hc-seg">${p.segment}</div></div><div class="hc-date">${p.date}</div></div><p class="hc-summary">${p.data?.resumo||''}</p><div class="hc-actions"><button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button><button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button><button class="hc-del" onclick="deletePlan('${p.id}')">Excluir</button></div></div>`;}).join('');
-}
-
-function loadPlan(id){const plan=getPlans().find(p=>p.id===id);if(!plan)return;currentData=plan.data;currentProfile={name:plan.name,segment:plan.segment};renderResult(plan.data,plan.name);showScreen('result');setStep(3);}
-function deletePlan(id){if(!confirm('Excluir?'))return;savePlans(getPlans().filter(p=>p.id!==id));updateBadges();
-
-async function generateNextWeek(weekNum){
-  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
-  toast('Gerando semana '+weekNum+' com base no seu progresso...');
-  
-  const done = document.querySelectorAll('.task-check-item.done-task').length;
-  const total = document.querySelectorAll('.task-check-item').length;
-  const pct = total ? Math.round((done/total)*100) : 0;
-  
-  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
-  
-  try{
-    const resp = await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const raw = await resp.json();
-    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
-    const text = textBlocks[textBlocks.length-1]?.text||'';
-    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
-    
-    const newTasks = renderTasks(data.tarefas||[]);
-    const weekCard = document.querySelector('.new-week-card');
-    if(weekCard){
-      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
-    }
-    toast('Semana '+weekNum+' gerada!');
-    updateProgressRing();
-  }catch(e){
-    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
-  }
-}renderHistory();toast('Excluído.');}
-
-function renderTracking(){
-  const plans=getPlans();const el=document.getElementById('tracking-list');
-  if(!plans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano</strong><p>Gere um plano primeiro.</p></div>`;return;}
-  el.innerHTML=plans.map(p=>{
-    const tw1=p.data?.tarefas?.semana1||[],tw2=p.data?.tarefas?.semana2||[];
-    const total=tw1.length+tw2.length,prog=p.taskProgress||{},done=Object.values(prog).filter(Boolean).length,pct=total?Math.round((done/total)*100):0;
-    const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';
-    const t1=tw1.map((t,i)=>{const k=`w1_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
-    const t2=tw2.map((t,i)=>{const k=`w2_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
-    return `<div class="plan-track-card" id="ptc-${p.id}"><div class="ptc-header"><div><div class="ptc-name">${p.name}</div><div class="ptc-seg">${p.segment} · ${p.date}</div></div><span class="rb-badge badge-green">${pct}%</span></div><div class="ptc-prog-label"><span>Progresso</span><span id="pl-${p.id}">${done}/${total}</span></div><div class="ptc-prog-bar"><div class="ptc-prog-fill" id="pf-${p.id}" style="width:${pct}%;background:${fc};"></div></div><div class="week-toggle"><button class="wtab on" onclick="swTab('${p.id}','w1',this)">Semana 1</button><button class="wtab" onclick="swTab('${p.id}','w2',this)">Semana 2</button></div><div id="tw1-${p.id}">${t1}</div><div id="tw2-${p.id}" style="display:none">${t2}</div><div class="ptc-actions"><button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button><button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button></div></div>`;
+  const el=document.getElementById('history-list');
+  if(!localPlans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano ainda</strong><p>Gere seu primeiro plano estratégico.</p></div>`;return;}
+  el.innerHTML=localPlans.map(p=>{
+    const done=Object.values(p.taskProgress||{}).filter(Boolean).length;
+    const total=(p.data?.tarefas?.semana1||[]).length+(p.data?.tarefas?.semana2||[]).length;
+    const pct=total?Math.round((done/total)*100):0;
+    return `<div class="hist-card">
+      <div class="hc-top"><div><div class="hc-name">${p.name}</div><div class="hc-seg">${p.segment}</div></div><div class="hc-date">${p.date}</div></div>
+      <p class="hc-summary">${p.data?.resumo||''}</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.875rem">
+        <span class="rb-badge badge-green">${pct}% concluído</span>
+        ${p.data?.branding?.nome_slogan?`<span class="rb-badge badge-purple">"${p.data.branding.nome_slogan}"</span>`:''}
+      </div>
+      <div class="hc-actions">
+        <button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button>
+        <button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button>
+        <button class="btn btn-red" onclick="deletePlanFromServer('${p.id}')">Excluir</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function swTab(id,w,btn){const c=document.getElementById('ptc-'+id);c.querySelectorAll('.wtab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.getElementById('tw1-'+id).style.display=w==='w1'?'block':'none';document.getElementById('tw2-'+id).style.display=w==='w2'?'block':'none';}
-function toggleTracking(planId,key,el){const plans=getPlans();const plan=plans.find(p=>p.id===planId);if(!plan)return;if(!plan.taskProgress)plan.taskProgress={};plan.taskProgress[key]=!plan.taskProgress[key];savePlans(plans);el.querySelector('.ptc-chk').classList.toggle('on');el.classList.toggle('done-task');const tw1=plan.data?.tarefas?.semana1||[],tw2=plan.data?.tarefas?.semana2||[];const total=tw1.length+tw2.length,done=Object.values(plan.taskProgress).filter(Boolean).length,pct=total?Math.round((done/total)*100):0;const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';document.getElementById('pf-'+planId).style.width=pct+'%';document.getElementById('pf-'+planId).style.background=fc;document.getElementById('pl-'+planId).textContent=`${done}/${total}`;if(pct===100)toast('Parabéns! Todas as tarefas concluídas!');}
-
-function buildPDF(data,name,segment){const lines=[];const a=(t,s)=>lines.push({text:t,style:s||'body'});a('ESTRATEGISTA IA','header');a(`Plano: ${name}`,'title');a(`${segment} · ${new Date().toLocaleDateString('pt-BR')}`,'meta');a('','spacer');a('DIAGNÓSTICO','section');a(data.resumo||'');a('','spacer');a('TAREFAS SEMANA 1','section');(data.tarefas?.semana1||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});a('','spacer');a('TAREFAS SEMANA 2','section');(data.tarefas?.semana2||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});a('','spacer');a('MARKETING','section');a(data.marketing?.estrategia_geral||'');(data.marketing?.canais||[]).forEach(c=>a(`• ${c.canal}: ${c.porque}`));a('Ação: '+(data.marketing?.acao_imediata||''),'highlight');a('','spacer');a('BRANDING','section');a('Posicionamento: '+(data.branding?.posicionamento||''));a('Slogan: "'+(data.branding?.nome_slogan||'')+'"','highlight');a('','spacer');a('VENDAS','section');a(data.vendas?.abordagem||'');(data.vendas?.tecnicas||[]).forEach(t=>a('• '+t));a('Meta: '+(data.vendas?.meta_90dias||''),'highlight');a('','spacer');a('PÚBLICO','section');a(data.publico?.perfil_detalhado||'');(data.publico?.dores||[]).forEach(d=>a('• '+d));return lines;}
-
-function renderPDF(lines,filename){const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});const W=210,ml=18,cw=W-36;let y=20;const ac=[62,158,117],dk=[14,14,16],gy=[120,120,112],lg=[240,240,235];doc.setFillColor(...ac);doc.rect(0,0,W,14,'F');lines.forEach(l=>{if(y>272){doc.addPage();y=20;}switch(l.style){case 'header':doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text(l.text,ml,9);y=24;break;case 'title':doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...dk);const tl=doc.splitTextToSize(l.text,cw);doc.text(tl,ml,y);y+=tl.length*8+3;break;case 'meta':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);doc.text(l.text,ml,y);y+=6;break;case 'spacer':y+=4;break;case 'section':doc.setFillColor(...ac);doc.roundedRect(ml,y,cw,7,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text(l.text,ml+4,y+4.8);y+=12;break;case 'task-title':doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...dk);const tt=doc.splitTextToSize(l.text,cw-4);doc.text(tt,ml+2,y);y+=tt.length*5+1;break;case 'task-desc':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);const td=doc.splitTextToSize(l.text,cw-6);doc.text(td,ml+4,y);y+=td.length*4.5+3;break;case 'highlight':doc.setFillColor(...lg);const hl=doc.splitTextToSize(l.text,cw-8);const hh=hl.length*5+6;doc.roundedRect(ml,y-1,cw,hh,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...ac);doc.text(hl,ml+4,y+3.5);y+=hh+4;break;default:doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(...dk);const bl=doc.splitTextToSize(l.text||'',cw);doc.text(bl,ml,y);y+=bl.length*5+2;}});doc.save(filename);}
-function downloadPDF(){if(!currentData||!currentProfile)return;renderPDF(buildPDF(currentData,currentProfile.name,currentProfile.segment),`plano-${currentProfile.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);toast('PDF baixando...');}
-function downloadPlanPDF(id){const p=getPlans().find(p=>p.id===id);if(!p)return;renderPDF(buildPDF(p.data,p.name,p.segment),`plano-${p.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);toast('PDF baixando...');}
-updateBadges();
-
-async function generateNextWeek(weekNum){
-  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
-  toast('Gerando semana '+weekNum+' com base no seu progresso...');
-  
-  const done = document.querySelectorAll('.task-check-item.done-task').length;
-  const total = document.querySelectorAll('.task-check-item').length;
-  const pct = total ? Math.round((done/total)*100) : 0;
-  
-  const prompt = `Com base no perfil: ${JSON.stringify(currentProfile)} e no progresso de ${pct}% nas semanas anteriores, gere 6 tarefas específicas para a SEMANA ${weekNum} do plano. As tarefas devem ser mais avançadas e construir sobre o que já foi feito. Retorne APENAS este JSON: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
-  
-  try{
-    const resp = await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido.',
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const raw = await resp.json();
-    const textBlocks = raw.content?.filter(c=>c.type==='text')||[];
-    const text = textBlocks[textBlocks.length-1]?.text||'';
-    const data = JSON.parse(text.replace(/```json|```/g,'').trim());
-    
-    const newTasks = renderTasks(data.tarefas||[]);
-    const weekCard = document.querySelector('.new-week-card');
-    if(weekCard){
-      weekCard.outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
-    }
-    toast('Semana '+weekNum+' gerada!');
-    updateProgressRing();
-  }catch(e){
-    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
-  }
+function loadPlan(id){
+  const plan=localPlans.find(p=>p.id===id);
+  if(!plan) return;
+  currentData=plan.data; currentProfile={name:plan.name,segment:plan.segment};
+  currentPlanId=plan.id;
+  renderResult(plan.data, plan.name);
+  showScreen('result'); setStep(3);
 }
+
+// ==================== TRACKING ====================
+function renderTracking(){
+  const el=document.getElementById('tracking-list');
+  if(!localPlans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano</strong><p>Gere um plano primeiro.</p></div>`;return;}
+  el.innerHTML=localPlans.map(p=>{
+    const tw1=p.data?.tarefas?.semana1||[], tw2=p.data?.tarefas?.semana2||[];
+    const total=tw1.length+tw2.length, prog=p.taskProgress||{};
+    const done=Object.values(prog).filter(Boolean).length;
+    const pct=total?Math.round((done/total)*100):0;
+    const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';
+    const t1=tw1.map((t,i)=>{const k=`w1_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
+    const t2=tw2.map((t,i)=>{const k=`w2_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
+    return `<div class="plan-track-card" id="ptc-${p.id}">
+      <div class="ptc-header"><div><div class="ptc-name">${p.name}</div><div class="ptc-seg">${p.segment} · ${p.date}</div></div><span class="rb-badge badge-green">${pct}%</span></div>
+      <div class="ptc-prog-label"><span>Progresso</span><span id="pl-${p.id}">${done}/${total}</span></div>
+      <div class="ptc-prog-bar"><div class="ptc-prog-fill" id="pf-${p.id}" style="width:${pct}%;background:${fc};"></div></div>
+      <div class="week-toggle"><button class="wtab on" onclick="swTab('${p.id}','w1',this)">Semana 1</button><button class="wtab" onclick="swTab('${p.id}','w2',this)">Semana 2</button></div>
+      <div id="tw1-${p.id}">${t1}</div><div id="tw2-${p.id}" style="display:none">${t2}</div>
+      <div class="ptc-actions"><button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button><button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button></div>
+    </div>`;
+  }).join('');
+}
+
+function swTab(id,w,btn){
+  const c=document.getElementById('ptc-'+id);
+  c.querySelectorAll('.wtab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  document.getElementById('tw1-'+id).style.display=w==='w1'?'block':'none';
+  document.getElementById('tw2-'+id).style.display=w==='w2'?'block':'none';
+}
+
+async function toggleTracking(planId,key,el){
+  const plan=localPlans.find(p=>p.id===planId);
+  if(!plan) return;
+  if(!plan.taskProgress) plan.taskProgress={};
+  plan.taskProgress[key]=!plan.taskProgress[key];
+  el.querySelector('.ptc-chk').classList.toggle('on');
+  el.classList.toggle('done-task');
+  const tw1=plan.data?.tarefas?.semana1||[], tw2=plan.data?.tarefas?.semana2||[];
+  const total=tw1.length+tw2.length, done=Object.values(plan.taskProgress).filter(Boolean).length;
+  const pct=total?Math.round((done/total)*100):0;
+  const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';
+  document.getElementById('pf-'+planId).style.width=pct+'%';
+  document.getElementById('pf-'+planId).style.background=fc;
+  document.getElementById('pl-'+planId).textContent=`${done}/${total}`;
+  document.querySelector(`#ptc-${planId} .rb-badge`).textContent=`${pct}%`;
+  await updateTaskProgress(planId, plan.taskProgress);
+  if(pct===100) toast('🎉 Todas as tarefas concluídas!');
+}
+
+// ==================== PDF ====================
+function buildPDF(data,name,segment){
+  const lines=[];
+  const a=(t,s)=>lines.push({text:t,style:s||'body'});
+  a('ESTRATEGISTA IA','header');a(`Plano: ${name}`,'title');a(`${segment} · ${new Date().toLocaleDateString('pt-BR')}`,'meta');
+  a('','spacer');a('DIAGNÓSTICO','section');a(data.resumo||'');
+  a('','spacer');a('TAREFAS SEMANA 1','section');(data.tarefas?.semana1||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});
+  a('','spacer');a('TAREFAS SEMANA 2','section');(data.tarefas?.semana2||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});
+  a('','spacer');a('MARKETING','section');a(data.marketing?.estrategia_geral||'');(data.marketing?.canais||[]).forEach(c=>a(`• ${c.canal}: ${c.porque}`));a('Ação: '+(data.marketing?.acao_imediata||''),'highlight');
+  a('','spacer');a('BRANDING','section');a('Posicionamento: '+(data.branding?.posicionamento||''));a('Slogan: "'+(data.branding?.nome_slogan||'')+'"','highlight');
+  a('','spacer');a('VENDAS','section');a(data.vendas?.abordagem||'');(data.vendas?.tecnicas||[]).forEach(t=>a('• '+t));a('Meta: '+(data.vendas?.meta_90dias||''),'highlight');
+  a('','spacer');a('EXPANSÃO GEOGRÁFICA','section');a('Cidade: '+(data.geografia?.cidade_foco||''));a('Expansão: '+(data.geografia?.raio_atuacao||''));
+  a('','spacer');a('PÚBLICO','section');a(data.publico?.perfil_detalhado||'');(data.publico?.dores||[]).forEach(d=>a('• '+d));
+  return lines;
+}
+
+function renderPDF(lines,filename){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,ml=18,cw=W-36;let y=20;
+  const ac=[62,158,117],dk=[14,14,16],gy=[120,120,112],lg=[240,240,235];
+  doc.setFillColor(...ac);doc.rect(0,0,W,14,'F');
+  lines.forEach(l=>{
+    if(y>272){doc.addPage();y=20;}
+    switch(l.style){
+      case 'header':doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text(l.text,ml,9);y=24;break;
+      case 'title':doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...dk);const tl=doc.splitTextToSize(l.text,cw);doc.text(tl,ml,y);y+=tl.length*8+3;break;
+      case 'meta':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);doc.text(l.text,ml,y);y+=6;break;
+      case 'spacer':y+=4;break;
+      case 'section':doc.setFillColor(...ac);doc.roundedRect(ml,y,cw,7,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text(l.text,ml+4,y+4.8);y+=12;break;
+      case 'task-title':doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...dk);const tt=doc.splitTextToSize(l.text,cw-4);doc.text(tt,ml+2,y);y+=tt.length*5+1;break;
+      case 'task-desc':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);const td=doc.splitTextToSize(l.text,cw-6);doc.text(td,ml+4,y);y+=td.length*4.5+3;break;
+      case 'highlight':doc.setFillColor(...lg);const hl=doc.splitTextToSize(l.text,cw-8);const hh=hl.length*5+6;doc.roundedRect(ml,y-1,cw,hh,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...ac);doc.text(hl,ml+4,y+3.5);y+=hh+4;break;
+      default:doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(...dk);const bl=doc.splitTextToSize(l.text||'',cw);doc.text(bl,ml,y);y+=bl.length*5+2;
+    }
+  });
+  const tp=doc.getNumberOfPages();
+  for(let p=1;p<=tp;p++){doc.setPage(p);doc.setFillColor(...ac);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text('Estrategista IA — estrategista-ia-app-production.up.railway.app',ml,292);doc.text(`${p}/${tp}`,W-ml,292,'right');}
+  doc.save(filename);
+}
+
+function downloadPDF(){
+  if(!currentData||!currentProfile) return;
+  renderPDF(buildPDF(currentData,currentProfile.name,currentProfile.segment),`plano-${currentProfile.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);
+  toast('PDF baixando...');
+}
+
+function downloadPlanPDF(id){
+  const p=localPlans.find(p=>p.id===id);
+  if(!p) return;
+  renderPDF(buildPDF(p.data,p.name,p.segment),`plano-${p.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);
+  toast('PDF baixando...');
+}
+
+// Verificar auth ao carregar
+checkAuth();
 </script>
 </body>
 </html>
