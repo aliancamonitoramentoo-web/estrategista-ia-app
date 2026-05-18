@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estrategista IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#0e0e10;--bg2:#18181c;--bg3:#222228;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#f0efe8;--muted:#888880;--accent:#c8f060;--accent2:#60d4c8;--accent3:#f0a060;--purple:#a090f8;--red:#f06060;--radius:16px;--radius-sm:10px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+.orb1{width:400px;height:400px;background:rgba(200,240,96,0.07);top:-100px;right:-80px;}
+.orb2{width:300px;height:300px;background:rgba(96,212,200,0.06);bottom:100px;left:-60px;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(14,14,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.nav-icon{width:28px;height:28px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.nav-actions{display:flex;gap:8px;}
+.nav-btn{padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.nav-btn:hover{color:var(--text);}
+.badge-count{background:var(--accent);color:#0e0e10;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:800;}
+.app{position:relative;z-index:1;max-width:740px;margin:0 auto;padding:0 1.25rem 4rem;}
+.screen{display:none;}.screen.visible{display:block;}
+.header{padding:2.5rem 0 2rem;text-align:center;}
+h1{font-family:'Syne',sans-serif;font-size:clamp(24px,6vw,36px);font-weight:800;line-height:1.15;margin-bottom:.75rem;letter-spacing:-.02em;}
+h1 span{color:var(--accent);}
+.header-sub{font-size:15px;color:var(--muted);line-height:1.6;max-width:440px;margin:0 auto;}
+.steps{display:flex;justify-content:center;gap:0;margin:1.5rem 0;}
+.step-item{display:flex;align-items:center;gap:6px;font-size:11px;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);transition:color .3s;}
+.step-item.active{color:var(--accent);}.step-item.done{color:var(--accent2);}
+.step-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.step-line{width:28px;height:1px;background:var(--border2);margin:0 4px;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;animation:fadeUp .4s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.card-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.card-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-grid.full{grid-template-columns:1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:600;color:var(--muted);font-family:'Syne',sans-serif;letter-spacing:.05em;text-transform:uppercase;}
+.field input,.field select,.field textarea{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;outline:none;transition:border-color .2s;width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
+.field select option{background:var(--bg3);}
+.field textarea{resize:vertical;min-height:72px;line-height:1.55;}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.03em;cursor:pointer;border:none;transition:all .2s;}
+.btn-primary{background:var(--accent);color:#0e0e10;width:100%;margin-top:.75rem;}
+.btn-primary:hover{background:#d8ff70;transform:translateY(-1px);}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:12px;padding:9px 16px;}
+.btn-ghost:hover{color:var(--text);}
+.btn-teal{background:rgba(96,212,200,0.12);border:1px solid rgba(96,212,200,0.25);color:var(--accent2);font-size:12px;padding:9px 16px;}
+.btn-orange{background:rgba(240,160,96,0.12);border:1px solid rgba(240,160,96,0.25);color:var(--accent3);font-size:12px;padding:9px 16px;}
+.spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1.5rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-steps{list-style:none;text-align:left;max-width:300px;margin:1.5rem auto 0;}
+.loading-steps li{font-size:13px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:10px;transition:color .3s;}
+.loading-steps li.active{color:var(--accent);}.loading-steps li.done{color:var(--accent2);}
+.ls-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.result-hero{text-align:center;padding:1.25rem 0 1.5rem;}
+.result-hero h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.4rem;}
+.result-hero p{font-size:13px;color:var(--muted);line-height:1.6;}
+.result-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1rem;}
+.section-tabs{display:flex;gap:8px;margin-bottom:1.25rem;overflow-x:auto;padding-bottom:4px;}
+.section-tabs::-webkit-scrollbar{display:none;}
+.stab{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.stab.active{background:var(--accent);border-color:var(--accent);color:#0e0e10;}
+.section-content{display:none;}.section-content.visible{display:block;}
+.result-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.375rem;margin-bottom:10px;animation:fadeUp .35s ease both;}
+.rb-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:.875rem;}
+.rb-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;}
+.rb-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;font-family:'Syne',sans-serif;flex-shrink:0;}
+.badge-green{background:rgba(200,240,96,0.12);color:var(--accent);}
+.badge-teal{background:rgba(96,212,200,0.12);color:var(--accent2);}
+.badge-orange{background:rgba(240,160,96,0.12);color:var(--accent3);}
+.badge-purple{background:rgba(160,144,248,0.12);color:var(--purple);}
+.rb-body{font-size:13px;color:#b0b0a8;line-height:1.7;}
+.rb-body p{margin-bottom:.5rem;}.rb-body p:last-child{margin-bottom:0;}
+.rb-body ul{padding-left:1.1rem;display:flex;flex-direction:column;gap:5px;}
+.rb-body strong{color:var(--text);font-weight:500;}
+.task-check-item{display:flex;align-items:flex-start;gap:12px;padding:.75rem 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none;}
+.task-check-item:last-child{border-bottom:none;padding-bottom:0;}
+.task-check-item:first-child{padding-top:0;}
+.task-check-item.done-task{opacity:.4;}
+.task-chk{width:20px;height:20px;min-width:20px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px;}
+.task-chk.on{background:var(--accent);border-color:var(--accent);}
+.task-chk.on svg{display:block;}.task-chk svg{display:none;}
+.task-text strong{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.task-text span{font-size:12px;color:var(--muted);line-height:1.5;}
+.trend-item{display:flex;gap:12px;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border);}
+.trend-item:last-child{border-bottom:none;}
+.trend-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--border2);min-width:28px;line-height:1;}
+.trend-text strong{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.trend-text span{font-size:12px;color:var(--muted);line-height:1.55;}
+.insight-pill{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted);margin:3px;}
+.hist-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;animation:fadeUp .3s ease both;}
+.hc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.75rem;}
+.hc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.hc-seg{font-size:11px;color:var(--muted);margin-top:2px;}
+.hc-date{font-size:11px;color:var(--muted);white-space:nowrap;}
+.hc-summary{font-size:13px;color:#a0a098;line-height:1.6;margin-bottom:.875rem;}
+.hc-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.hc-del{background:rgba(240,96,96,0.1);border:1px solid rgba(240,96,96,0.2);color:var(--red);font-size:11px;padding:7px 13px;border-radius:var(--radius-sm);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;transition:all .2s;}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:.75rem 1.25rem;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text);z-index:999;transition:transform .3s ease;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.tracking-header,.history-header{padding:1.5rem 0 1rem;}
+.tracking-header h2,.history-header h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.3rem;}
+.tracking-header p,.history-header p{font-size:13px;color:var(--muted);}
+.plan-track-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;}
+.ptc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.875rem;}
+.ptc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.ptc-seg{font-size:11px;color:var(--muted);margin-top:2px;}
+.ptc-prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;}
+.ptc-prog-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:1rem;}
+.ptc-prog-fill{height:100%;border-radius:3px;transition:width .4s ease;}
+.ptc-task{display:flex;align-items:flex-start;gap:10px;padding:.6rem 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.ptc-task:last-child{border-bottom:none;}
+.ptc-task.done-task{opacity:.38;}
+.ptc-chk{width:18px;height:18px;min-width:18px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;}
+.ptc-chk.on{background:var(--accent);border-color:var(--accent);}
+.ptc-chk.on svg{display:block;}.ptc-chk svg{display:none;}
+.ptc-task-text{font-size:13px;color:var(--text);line-height:1.4;}
+.ptc-actions{display:flex;gap:8px;margin-top:.875rem;flex-wrap:wrap;}
+.week-toggle{display:flex;gap:6px;margin-bottom:.875rem;}
+.wtab{padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;color:var(--muted);background:transparent;transition:all .2s;}
+.wtab.on{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+.empty-state{text-align:center;padding:4rem 1rem;color:var(--muted);}
+.empty-state strong{color:var(--text);display:block;font-family:'Syne',sans-serif;font-size:16px;margin-bottom:.5rem;}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr;}h1{font-size:24px;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.6 5L13 7L8.6 9L7 13L5.4 9L1 7L5.4 5L7 1Z" fill="#0e0e10"/></svg></div>
+    Estrategista IA
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="showScreen('tracking')">✓ Tarefas <span class="badge-count" id="badge-tracking">0</span></button>
+    <button class="nav-btn" onclick="showScreen('history')">≡ Histórico <span class="badge-count" id="badge-history">0</span></button>
+  </div>
+</nav>
+<div class="app">
+<div class="toast" id="toast"></div>
+
+<!-- FORM -->
+<div class="screen visible" id="screen-form">
+  <div class="header">
+    <h1>Seu plano de<br><span>crescimento</span> personalizado</h1>
+    <p class="header-sub">Preencha seu perfil. A IA analisa, cruza com tendências do mercado e gera sua estratégia completa.</p>
+  </div>
+  <div class="steps">
+    <div class="step-item active" id="step1-ind"><div class="step-dot"></div>Perfil</div>
+    <div class="step-line"></div>
+    <div class="step-item" id="step2-ind"><div class="step-dot"></div>Análise</div>
+    <div class="step-line"></div>
+    <div class="step-item" id="step3-ind"><div class="step-dot"></div>Estratégia</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Sobre o negócio</div>
+    <div class="form-grid">
+      <div class="field"><label>Nome do negócio</label><input type="text" id="biz-name" placeholder="Ex: Barbearia do João"></div>
+      <div class="field"><label>Segmento</label><select id="biz-segment"><option value="">Selecione...</option><option>Barbearia</option><option>Salão de beleza</option><option>Móveis planejados</option><option>Restaurante / Lanchonete</option><option>Moda e vestuário</option><option>Estética e bem-estar</option><option>Construção e reforma</option><option>Tecnologia e serviços digitais</option><option>Educação e cursos</option><option>Saúde e fitness</option><option>Pet shop e veterinário</option><option>Outro</option></select></div>
+      <div class="field"><label>Cidade / Estado</label><input type="text" id="biz-city" placeholder="Ex: Recife, PE"></div>
+      <div class="field"><label>Tempo no mercado</label><select id="biz-time"><option value="">Selecione...</option><option>Menos de 6 meses</option><option>6 meses a 1 ano</option><option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Situação atual</div>
+    <div class="form-grid">
+      <div class="field"><label>Colaboradores</label><select id="biz-team"><option value="">Selecione...</option><option>Só eu</option><option>1 a 2</option><option>3 a 5</option><option>Mais de 5</option></select></div>
+      <div class="field"><label>Faturamento mensal</label><select id="biz-revenue"><option value="">Selecione...</option><option>Até R$ 3.000</option><option>R$ 3.000 – R$ 8.000</option><option>R$ 8.000 – R$ 20.000</option><option>R$ 20.000 – R$ 50.000</option><option>Acima de R$ 50.000</option></select></div>
+      <div class="field full"><label>Maior dificuldade hoje</label><select id="biz-pain"><option value="">Selecione...</option><option>Atrair novos clientes</option><option>Fidelizar clientes existentes</option><option>Organização e processos internos</option><option>Precificação e margem</option><option>Presença online e redes sociais</option><option>Gestão de tempo</option><option>Fluxo de caixa</option><option>Diferenciação da concorrência</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Público e posicionamento</div>
+    <div class="form-grid">
+      <div class="field"><label>Faixa etária</label><select id="biz-age"><option value="">Selecione...</option><option>18–25 anos</option><option>25–35 anos</option><option>35–50 anos</option><option>50+ anos</option><option>Todas as faixas</option></select></div>
+      <div class="field"><label>Ticket médio</label><select id="biz-ticket"><option value="">Selecione...</option><option>Até R$ 50</option><option>R$ 50 – R$ 150</option><option>R$ 150 – R$ 500</option><option>R$ 500 – R$ 2.000</option><option>Acima de R$ 2.000</option></select></div>
+      <div class="field full"><label>Posicionamento</label><select id="biz-position"><option value="">Selecione...</option><option>Preço mais acessível da região</option><option>Melhor custo-benefício</option><option>Qualidade premium</option><option>Especialista em nicho específico</option><option>Atendimento personalizado</option><option>Ainda não tenho posicionamento claro</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Presença digital</div>
+    <div class="form-grid">
+      <div class="field"><label>Onde está presente</label><select id="biz-social"><option value="">Selecione...</option><option>Só WhatsApp</option><option>WhatsApp + Instagram</option><option>WhatsApp + Instagram + Google</option><option>Tenho site próprio</option><option>Não tenho presença digital</option></select></div>
+      <div class="field"><label>Frequência de posts</label><select id="biz-posts"><option value="">Selecione...</option><option>Nunca posto</option><option>Raramente</option><option>Às vezes (1x por semana)</option><option>Regularmente (3–5x)</option><option>Todo dia</option></select></div>
+      <div class="field full"><label>Diferenciais (opcional)</label><textarea id="biz-diff" placeholder="Ex: atendimento domiciliar, produtos naturais..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Meta de crescimento</div>
+    <div class="form-grid full">
+      <div class="field"><label>Meta nos próximos 90 dias</label><select id="biz-goal"><option value="">Selecione...</option><option>Dobrar o número de clientes</option><option>Aumentar o faturamento em 30%</option><option>Construir uma marca reconhecida</option><option>Estruturar processos para crescer</option><option>Reduzir dependência de indicações</option><option>Contratar meu primeiro colaborador</option><option>Criar uma presença digital forte</option></select></div>
+    </div>
+  </div>
+  <button class="btn btn-primary" onclick="startGeneration()">⭐ Gerar minha estratégia completa</button>
+</div>
+
+<!-- LOADING -->
+<div class="screen" id="screen-loading">
+  <div style="text-align:center;padding:3rem 0;">
+    <div class="spinner"></div>
+    <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:.4rem;">Analisando seu negócio...</p>
+    <p style="font-size:13px;color:var(--muted);">Isso leva alguns segundos</p>
+    <ul class="loading-steps">
+      <li id="ls1"><div class="ls-dot"></div>Lendo seu perfil</li>
+      <li id="ls2"><div class="ls-dot"></div>Buscando tendências do segmento</li>
+      <li id="ls3"><div class="ls-dot"></div>Analisando empresas de referência</li>
+      <li id="ls4"><div class="ls-dot"></div>Cruzando dados e oportunidades</li>
+      <li id="ls5"><div class="ls-dot"></div>Gerando sua estratégia</li>
+    </ul>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-result">
+  <div class="result-hero">
+    <h2 id="result-title">Plano pronto!</h2>
+    <p id="result-sub"></p>
+    <div class="result-actions">
+      <button class="btn btn-teal" onclick="downloadPDF()">↓ Baixar PDF</button>
+      <button class="btn btn-orange" onclick="saveToTracking()">✓ Acompanhar tarefas</button>
+      <button class="btn btn-ghost" onclick="showScreen('form')">Novo plano</button>
+    </div>
+  </div>
+  <div class="section-tabs">
+    <button class="stab active" onclick="showSection('tarefas',this)">Tarefas</button>
+    <button class="stab" onclick="showSection('marketing',this)">Marketing</button>
+    <button class="stab" onclick="showSection('branding',this)">Branding</button>
+    <button class="stab" onclick="showSection('vendas',this)">Vendas</button>
+    <button class="stab" onclick="showSection('tendencias',this)">Tendências</button>
+    <button class="stab" onclick="showSection('publico',this)">Público</button>
+  </div>
+  <div id="sec-tarefas" class="section-content visible"></div>
+  <div id="sec-marketing" class="section-content"></div>
+  <div id="sec-branding" class="section-content"></div>
+  <div id="sec-vendas" class="section-content"></div>
+  <div id="sec-tendencias" class="section-content"></div>
+  <div id="sec-publico" class="section-content"></div>
+</div>
+
+<!-- TRACKING -->
+<div class="screen" id="screen-tracking">
+  <div class="tracking-header"><h2>Acompanhamento de tarefas</h2><p>Marque as tarefas conforme for concluindo.</p></div>
+  <div id="tracking-list"></div>
+</div>
+
+<!-- HISTORY -->
+<div class="screen" id="screen-history">
+  <div class="history-header"><h2>Histórico de planos</h2><p>Todos os planos gerados ficam salvos aqui.</p></div>
+  <div id="history-list"></div>
+</div>
+</div>
+
+<script>
+// COLOQUE SUA CHAVE AQUI
+const API_KEY = 'PLACEHOLDER' // chave via função;
+
+let currentData=null,currentProfile=null;
+const SK='estrategista_plans';
+function getPlans(){try{return JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){return[];}}
+function savePlans(p){localStorage.setItem(SK,JSON.stringify(p));}
+function updateBadges(){const p=getPlans();document.getElementById('badge-history').textContent=p.length;document.getElementById('badge-tracking').textContent=p.length;}
+function showScreen(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));document.getElementById('screen-'+n).classList.add('visible');window.scrollTo({top:0,behavior:'smooth'});if(n==='history')renderHistory();if(n==='tracking')renderTracking();}
+function showSection(n,btn){document.querySelectorAll('.section-content').forEach(s=>s.classList.remove('visible'));document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));document.getElementById('sec-'+n).classList.add('visible');btn.classList.add('active');}
+function setStep(n){['step1-ind','step2-ind','step3-ind'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','done');if(i+1<n)el.classList.add('done');else if(i+1===n)el.classList.add('active');});}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function val(id){return document.getElementById(id)?.value||'';}
+function animateLoading(){const steps=['ls1','ls2','ls3','ls4','ls5'];let i=0;steps.forEach(id=>{const el=document.getElementById(id);el.classList.remove('active','done');});return new Promise(resolve=>{function next(){if(i>0)document.getElementById(steps[i-1]).classList.replace('active','done');if(i<steps.length){document.getElementById(steps[i]).classList.add('active');i++;setTimeout(next,800+Math.random()*500);}else setTimeout(resolve,300);}next();});}
+function renderTasks(tasks){return tasks.map(t=>`<div class="task-check-item" onclick="toggleTask(this)"><div class="task-chk"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0e0e10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-text"><strong>${t.title}</strong><span>${t.desc}</span></div></div>`).join('');}
+function toggleTask(el){el.querySelector('.task-chk').classList.toggle('on');el.classList.toggle('done-task');}
+function resultBlock(title,badge,badgeClass,body){return `<div class="result-block"><div class="rb-header"><div class="rb-title">${title}</div><span class="rb-badge ${badgeClass}">${badge}</span></div><div class="rb-body">${body}</div></div>`;}
+
+async function startGeneration(){
+  const name=val('biz-name'),segment=val('biz-segment'),city=val('biz-city'),time=val('biz-time'),team=val('biz-team'),revenue=val('biz-revenue'),pain=val('biz-pain'),age=val('biz-age'),ticket=val('biz-ticket'),position=val('biz-position'),social=val('biz-social'),posts=val('biz-posts'),diff=val('biz-diff'),goal=val('biz-goal');
+  if(!name||!segment||!pain||!goal){toast('Preencha: nome, segmento, dificuldade e meta.');return;}
+  currentProfile={name,segment,city,time,team,revenue,pain,age,ticket,position,social,posts,diff,goal};
+  showScreen('loading');setStep(2);
+  const profileText=`Nome: ${name}\nSegmento: ${segment}\nCidade: ${city}\nTempo: ${time}\nColaboradores: ${team}\nFaturamento: ${revenue}\nDificuldade: ${pain}\nFaixa etária: ${age}\nTicket: ${ticket}\nPosicionamento: ${position}\nPresença digital: ${social}\nPosts: ${posts}\nDiferenciais: ${diff}\nMeta: ${goal}`;
+  const loadPromise=animateLoading();
+  let data;
+  try{
+    const resp=await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:'Você é um estrategista especializado em micro e pequenas empresas brasileiras. Responda APENAS em JSON válido, sem markdown.',messages:[{role:'user',content:`Analise este perfil e gere um plano estratégico:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resumo":"2 frases","tarefas":{"semana1":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"semana2":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]},"marketing":{"estrategia_geral":"...","canais":[{"canal":"...","porque":"...","como":"..."}],"conteudo":"...","acao_imediata":"..."},"branding":{"posicionamento":"...","voz":"...","diferenciais":"...","nome_slogan":"..."},"vendas":{"abordagem":"...","tecnicas":["...","...","..."],"fidelizacao":"...","meta_90dias":"..."},"tendencias":{"do_segmento":[{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."}],"referencia_mercado":[{"empresa":"...","aprendizado":"..."},{"empresa":"...","aprendizado":"..."}]},"publico":{"perfil_detalhado":"...","dores":["...","...","..."],"desejos":["...","...","..."],"onde_encontrar":["...","...","..."],"como_comunicar":"..."}}`}]})
+    });
+    const raw=await resp.json();
+    const text=raw.content?.map(c=>c.text||'').join('');
+    data=JSON.parse(text.replace(/```json|```/g,'').trim());
+  }catch(e){console.error(e);toast('Erro ao gerar. Verifique sua chave de API.');showScreen('form');setStep(1);return;}
+  await loadPromise;
+  currentData=data;
+  renderResult(data,name);
+  saveToHistory(name,segment,data);
+  showScreen('result');setStep(3);
+  updateBadges();
+}
+
+function renderResult(data,name){
+  document.getElementById('result-title').innerHTML=`Plano pronto, <span style="color:var(--accent)">${name}</span>`;
+  document.getElementById('result-sub').textContent=data.resumo||'';
+  const tw1=data.tarefas?.semana1||[],tw2=data.tarefas?.semana2||[];
+  document.getElementById('sec-tarefas').innerHTML=resultBlock('Semana 1 — Ação imediata','Esta semana','badge-green',`<div>${renderTasks(tw1)}</div>`)+resultBlock('Semana 2 — Aprofundar','Próxima semana','badge-teal',`<div>${renderTasks(tw2)}</div>`);
+  const mk=data.marketing||{};
+  const canais=(mk.canais||[]).map(c=>`<p><strong>${c.canal}</strong> — ${c.porque} ${c.como}</p>`).join('');
+  document.getElementById('sec-marketing').innerHTML=resultBlock('Estratégia geral','Marketing','badge-green',`<p>${mk.estrategia_geral||''}</p>`)+resultBlock('Canais','Onde atuar','badge-teal',canais)+resultBlock('Conteúdo','Como criar','badge-orange',`<p>${mk.conteudo||''}</p>`)+resultBlock('Ação desta semana','Faça agora','badge-purple',`<p>${mk.acao_imediata||''}</p>`);
+  const br=data.branding||{};
+  document.getElementById('sec-branding').innerHTML=resultBlock('Posicionamento','Destaque','badge-green',`<p>${br.posicionamento||''}</p>`)+resultBlock('Voz e tom','Personalidade','badge-teal',`<p>${br.voz||''}</p>`)+resultBlock('Diferenciais','Pontos fortes','badge-orange',`<p>${br.diferenciais||''}</p>`)+resultBlock('Slogan','Tagline','badge-purple',`<p style="font-size:17px;font-style:italic;color:var(--accent);">"${br.nome_slogan||''}"</p>`);
+  const vn=data.vendas||{};
+  const tec=(vn.tecnicas||[]).map(t=>`<li>${t}</li>`).join('');
+  document.getElementById('sec-vendas').innerHTML=resultBlock('Abordagem','Estratégia','badge-green',`<p>${vn.abordagem||''}</p>`)+resultBlock('Técnicas','Como vender','badge-teal',`<ul>${tec}</ul>`)+resultBlock('Fidelização','Reter clientes','badge-orange',`<p>${vn.fidelizacao||''}</p>`)+resultBlock('Meta 90 dias','Foco','badge-purple',`<p style="font-size:15px;font-weight:500;color:var(--accent);">${vn.meta_90dias||''}</p>`);
+  const tr=data.tendencias||{};
+  const trendItems=(tr.do_segmento||[]).map((t,i)=>`<div class="trend-item"><div class="trend-num">0${i+1}</div><div class="trend-text"><strong>${t.tendencia}</strong><span>${t.impacto} — ${t.oportunidade}</span></div></div>`).join('');
+  const refItems=(tr.referencia_mercado||[]).map(r=>`<p><strong>${r.empresa}</strong> — ${r.aprendizado}</p>`).join('');
+  document.getElementById('sec-tendencias').innerHTML=resultBlock('Tendências','Em alta','badge-green',trendItems)+resultBlock('Referências','Aprenda com quem cresceu','badge-teal',refItems);
+  const pb=data.publico||{};
+  const dores=(pb.dores||[]).map(d=>`<li>${d}</li>`).join('');
+  const desejos=(pb.desejos||[]).map(d=>`<li>${d}</li>`).join('');
+  const onde=(pb.onde_encontrar||[]).map(o=>`<span class="insight-pill">${o}</span>`).join('');
+  document.getElementById('sec-publico').innerHTML=resultBlock('Cliente ideal','Perfil','badge-green',`<p>${pb.perfil_detalhado||''}</p>`)+resultBlock('Dores e desejos','O que move','badge-teal',`<strong style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">DORES</strong><ul>${dores}</ul><strong style="font-size:11px;color:var(--muted);display:block;margin:12px 0 6px;">DESEJOS</strong><ul>${desejos}</ul>`)+resultBlock('Onde encontrar','Canais','badge-orange',onde)+resultBlock('Como comunicar','Tom certo','badge-purple',`<p>${pb.como_comunicar||''}</p>`);
+}
+
+function saveToHistory(name,segment,data){const plans=getPlans();plans.unshift({id:'plan_'+Date.now(),name,segment,date:new Date().toLocaleDateString('pt-BR'),data,taskProgress:{}});savePlans(plans);updateBadges();}
+function saveToTracking(){toast('Plano salvo em Acompanhamento!');updateBadges();}
+
+function renderHistory(){
+  const plans=getPlans();const el=document.getElementById('history-list');
+  if(!plans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano ainda</strong><p>Gere seu primeiro plano estratégico.</p></div>`;return;}
+  el.innerHTML=plans.map(p=>{const done=Object.values(p.taskProgress||{}).filter(Boolean).length;const total=(p.data?.tarefas?.semana1||[]).length+(p.data?.tarefas?.semana2||[]).length;const pct=total?Math.round((done/total)*100):0;return `<div class="hist-card"><div class="hc-top"><div><div class="hc-name">${p.name}</div><div class="hc-seg">${p.segment}</div></div><div class="hc-date">${p.date}</div></div><p class="hc-summary">${p.data?.resumo||''}</p><div class="hc-actions"><button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button><button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button><button class="hc-del" onclick="deletePlan('${p.id}')">Excluir</button></div></div>`;}).join('');
+}
+
+function loadPlan(id){const plan=getPlans().find(p=>p.id===id);if(!plan)return;currentData=plan.data;currentProfile={name:plan.name,segment:plan.segment};renderResult(plan.data,plan.name);showScreen('result');setStep(3);}
+function deletePlan(id){if(!confirm('Excluir?'))return;savePlans(getPlans().filter(p=>p.id!==id));updateBadges();renderHistory();toast('Excluído.');}
+
+function renderTracking(){
+  const plans=getPlans();const el=document.getElementById('tracking-list');
+  if(!plans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano</strong><p>Gere um plano primeiro.</p></div>`;return;}
+  el.innerHTML=plans.map(p=>{
+    const tw1=p.data?.tarefas?.semana1||[],tw2=p.data?.tarefas?.semana2||[];
+    const total=tw1.length+tw2.length,prog=p.taskProgress||{},done=Object.values(prog).filter(Boolean).length,pct=total?Math.round((done/total)*100):0;
+    const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';
+    const t1=tw1.map((t,i)=>{const k=`w1_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
+    const t2=tw2.map((t,i)=>{const k=`w2_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
+    return `<div class="plan-track-card" id="ptc-${p.id}"><div class="ptc-header"><div><div class="ptc-name">${p.name}</div><div class="ptc-seg">${p.segment} · ${p.date}</div></div><span class="rb-badge badge-green">${pct}%</span></div><div class="ptc-prog-label"><span>Progresso</span><span id="pl-${p.id}">${done}/${total}</span></div><div class="ptc-prog-bar"><div class="ptc-prog-fill" id="pf-${p.id}" style="width:${pct}%;background:${fc};"></div></div><div class="week-toggle"><button class="wtab on" onclick="swTab('${p.id}','w1',this)">Semana 1</button><button class="wtab" onclick="swTab('${p.id}','w2',this)">Semana 2</button></div><div id="tw1-${p.id}">${t1}</div><div id="tw2-${p.id}" style="display:none">${t2}</div><div class="ptc-actions"><button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button><button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button></div></div>`;
+  }).join('');
+}
+
+function swTab(id,w,btn){const c=document.getElementById('ptc-'+id);c.querySelectorAll('.wtab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.getElementById('tw1-'+id).style.display=w==='w1'?'block':'none';document.getElementById('tw2-'+id).style.display=w==='w2'?'block':'none';}
+function toggleTracking(planId,key,el){const plans=getPlans();const plan=plans.find(p=>p.id===planId);if(!plan)return;if(!plan.taskProgress)plan.taskProgress={};plan.taskProgress[key]=!plan.taskProgress[key];savePlans(plans);el.querySelector('.ptc-chk').classList.toggle('on');el.classList.toggle('done-task');const tw1=plan.data?.tarefas?.semana1||[],tw2=plan.data?.tarefas?.semana2||[];const total=tw1.length+tw2.length,done=Object.values(plan.taskProgress).filter(Boolean).length,pct=total?Math.round((done/total)*100):0;const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';document.getElementById('pf-'+planId).style.width=pct+'%';document.getElementById('pf-'+planId).style.background=fc;document.getElementById('pl-'+planId).textContent=`${done}/${total}`;if(pct===100)toast('Parabéns! Todas as tarefas concluídas!');}
+
+function buildPDF(data,name,segment){const lines=[];const a=(t,s)=>lines.push({text:t,style:s||'body'});a('ESTRATEGISTA IA','header');a(`Plano: ${name}`,'title');a(`${segment} · ${new Date().toLocaleDateString('pt-BR')}`,'meta');a('','spacer');a('DIAGNÓSTICO','section');a(data.resumo||'');a('','spacer');a('TAREFAS SEMANA 1','section');(data.tarefas?.semana1||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});a('','spacer');a('TAREFAS SEMANA 2','section');(data.tarefas?.semana2||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});a('','spacer');a('MARKETING','section');a(data.marketing?.estrategia_geral||'');(data.marketing?.canais||[]).forEach(c=>a(`• ${c.canal}: ${c.porque}`));a('Ação: '+(data.marketing?.acao_imediata||''),'highlight');a('','spacer');a('BRANDING','section');a('Posicionamento: '+(data.branding?.posicionamento||''));a('Slogan: "'+(data.branding?.nome_slogan||'')+'"','highlight');a('','spacer');a('VENDAS','section');a(data.vendas?.abordagem||'');(data.vendas?.tecnicas||[]).forEach(t=>a('• '+t));a('Meta: '+(data.vendas?.meta_90dias||''),'highlight');a('','spacer');a('PÚBLICO','section');a(data.publico?.perfil_detalhado||'');(data.publico?.dores||[]).forEach(d=>a('• '+d));return lines;}
+
+function renderPDF(lines,filename){const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});const W=210,ml=18,cw=W-36;let y=20;const ac=[62,158,117],dk=[14,14,16],gy=[120,120,112],lg=[240,240,235];doc.setFillColor(...ac);doc.rect(0,0,W,14,'F');lines.forEach(l=>{if(y>272){doc.addPage();y=20;}switch(l.style){case 'header':doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text(l.text,ml,9);y=24;break;case 'title':doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...dk);const tl=doc.splitTextToSize(l.text,cw);doc.text(tl,ml,y);y+=tl.length*8+3;break;case 'meta':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);doc.text(l.text,ml,y);y+=6;break;case 'spacer':y+=4;break;case 'section':doc.setFillColor(...ac);doc.roundedRect(ml,y,cw,7,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text(l.text,ml+4,y+4.8);y+=12;break;case 'task-title':doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...dk);const tt=doc.splitTextToSize(l.text,cw-4);doc.text(tt,ml+2,y);y+=tt.length*5+1;break;case 'task-desc':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);const td=doc.splitTextToSize(l.text,cw-6);doc.text(td,ml+4,y);y+=td.length*4.5+3;break;case 'highlight':doc.setFillColor(...lg);const hl=doc.splitTextToSize(l.text,cw-8);const hh=hl.length*5+6;doc.roundedRect(ml,y-1,cw,hh,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...ac);doc.text(hl,ml+4,y+3.5);y+=hh+4;break;default:doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(...dk);const bl=doc.splitTextToSize(l.text||'',cw);doc.text(bl,ml,y);y+=bl.length*5+2;}});doc.save(filename);}
+function downloadPDF(){if(!currentData||!currentProfile)return;renderPDF(buildPDF(currentData,currentProfile.name,currentProfile.segment),`plano-${currentProfile.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);toast('PDF baixando...');}
+function downloadPlanPDF(id){const p=getPlans().find(p=>p.id===id);if(!p)return;renderPDF(buildPDF(p.data,p.name,p.segment),`plano-${p.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);toast('PDF baixando...');}
+updateBadges();
+</script>
+</body>
+</html>
