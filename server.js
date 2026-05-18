@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const app = express();
 
 app.use(express.json());
@@ -19,13 +18,18 @@ app.post('/api/generate', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 6000,
         system: req.body.system,
-        messages: req.body.messages
+        messages: req.body.messages,
+        tools: [{
+          type: "web_search_20250305",
+          name: "web_search"
+        }]
       })
     });
-    const data = await response.json();
-    res.json(data);
+
+    const text = await response.text();
+    res.status(response.status).send(text);
   } catch(e) {
     res.status(500).json({ error: e.message });
   }
