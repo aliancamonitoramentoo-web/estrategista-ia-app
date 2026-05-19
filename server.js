@@ -26,6 +26,27 @@ function getUser(token) {
   return users.get(email) || null;
 }
 
+// ==================== CRM SYNC ====================
+async function sendToCRM(userData) {
+  const CRM_URL = 'https://crm-alianca-production.up.railway.app/api/leads-estrategista';
+  
+  const response = await fetch(CRM_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: userData.name,
+      email: userData.email,
+      createdAt: new Date().toISOString()
+    })
+  });
+
+  if (!response.ok) {
+    console.log('CRM sync failed:', response.status);
+  } else {
+    console.log('Lead enviado ao CRM:', userData.name);
+  }
+}
+
 // ==================== AUTH ROUTES ====================
 
 // Cadastro
@@ -47,6 +68,13 @@ app.post('/api/auth/register', (req, res) => {
 
   const token = generateToken();
   sessions.set(token, email);
+
+  // Enviar para o CRM automaticamente
+  try {
+    await sendToCRM({ name, email });
+  } catch(e) {
+    console.log('CRM sync error:', e.message);
+  }
 
   res.json({ token, user: { name, email, plansGenerated: 0 } });
 });
