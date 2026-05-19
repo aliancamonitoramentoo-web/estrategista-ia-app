@@ -69,12 +69,8 @@ app.post('/api/auth/register', (req, res) => {
   const token = generateToken();
   sessions.set(token, email);
 
-  // Enviar para o CRM automaticamente
-  try {
-    await sendToCRM({ name, email });
-  } catch(e) {
-    console.log('CRM sync error:', e.message);
-  }
+  // Enviar para o CRM automaticamente (sem bloquear o cadastro)
+  sendToCRM({ name, email }).catch(e => console.log('CRM sync error:', e.message));
 
   res.json({ token, user: { name, email, plansGenerated: 0 } });
 });
