@@ -3,899 +3,1089 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estrategista IA</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Estrategista IA — Seu Plano de Negócio Inteligente</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--bg:#0e0e10;--bg2:#18181c;--bg3:#222228;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#f0efe8;--muted:#888880;--accent:#c8f060;--accent2:#60d4c8;--accent3:#f0a060;--purple:#a090f8;--red:#f06060;--radius:16px;--radius-sm:10px;}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
-.orb1{width:400px;height:400px;background:rgba(200,240,96,0.07);top:-100px;right:-80px;}
-.orb2{width:300px;height:300px;background:rgba(96,212,200,0.06);bottom:100px;left:-60px;}
+:root{
+  --bg:#080c14;--s1:#0d1420;--s2:#121a2a;--s3:#172035;
+  --bd:#1e2d45;--bd2:#243550;
+  --gold:#f5a623;--goldl:rgba(245,166,35,.12);
+  --green:#00d97e;--red:#ff4560;--blue:#3d9bff;--purple:#b08fff;
+  --t1:#edf2ff;--t2:#7a96bb;--t3:#3d5878;
+  --F:'DM Sans',sans-serif;--H:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;font-size:14px;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px;}
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:100;background:rgba(14,14,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;}
-.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
-.nav-icon{width:28px;height:28px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
-.nav-actions{display:flex;gap:8px;align-items:center;}
-.nav-btn{padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
-.nav-btn:hover{color:var(--text);}
-.badge-count{background:var(--accent);color:#0e0e10;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:800;}
-.nav-user{font-size:12px;color:var(--muted);font-family:'Syne',sans-serif;}
-.nav-user span{color:var(--accent);}
+/* ── LOGIN / CADASTRO ── */
+#LS{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(ellipse at 20% 40%,rgba(245,166,35,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
+.lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);}
+.llogo{display:flex;align-items:center;gap:13px;margin-bottom:6px;justify-content:center;}
+.lmark{width:52px;height:52px;border-radius:14px;background:linear-gradient(145deg,var(--gold),#8a5000);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 22px rgba(245,166,35,.4);}
+.lbrand{font-family:var(--H);font-size:18px;font-weight:800;}
+.lsub{font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:2px;}
+.ltab{display:flex;background:var(--s2);border-radius:10px;padding:4px;margin-bottom:20px;}
+.ltab button{flex:1;padding:8px;border:none;background:none;color:var(--t2);font-family:var(--F);font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s;}
+.ltab button.on{background:var(--gold);color:#000;font-weight:800;}
+.fg{margin-bottom:11px;}
+.fg label{display:block;font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.9px;font-weight:700;margin-bottom:5px;}
+.li{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:10px 13px;color:var(--t1);font-family:var(--F);font-size:13px;outline:none;transition:border-color .2s;}
+.li:focus{border-color:var(--gold);}
+.li option{background:var(--s2);}
+.lbtn{width:100%;background:var(--gold);color:#000;border:none;border-radius:9px;padding:13px;font-family:var(--H);font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px;}
+.lbtn:hover{background:#ffc76a;transform:translateY(-1px);}
+.lerr{color:var(--red);font-size:11px;text-align:center;margin-top:8px;min-height:16px;}
+.porte-badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;margin-top:6px;}
+.porte-iniciante{background:rgba(61,155,255,.15);color:var(--blue);}
+.porte-micro{background:rgba(245,166,35,.15);color:var(--gold);}
+.porte-pequeno{background:rgba(0,217,126,.15);color:var(--green);}
+.porte-medio{background:rgba(176,143,255,.15);color:var(--purple);}
+.porte-grande{background:rgba(255,69,96,.15);color:var(--red);}
 
-/* LAYOUT */
-.app{position:relative;z-index:1;max-width:740px;margin:0 auto;padding:0 1.25rem 4rem;}
-.screen{display:none;}.screen.visible{display:block;}
+/* ── APP ── */
+#APP{display:none;min-height:100vh;flex-direction:column;}
+#APP.show{display:flex;}
+.topbar{height:56px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:100;}
+.toplogo{display:flex;align-items:center;gap:10px;}
+.topmark{width:34px;height:34px;border-radius:9px;background:linear-gradient(145deg,var(--gold),#8a5000);display:flex;align-items:center;justify-content:center;font-size:17px;}
+.topbrand{font-family:var(--H);font-size:14px;font-weight:800;}
+.topuser{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.topav{width:30px;height:30px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#000;}
+.topname{font-size:12px;font-weight:600;}
+.topbadge{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:700;}
+.logoutbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;transition:color .2s;padding:4px;}
+.logoutbtn:hover{color:var(--red);}
 
-/* AUTH SCREEN */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem;}
-.auth-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;width:100%;max-width:420px;animation:fadeUp .4s ease both;}
-.auth-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:2rem;}
-.auth-logo-icon{width:40px;height:40px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
-.auth-logo-text{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
-.auth-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.4rem;text-align:center;}
-.auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:1.75rem;line-height:1.6;}
-.auth-field{margin-bottom:1rem;}
-.auth-field label{display:block;font-size:11px;font-weight:600;color:var(--muted);font-family:'Syne',sans-serif;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
-.auth-field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;}
-.auth-field input:focus{border-color:var(--accent);}
-.auth-field input::placeholder{color:var(--muted);}
-.auth-btn{width:100%;padding:13px;background:var(--accent);color:#0e0e10;border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:.5rem;}
-.auth-btn:hover{background:#d8ff70;}
-.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
-.auth-switch{text-align:center;margin-top:1.25rem;font-size:13px;color:var(--muted);}
-.auth-switch a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:500;}
-.auth-error{background:rgba(240,96,96,0.1);border:1px solid rgba(240,96,96,0.2);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:13px;color:var(--red);margin-bottom:1rem;display:none;}
+.main{flex:1;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;}
 
-/* MAIN HEADER */
-.header{padding:2rem 0 1.5rem;text-align:center;}
-h1{font-family:'Syne',sans-serif;font-size:clamp(22px,5vw,34px);font-weight:800;line-height:1.15;margin-bottom:.6rem;letter-spacing:-.02em;}
-h1 span{color:var(--accent);}
-.header-sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:440px;margin:0 auto;}
+/* ── PERFIL CARD ── */
+.perfil-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.perfil-icon{width:52px;height:52px;border-radius:14px;background:var(--goldl);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.perfil-info{flex:1;min-width:200px;}
+.perfil-nome{font-family:var(--H);font-size:17px;font-weight:800;}
+.perfil-sub{font-size:12px;color:var(--t2);margin-top:3px;}
+.perfil-stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+.pstat{background:var(--s2);border-radius:8px;padding:6px 12px;font-size:11px;color:var(--t2);}
+.pstat strong{color:var(--t1);font-weight:700;}
 
-/* STEPS */
-.steps{display:flex;justify-content:center;gap:0;margin:1.25rem 0;}
-.step-item{display:flex;align-items:center;gap:6px;font-size:11px;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);transition:color .3s;}
-.step-item.active{color:var(--accent);}.step-item.done{color:var(--accent2);}
-.step-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;}
-.step-line{width:28px;height:1px;background:var(--border2);margin:0 4px;}
+/* ── ECOSSISTEMA (aprenda antes de fazer) ── */
+.eco-banner{background:linear-gradient(135deg,rgba(61,155,255,.1),rgba(176,143,255,.08));border:1px solid rgba(61,155,255,.25);border-radius:14px;padding:16px 18px;margin-bottom:20px;}
+.eco-title{font-family:var(--H);font-size:14px;font-weight:800;color:var(--blue);margin-bottom:10px;}
+.eco-pills{display:flex;gap:7px;flex-wrap:wrap;}
+.eco-pill{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--t2);}
+.eco-pill:hover,.eco-pill.on{background:var(--blue);color:#fff;border-color:var(--blue);}
+.eco-content{margin-top:14px;display:none;animation:fi .2s;}
+.eco-content.show{display:block;}
 
-/* CARDS E FORM */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;animation:fadeUp .4s ease both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.card-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
-.card-label::after{content:'';flex:1;height:1px;background:var(--border);}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.form-grid.full{grid-template-columns:1fr;}
-.field{display:flex;flex-direction:column;gap:5px;}
-.field label{font-size:11px;font-weight:600;color:var(--muted);font-family:'Syne',sans-serif;letter-spacing:.05em;text-transform:uppercase;}
-.field input,.field select,.field textarea{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;outline:none;transition:border-color .2s;width:100%;}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
-.field select option{background:var(--bg3);}
-.field textarea{resize:vertical;min-height:72px;line-height:1.55;}
-.field input::placeholder,.field textarea::placeholder{color:var(--muted);}
+/* ── FORM PLANO ── */
+.form-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:22px;margin-bottom:20px;}
+.form-title{font-family:var(--H);font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:9px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.hint{font-size:11px;color:var(--t3);margin-top:4px;line-height:1.5;}
+.hint strong{color:var(--gold);}
 
-/* BOTÕES */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.03em;cursor:pointer;border:none;transition:all .2s;}
-.btn-primary{background:var(--accent);color:#0e0e10;width:100%;margin-top:.75rem;}
-.btn-primary:hover{background:#d8ff70;transform:translateY(-1px);}
-.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:12px;padding:9px 16px;}
-.btn-ghost:hover{color:var(--text);}
-.btn-teal{background:rgba(96,212,200,0.12);border:1px solid rgba(96,212,200,0.25);color:var(--accent2);font-size:12px;padding:9px 16px;}
-.btn-orange{background:rgba(240,160,96,0.12);border:1px solid rgba(240,160,96,0.25);color:var(--accent3);font-size:12px;padding:9px 16px;}
-.btn-red{background:rgba(240,96,96,0.1);border:1px solid rgba(240,96,96,0.2);color:var(--red);font-size:12px;padding:9px 16px;}
+/* ── GENERATE BTN ── */
+.genbtn{width:100%;background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;border-radius:12px;padding:16px;font-family:var(--H);font-size:16px;font-weight:800;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.genbtn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(245,166,35,.4);}
+.genbtn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
-/* LOADING */
-.spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1.5rem;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loading-steps{list-style:none;text-align:left;max-width:300px;margin:1.5rem auto 0;}
-.loading-steps li{font-size:13px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:10px;transition:color .3s;}
-.loading-steps li.active{color:var(--accent);}.loading-steps li.done{color:var(--accent2);}
-.ls-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+/* ── PLANO RESULTADO ── */
+.plano-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:20px;animation:fi .3s;}
+.plano-header{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(245,166,35,.05));border-bottom:1px solid var(--bd);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.plano-title{font-family:var(--H);font-size:18px;font-weight:800;}
+.plano-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:700;border:none;font-family:var(--F);transition:all .15s;white-space:nowrap;}
+.bg{background:var(--gold);color:#000;}.bg:hover{background:#ffc76a;}
+.bgh{background:var(--s2);color:var(--t1);border:1px solid var(--bd);}.bgh:hover{background:var(--s3);}
+.bb{background:rgba(61,155,255,.12);color:var(--blue);border:1px solid rgba(61,155,255,.3);}
+.bgr{background:rgba(0,217,126,.1);color:var(--green);border:1px solid rgba(0,217,126,.3);}
+.br{background:rgba(255,69,96,.1);color:var(--red);border:1px solid rgba(255,69,96,.3);}
 
-/* RESULTADO */
-.result-hero{text-align:center;padding:1.25rem 0 1.25rem;}
-.result-hero h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.4rem;}
-.result-hero p{font-size:13px;color:var(--muted);line-height:1.6;}
-.result-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1rem;}
-.section-tabs{display:flex;gap:6px;margin-bottom:1.25rem;overflow-x:auto;padding-bottom:4px;}
-.section-tabs::-webkit-scrollbar{display:none;}
-.stab{padding:7px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s;}
-.stab.active{background:var(--accent);border-color:var(--accent);color:#0e0e10;}
-.section-content{display:none;}.section-content.visible{display:block;}
-.result-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.375rem;margin-bottom:10px;animation:fadeUp .35s ease both;}
-.rb-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:.875rem;}
-.rb-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;}
-.rb-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;font-family:'Syne',sans-serif;flex-shrink:0;}
-.badge-green{background:rgba(200,240,96,0.12);color:var(--accent);}
-.badge-teal{background:rgba(96,212,200,0.12);color:var(--accent2);}
-.badge-orange{background:rgba(240,160,96,0.12);color:var(--accent3);}
-.badge-purple{background:rgba(160,144,248,0.12);color:var(--purple);}
-.rb-body{font-size:13px;color:#b0b0a8;line-height:1.7;}
-.rb-body p{margin-bottom:.5rem;}.rb-body p:last-child{margin-bottom:0;}
-.rb-body ul{padding-left:1.1rem;display:flex;flex-direction:column;gap:5px;}
-.rb-body strong{color:var(--text);font-weight:500;}
+/* ── SEÇÕES DO PLANO ── */
+.secoes{padding:20px;}
+.secao{margin-bottom:24px;border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.sec-header{padding:13px 16px;background:var(--s2);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.sec-title{font-family:var(--H);font-size:14px;font-weight:700;display:flex;align-items:center;gap:9px;}
+.sec-body{padding:16px;display:none;}
+.sec-body.open{display:block;}
+.sec-aprender{background:rgba(61,155,255,.06);border-left:3px solid var(--blue);border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;line-height:1.7;color:var(--t2);}
+.sec-aprender strong{color:var(--blue);}
+.sec-conteudo{font-size:13px;line-height:1.8;color:var(--t1);white-space:pre-wrap;}
 
-/* TAREFAS */
-.task-check-item{display:flex;align-items:flex-start;gap:12px;padding:.75rem 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none;}
-.task-check-item:last-child{border-bottom:none;padding-bottom:0;}
-.task-check-item:first-child{padding-top:0;}
-.task-check-item.done-task{opacity:.4;}
-.task-chk{width:20px;height:20px;min-width:20px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px;}
-.task-chk.on{background:var(--accent);border-color:var(--accent);}
-.task-chk.on svg{display:block;}.task-chk svg{display:none;}
-.task-text strong{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
-.task-text span{font-size:12px;color:var(--muted);line-height:1.5;}
+/* ── PROGRESSO ── */
+.prog-ring{position:relative;width:70px;height:70px;}
+.prog-ring svg{transform:rotate(-90deg);}
+.prog-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;font-weight:800;color:var(--gold);}
+.prog-bar{height:6px;background:var(--s2);border-radius:3px;overflow:hidden;margin-top:8px;}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--green));transition:width 1s ease;}
 
-/* PROGRESSO */
-.progress-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
-.progress-ring-wrap{display:flex;align-items:center;gap:16px;}
-.ring-svg-wrap{position:relative;width:64px;height:64px;flex-shrink:0;}
-.ring-svg-wrap svg{transform:rotate(-90deg);}
-.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);}
-.ring-details{flex:1;}
-.ring-label{font-size:11px;color:var(--muted);font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
-.ring-count{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
-.new-week-card{background:linear-gradient(135deg,rgba(200,240,96,0.08),rgba(96,212,200,0.06));border:1px solid rgba(200,240,96,0.15);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;text-align:center;}
-.new-week-card h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:.4rem;}
-.new-week-card p{font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.55;}
+/* ── TAREFAS ── */
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(30,45,69,.6);}
+.task-item:last-child{border-bottom:none;}
+.task-chk{width:20px;height:20px;border-radius:6px;border:2px solid var(--bd2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;flex-shrink:0;margin-top:1px;}
+.task-chk.done{background:var(--green);border-color:var(--green);color:#000;}
+.task-txt{flex:1;font-size:13px;line-height:1.5;}
+.task-txt.done{text-decoration:line-through;color:var(--t3);}
+.task-semana{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--goldl);color:var(--gold);font-weight:700;flex-shrink:0;margin-top:2px;}
 
-/* TENDÊNCIAS */
-.trend-item{display:flex;gap:12px;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border);}
-.trend-item:last-child{border-bottom:none;}
-.trend-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--border2);min-width:28px;line-height:1;}
-.trend-text strong{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
-.trend-text span{font-size:12px;color:var(--muted);line-height:1.55;}
-.insight-pill{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted);margin:3px;}
+/* ── HISTÓRICO ── */
+.hist-item{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:13px 15px;margin-bottom:9px;cursor:pointer;transition:border-color .2s;}
+.hist-item:hover{border-color:var(--gold);}
+.hist-nome{font-family:var(--H);font-size:14px;font-weight:700;}
+.hist-meta{font-size:11px;color:var(--t2);margin-top:3px;}
 
-/* HISTÓRICO */
-.hist-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;animation:fadeUp .3s ease both;}
-.hc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.75rem;}
-.hc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
-.hc-seg{font-size:11px;color:var(--muted);margin-top:2px;}
-.hc-date{font-size:11px;color:var(--muted);white-space:nowrap;}
-.hc-summary{font-size:13px;color:#a0a098;line-height:1.6;margin-bottom:.875rem;}
-.hc-actions{display:flex;gap:8px;flex-wrap:wrap;}
+/* ── LOADING ── */
+.loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px;text-align:center;}
+.spinner{width:40px;height:40px;border:3px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
-/* TRACKING */
-.plan-track-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:10px;}
-.ptc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.875rem;}
-.ptc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
-.ptc-seg{font-size:11px;color:var(--muted);margin-top:2px;}
-.ptc-prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;}
-.ptc-prog-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:1rem;}
-.ptc-prog-fill{height:100%;border-radius:3px;transition:width .4s ease;}
-.ptc-task{display:flex;align-items:flex-start;gap:10px;padding:.6rem 0;border-bottom:1px solid var(--border);cursor:pointer;}
-.ptc-task:last-child{border-bottom:none;}
-.ptc-task.done-task{opacity:.38;}
-.ptc-chk{width:18px;height:18px;min-width:18px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;}
-.ptc-chk.on{background:var(--accent);border-color:var(--accent);}
-.ptc-chk.on svg{display:block;}.ptc-chk svg{display:none;}
-.ptc-task-text{font-size:13px;color:var(--text);line-height:1.4;}
-.ptc-actions{display:flex;gap:8px;margin-top:.875rem;flex-wrap:wrap;}
-.week-toggle{display:flex;gap:6px;margin-bottom:.875rem;}
-.wtab{padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;color:var(--muted);background:transparent;transition:all .2s;}
-.wtab.on{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.modal-bg.open{display:flex;}
+.modal{background:var(--s1);border:1px solid var(--bd2);border-radius:18px;padding:26px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto;}
+.modal-title{font-family:var(--H);font-size:17px;font-weight:800;margin-bottom:14px;}
+.modal-body{font-size:13px;line-height:1.8;color:var(--t2);}
+.modal-body strong{color:var(--gold);}
+.modal-body .exemplo{background:var(--s2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 13px;margin:10px 0;font-size:12.5px;color:var(--t1);}
 
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);}
-.empty-state strong{color:var(--text);display:block;font-family:'Syne',sans-serif;font-size:16px;margin-bottom:.5rem;}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--s1);border:1px solid var(--gold);border-radius:11px;padding:11px 16px;z-index:2000;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;transform:translateX(130%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 28px rgba(0,0,0,.6);}
+.toast.show{transform:translateX(0);}
 
-/* TOAST */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:.75rem 1.25rem;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text);z-index:999;transition:transform .3s ease;white-space:nowrap;}
-.toast.show{transform:translateX(-50%) translateY(0);}
+.tabs{display:flex;gap:3px;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:20px;}
+.tab{flex:1;padding:8px;text-align:center;border:none;background:none;color:var(--t2);font-family:var(--F);font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;transition:all .2s;}
+.tab.on{background:var(--s1);color:var(--t1);box-shadow:0 1px 6px rgba(0,0,0,.3);}
 
-@media(max-width:500px){.form-grid{grid-template-columns:1fr;}h1{font-size:22px;}.result-actions .btn{font-size:11px;padding:8px 10px;}.stab{padding:6px 10px;font-size:10px;}}
+.empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px;text-align:center;color:var(--t3);}
+.empty .ei{font-size:40px;opacity:.3;}
+
+@media(max-width:600px){.fg2{grid-template-columns:1fr;}.perfil-card{flex-direction:column;text-align:center;}}
 </style>
 </head>
 <body>
-<div class="orb orb1"></div><div class="orb orb2"></div>
 
-<!-- NAV -->
-<nav class="nav" id="main-nav" style="display:none">
-  <div class="nav-logo">
-    <div class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.6 5L13 7L8.6 9L7 13L5.4 9L1 7L5.4 5L7 1Z" fill="#0e0e10"/></svg></div>
-    Estrategista IA
+<!-- LOGIN -->
+<div id="LS">
+  <div class="lbox">
+    <div class="llogo">
+      <div class="lmark">🧠</div>
+      <div><div class="lbrand">Estrategista IA</div><div class="lsub">Plano de Negócio Inteligente</div></div>
+    </div>
+    <div class="ltab" style="margin-top:18px">
+      <button class="on" onclick="showTab('login',this)">Entrar</button>
+      <button onclick="showTab('cadastro',this)">Criar Conta</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="tab-login">
+      <div class="fg"><label>E-mail</label><input class="li" id="l-email" type="email" placeholder="seu@email.com"></div>
+      <div class="fg"><label>Senha</label><input class="li" id="l-senha" type="password" placeholder="••••••••"></div>
+      <button class="lbtn" onclick="fazerLogin()">Entrar</button>
+      <div class="lerr" id="l-err"></div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div id="tab-cadastro" style="display:none">
+      <div class="fg"><label>Seu Nome *</label><input class="li" id="c-nome" placeholder="Como você se chama?"></div>
+      <div class="fg"><label>E-mail *</label><input class="li" id="c-email" type="email" placeholder="seu@email.com"></div>
+      <div class="fg"><label>Senha *</label><input class="li" id="c-senha" type="password" placeholder="Mínimo 6 caracteres"></div>
+      <div class="fg2">
+        <div class="fg"><label>Seu Negócio / Segmento *</label>
+          <input class="li" id="c-segmento" list="seg-list" placeholder="Ex: Padaria, Barbearia, Delivery...">
+          <datalist id="seg-list">
+            <option>Padaria / Confeitaria</option><option>Barbearia / Salão</option>
+            <option>Restaurante / Lanchonete</option><option>Delivery de comida</option>
+            <option>Loja de roupas</option><option>Mercadinho / Mercearia</option>
+            <option>Serviços gerais / Manutenção</option><option>Artesanato / Costura</option>
+            <option>Cabeleireira autônoma</option><option>Manicure / Pedicure</option>
+            <option>Personal trainer</option><option>Aulas particulares / Reforço escolar</option>
+            <option>Venda de salgados / Marmitas</option><option>Chaveiro</option>
+            <option>Mecânica / Auto elétrica</option><option>Farmácia</option>
+            <option>Pet shop / Banho e tosa</option><option>Limpeza e higienização</option>
+            <option>Construção / Reforma</option><option>Tecnologia / Informática</option>
+            <option>Consultoria</option><option>E-commerce</option><option>Outro</option>
+          </datalist>
+        </div>
+        <div class="fg"><label>Cidade *</label><input class="li" id="c-cidade" placeholder="Ex: Recife, PE"></div>
+      </div>
+      <div class="fg">
+        <label>Faturamento Mensal Atual (R$)</label>
+        <input class="li" id="c-faturamento" type="number" placeholder="0 — se ainda não faturou, deixe 0" min="0" oninput="mostrarPorte(this.value)">
+        <div class="hint">Coloque o valor <strong>real de hoje</strong>. Se ainda não vendeu nada, coloque 0. Quanto mais real, melhor o plano.</div>
+        <div id="porte-preview" style="margin-top:6px"></div>
+      </div>
+      <div class="fg">
+        <label>WhatsApp (opcional)</label>
+        <input class="li" id="c-tel" type="tel" placeholder="(81) 99999-0000">
+      </div>
+      <button class="lbtn" onclick="fazerCadastro()">Criar Minha Conta Grátis</button>
+      <div class="lerr" id="c-err"></div>
+    </div>
   </div>
-  <div class="nav-actions">
-    <div class="nav-user">Olá, <span id="nav-name">...</span></div>
-    <button class="nav-btn" onclick="showScreen('tracking')">✓ <span class="badge-count" id="badge-tracking">0</span></button>
-    <button class="nav-btn" onclick="showScreen('history')">≡ <span class="badge-count" id="badge-history">0</span></button>
-    <button class="nav-btn" onclick="logout()">Sair</button>
+</div>
+
+<!-- APP -->
+<div id="APP">
+  <div class="topbar">
+    <div class="toplogo">
+      <div class="topmark">🧠</div>
+      <div class="topbrand">Estrategista IA</div>
+    </div>
+    <div class="topuser">
+      <div class="topav" id="topav">?</div>
+      <div>
+        <div class="topname" id="topname">—</div>
+        <div class="topbadge" id="topbadge" style="color:var(--gold);font-size:9px">—</div>
+      </div>
+      <button class="logoutbtn" onclick="logout()" title="Sair">⏻</button>
+    </div>
   </div>
-</nav>
 
-<div class="toast" id="toast"></div>
+  <div class="main">
+    <div class="tabs">
+      <button class="tab on" onclick="goTab('plano',this)">🧠 Meu Plano</button>
+      <button class="tab" onclick="goTab('aprender',this)">📚 Aprender</button>
+      <button class="tab" onclick="goTab('historico',this)">📋 Histórico</button>
+    </div>
 
-<!-- ==================== AUTH SCREEN ==================== -->
-<div id="screen-auth" style="display:block">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <div class="auth-logo-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#0e0e10"/></svg></div>
-        <span class="auth-logo-text">Estrategista IA</span>
+    <!-- ── TAB PLANO ── -->
+    <div id="tab-plano">
+
+      <!-- Perfil -->
+      <div class="perfil-card" id="perfil-card" style="display:none">
+        <div class="perfil-icon" id="perfil-icon">🏪</div>
+        <div class="perfil-info">
+          <div class="perfil-nome" id="perfil-nome">—</div>
+          <div class="perfil-sub" id="perfil-sub">—</div>
+          <div class="perfil-stats" id="perfil-stats"></div>
+        </div>
+        <div id="porte-tag"></div>
       </div>
 
-      <!-- LOGIN -->
-      <div id="auth-login">
-        <h2 class="auth-title">Entrar na conta</h2>
-        <p class="auth-sub">Seu plano de crescimento personalizado com IA</p>
-        <div class="auth-error" id="login-error"></div>
-        <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="seu@email.com"></div>
-        <div class="auth-field"><label>Senha</label><input type="password" id="login-password" placeholder="••••••••"></div>
-        <button class="auth-btn" onclick="login()">Entrar</button>
-        <div class="auth-switch">Não tem conta? <a onclick="showAuth('register')">Criar conta grátis</a></div>
+      <!-- Form geração -->
+      <div class="form-card" id="form-card">
+        <div class="form-title">🎯 Gerar Meu Plano Estratégico</div>
+        <div class="fg2">
+          <div class="fg">
+            <label>Faturamento Atual (R$/mês)</label>
+            <input class="li" id="f-fat" type="number" placeholder="Ex: 0 ou 1500 ou 8000" min="0">
+            <div class="hint">Coloque o que você <strong>fatura hoje de verdade</strong>. Pode ser 0.</div>
+          </div>
+          <div class="fg">
+            <label>Ticket Médio (R$)</label>
+            <input class="li" id="f-ticket" type="number" placeholder="Ex: pão R$0,50 · corte R$25" min="0">
+            <div class="hint">Quanto um cliente gasta <strong>por compra</strong> no seu negócio?</div>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="fg">
+            <label>Quantos Clientes por Mês?</label>
+            <input class="li" id="f-clientes" type="number" placeholder="Ex: 30, 100, 500..." min="0">
+          </div>
+          <div class="fg">
+            <label>Meta de Faturamento em 3 meses (R$)</label>
+            <input class="li" id="f-meta" type="number" placeholder="Quanto quer chegar?" min="0">
+            <div class="hint">Seja <strong>realista</strong>. Dobrar em 3 meses já é ótimo.</div>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Maior Desafio Hoje</label>
+          <input class="li" id="f-desafio" placeholder="Ex: poucos clientes, não sei divulgar, sem dinheiro para investir...">
+        </div>
+        <div class="fg">
+          <label>Tem presença nas redes sociais?</label>
+          <select class="li" id="f-redes">
+            <option value="nao">Não, nunca mexi com isso</option>
+            <option value="pouco">Tenho perfil mas não uso direito</option>
+            <option value="sim">Sim, uso regularmente</option>
+            <option value="pago">Sim, já invisto em anúncios pagos</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Trabalha sozinho ou tem equipe?</label>
+          <select class="li" id="f-equipe">
+            <option value="sozinho">Trabalho sozinho</option>
+            <option value="familiar">Ajuda de familiar (não pago)</option>
+            <option value="1-2">1 a 2 funcionários</option>
+            <option value="3+">3 ou mais funcionários</option>
+          </select>
+        </div>
+        <div id="gen-progress" style="display:none;margin-bottom:14px">
+          <div style="font-size:12px;color:var(--t2);margin-bottom:6px" id="gen-status">Gerando seu plano...</div>
+          <div class="prog-bar"><div class="prog-fill" id="gen-bar" style="width:0%"></div></div>
+        </div>
+        <button class="genbtn" id="genbtn" onclick="gerarPlano()">
+          <span>✨</span> Gerar Meu Plano Agora
+        </button>
       </div>
 
-      <!-- CADASTRO -->
-      <div id="auth-register" style="display:none">
-        <h2 class="auth-title">Criar conta grátis</h2>
-        <p class="auth-sub">Comece a crescer com estratégias personalizadas por IA</p>
-        <div class="auth-error" id="register-error"></div>
-        <div class="auth-field"><label>Seu nome</label><input type="text" id="register-name" placeholder="João Silva"></div>
-        <div class="auth-field"><label>Email</label><input type="email" id="register-email" placeholder="seu@email.com"></div>
-        <div class="auth-field"><label>Senha</label><input type="password" id="register-password" placeholder="Mínimo 6 caracteres"></div>
-        <button class="auth-btn" onclick="register()">Criar conta grátis</button>
-        <div class="auth-switch">Já tem conta? <a onclick="showAuth('login')">Entrar</a></div>
+      <!-- Resultado -->
+      <div id="plano-resultado"></div>
+    </div>
+
+    <!-- ── TAB APRENDER ── -->
+    <div id="tab-aprender" style="display:none">
+      <div class="form-card">
+        <div class="form-title">📚 Escola do Empreendedor</div>
+        <p style="font-size:13px;color:var(--t2);margin-bottom:18px;line-height:1.7">
+          Aqui você aprende na prática. Cada conceito é explicado em linguagem simples, com exemplos do <strong style="color:var(--gold)">seu tipo de negócio</strong>.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px" id="eco-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB HISTÓRICO ── -->
+    <div id="tab-historico" style="display:none">
+      <div class="form-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div class="form-title" style="margin:0">📋 Meus Planos</div>
+          <span style="font-size:11px;color:var(--t3)" id="hist-count">0 planos</span>
+        </div>
+        <div id="hist-lista"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ==================== APP SCREENS ==================== -->
-<div class="app" id="app-screens" style="display:none">
-
-<!-- FORM -->
-<div class="screen visible" id="screen-form">
-  <div class="header">
-    <h1>Seu plano de<br><span>crescimento</span> personalizado</h1>
-    <p class="header-sub">Preencha seu perfil. A IA busca tendências reais e gera sua estratégia completa.</p>
-  </div>
-  <div class="steps">
-    <div class="step-item active" id="step1-ind"><div class="step-dot"></div>Perfil</div>
-    <div class="step-line"></div>
-    <div class="step-item" id="step2-ind"><div class="step-dot"></div>Análise</div>
-    <div class="step-line"></div>
-    <div class="step-item" id="step3-ind"><div class="step-dot"></div>Estratégia</div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Sobre o negócio</div>
-    <div class="form-grid">
-      <div class="field"><label>Nome do negócio</label><input type="text" id="biz-name" placeholder="Ex: Barbearia do João"></div>
-      <div class="field"><label>Segmento</label><input type="text" id="biz-segment" placeholder="Ex: Barbearia, Padaria..." list="seg-list"><datalist id="seg-list"><option value="Barbearia"><option value="Salão de beleza"><option value="Móveis planejados"><option value="Restaurante / Lanchonete"><option value="Padaria / Confeitaria"><option value="Moda e vestuário"><option value="Estética e bem-estar"><option value="Construção e reforma"><option value="Tecnologia e serviços digitais"><option value="Educação e cursos"><option value="Saúde e fitness"><option value="Pet shop e veterinário"><option value="Farmácia"><option value="Mercado / Mercearia"><option value="Academia"><option value="Clínica médica / Odontológica"><option value="Auto peças / Mecânica"><option value="Loja de eletrônicos"><option value="Advocacia / Contabilidade"><option value="Imobiliária"><option value="Agropecuária"><option value="Fotografia e vídeo"></datalist></div>
-      <div class="field"><label>Cidade / Estado</label><input type="text" id="biz-city" placeholder="Ex: Recife, PE"></div>
-      <div class="field"><label>Tempo no mercado</label><select id="biz-time"><option value="">Selecione...</option><option>Menos de 6 meses</option><option>6 meses a 1 ano</option><option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
+<!-- MODAL APRENDER -->
+<div class="modal-bg" id="MOD">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="modal-title" id="mod-title">—</div>
+      <button onclick="fecharModal()" style="background:none;border:none;color:var(--t2);font-size:20px;cursor:pointer">✕</button>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Situação atual</div>
-    <div class="form-grid">
-      <div class="field"><label>Colaboradores</label><select id="biz-team"><option value="">Selecione...</option><option>Só eu</option><option>1 a 2</option><option>3 a 5</option><option>Mais de 5</option></select></div>
-      <div class="field"><label>Faturamento mensal</label><select id="biz-revenue"><option value="">Selecione...</option><option>Até R$ 3.000</option><option>R$ 3.000 – R$ 8.000</option><option>R$ 8.000 – R$ 20.000</option><option>R$ 20.000 – R$ 50.000</option><option>Acima de R$ 50.000</option></select></div>
-      <div class="field full"><label>Maior dificuldade hoje</label><select id="biz-pain"><option value="">Selecione...</option><option>Atrair novos clientes</option><option>Fidelizar clientes existentes</option><option>Organização e processos internos</option><option>Precificação e margem</option><option>Presença online e redes sociais</option><option>Gestão de tempo</option><option>Fluxo de caixa</option><option>Diferenciação da concorrência</option></select></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Público e posicionamento</div>
-    <div class="form-grid">
-      <div class="field"><label>Faixa etária</label><select id="biz-age"><option value="">Selecione...</option><option>18–25 anos</option><option>25–35 anos</option><option>35–50 anos</option><option>50+ anos</option><option>Todas as faixas</option></select></div>
-      <div class="field"><label>Ticket médio</label><select id="biz-ticket"><option value="">Selecione...</option><option>Até R$ 50</option><option>R$ 50 – R$ 150</option><option>R$ 150 – R$ 500</option><option>R$ 500 – R$ 2.000</option><option>Acima de R$ 2.000</option></select></div>
-      <div class="field full"><label>Posicionamento</label><select id="biz-position"><option value="">Selecione...</option><option>Preço mais acessível da região</option><option>Melhor custo-benefício</option><option>Qualidade premium</option><option>Especialista em nicho específico</option><option>Atendimento personalizado</option><option>Ainda não tenho posicionamento claro</option></select></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Presença digital</div>
-    <div class="form-grid">
-      <div class="field"><label>Onde está presente</label><select id="biz-social"><option value="">Selecione...</option><option>Só WhatsApp</option><option>WhatsApp + Instagram</option><option>WhatsApp + Instagram + Google</option><option>Tenho site próprio</option><option>Não tenho presença digital</option></select></div>
-      <div class="field"><label>Frequência de posts</label><select id="biz-posts"><option value="">Selecione...</option><option>Nunca posto</option><option>Raramente</option><option>Às vezes (1x por semana)</option><option>Regularmente (3–5x)</option><option>Todo dia</option></select></div>
-      <div class="field full"><label>Diferenciais (opcional)</label><textarea id="biz-diff" placeholder="Ex: atendimento domiciliar, produtos naturais..."></textarea></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Meta de crescimento</div>
-    <div class="form-grid full">
-      <div class="field"><label>Meta nos próximos 90 dias</label><select id="biz-goal"><option value="">Selecione...</option><option>Dobrar o número de clientes</option><option>Aumentar o faturamento em 30%</option><option>Construir uma marca reconhecida</option><option>Estruturar processos para crescer</option><option>Reduzir dependência de indicações</option><option>Contratar meu primeiro colaborador</option><option>Criar uma presença digital forte</option></select></div>
-    </div>
-  </div>
-
-  <button class="btn btn-primary" onclick="startGeneration()">⭐ Gerar minha estratégia completa</button>
-</div>
-
-<!-- LOADING -->
-<div class="screen" id="screen-loading">
-  <div style="text-align:center;padding:3rem 0;">
-    <div class="spinner"></div>
-    <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:.4rem;">Analisando seu negócio...</p>
-    <p style="font-size:13px;color:var(--muted);">Buscando dados reais do mercado</p>
-    <ul class="loading-steps">
-      <li id="ls1"><div class="ls-dot"></div>Lendo seu perfil e negócio</li>
-      <li id="ls2"><div class="ls-dot"></div>Buscando tendências do segmento em 2025</li>
-      <li id="ls3"><div class="ls-dot"></div>Pesquisando mercado da sua cidade</li>
-      <li id="ls4"><div class="ls-dot"></div>Analisando empresas de referência</li>
-      <li id="ls5"><div class="ls-dot"></div>Gerando estratégia com dados reais</li>
-    </ul>
+    <div class="modal-body" id="mod-body"></div>
+    <button class="btn bg" style="margin-top:16px;width:100%;justify-content:center" onclick="fecharModal()">Entendi! ✓</button>
   </div>
 </div>
 
-<!-- RESULT -->
-<div class="screen" id="screen-result">
-  <div class="result-hero">
-    <h2 id="result-title">Plano pronto!</h2>
-    <p id="result-sub"></p>
-    <div class="result-actions">
-      <button class="btn btn-teal" onclick="downloadPDF()">↓ PDF</button>
-      <button class="btn btn-orange" onclick="showScreen('tracking')">✓ Tarefas</button>
-      <button class="btn btn-ghost" onclick="showScreen('form')">Novo plano</button>
-    </div>
-  </div>
-
-  <div id="progress-card-wrap"></div>
-
-  <div class="section-tabs">
-    <button class="stab active" onclick="showSection('tarefas',this)">Tarefas</button>
-    <button class="stab" onclick="showSection('marketing',this)">Marketing</button>
-    <button class="stab" onclick="showSection('branding',this)">Branding</button>
-    <button class="stab" onclick="showSection('vendas',this)">Vendas</button>
-    <button class="stab" onclick="showSection('tendencias',this)">Tendências</button>
-    <button class="stab" onclick="showSection('publico',this)">Público</button>
-    <button class="stab" onclick="showSection('geografia',this)">Expansão</button>
-  </div>
-
-  <div id="sec-tarefas" class="section-content visible"></div>
-  <div id="sec-marketing" class="section-content"></div>
-  <div id="sec-branding" class="section-content"></div>
-  <div id="sec-vendas" class="section-content"></div>
-  <div id="sec-tendencias" class="section-content"></div>
-  <div id="sec-publico" class="section-content"></div>
-  <div id="sec-geografia" class="section-content"></div>
-</div>
-
-<!-- TRACKING -->
-<div class="screen" id="screen-tracking">
-  <div style="padding:1.5rem 0 1rem"><h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.3rem;">Acompanhamento</h2><p style="font-size:13px;color:var(--muted)">Marque as tarefas conforme for concluindo.</p></div>
-  <div id="tracking-list"></div>
-</div>
-
-<!-- HISTORY -->
-<div class="screen" id="screen-history">
-  <div style="padding:1.5rem 0 1rem"><h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.3rem;">Histórico</h2><p style="font-size:13px;color:var(--muted)">Todos os seus planos salvos.</p></div>
-  <div id="history-list"></div>
-</div>
-
-</div><!-- /app-screens -->
+<div class="toast" id="TOAST"><span id="t-ic">✅</span><span id="t-msg">OK</span></div>
 
 <script>
-let currentData=null, currentProfile=null, currentPlanId=null;
-let authToken = localStorage.getItem('auth_token');
-let currentUser = null;
+'use strict';
 
-// ==================== AUTH ====================
-function showAuth(type){
-  document.getElementById('auth-login').style.display = type==='login'?'block':'none';
-  document.getElementById('auth-register').style.display = type==='register'?'block':'none';
+// ── STATE ──────────────────────────────────────────────
+let token = localStorage.getItem('estrategista_token') || '';
+let usuario = null;
+let planoAtual = null;
+let taskProgress = {};
+
+// ── UTILS ──────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const toast = (msg, ic='✅') => {
+  const el = $('TOAST'); if(!el) return;
+  $('t-ic').textContent = ic;
+  $('t-msg').textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3500);
+};
+
+// ── PORTE ──────────────────────────────────────────────
+function calcPorte(fat) {
+  fat = parseInt(fat) || 0;
+  if (fat === 0)       return { label: 'Iniciante', cls: 'porte-iniciante', emoji: '🌱', desc: 'Começando do zero — foco em conseguir os primeiros clientes' };
+  if (fat <= 3000)     return { label: 'Microempresa', cls: 'porte-micro', emoji: '🏪', desc: 'Micro negócio — estratégias simples e de baixo custo' };
+  if (fat <= 15000)    return { label: 'Pequena Empresa', cls: 'porte-pequeno', emoji: '📈', desc: 'Em crescimento — hora de estruturar processos' };
+  if (fat <= 60000)    return { label: 'Empresa Média', cls: 'porte-medio', emoji: '🏢', desc: 'Consolidado — escalar e contratar' };
+  return                { label: 'Grande', cls: 'porte-grande', emoji: '🚀', desc: 'Empresa estabelecida — expansão e novos mercados' };
 }
 
-async function login(){
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  const errEl = document.getElementById('login-error');
-  errEl.style.display='none';
-
-  try{
-    const resp = await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-    const data = await resp.json();
-    if(!resp.ok){errEl.textContent=data.error;errEl.style.display='block';return;}
-    authToken = data.token;
-    localStorage.setItem('auth_token', authToken);
-    currentUser = data.user;
-    enterApp();
-  }catch(e){errEl.textContent='Erro de conexão.';errEl.style.display='block';}
+function mostrarPorte(fat) {
+  const el = $('porte-preview'); if(!el) return;
+  const p = calcPorte(fat);
+  el.innerHTML = `<span class="porte-badge ${p.cls}">${p.emoji} ${p.label}</span><span style="font-size:11px;color:var(--t3);margin-left:8px">${p.desc}</span>`;
 }
 
-async function register(){
-  const name = document.getElementById('register-name').value;
-  const email = document.getElementById('register-email').value;
-  const password = document.getElementById('register-password').value;
-  const errEl = document.getElementById('register-error');
-  errEl.style.display='none';
+// ── TABS ──────────────────────────────────────────────
+function showTab(id, btn) {
+  ['login','cadastro'].forEach(t => $(('tab-'+t)).style.display = t===id?'block':'none');
+  document.querySelectorAll('.ltab button').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  $('l-err').textContent = ''; $('c-err').textContent = '';
+}
+function goTab(id, btn) {
+  ['plano','aprender','historico'].forEach(t => $('tab-'+t).style.display = t===id?'block':'none');
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  if(id === 'aprender') renderEco();
+  if(id === 'historico') carregarHistorico();
+}
+['l-email','l-senha'].forEach(id => { const el = $(id); if(el) el.addEventListener('keydown', e => { if(e.key==='Enter') fazerLogin(); }); });
 
-  try{
-    const resp = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
-    const data = await resp.json();
-    if(!resp.ok){errEl.textContent=data.error;errEl.style.display='block';return;}
-    authToken = data.token;
-    localStorage.setItem('auth_token', authToken);
-    currentUser = data.user;
-    enterApp();
-  }catch(e){errEl.textContent='Erro de conexão.';errEl.style.display='block';}
+// ── AUTH ──────────────────────────────────────────────
+async function fazerLogin() {
+  const email = $('l-email').value.trim(), senha = $('l-senha').value;
+  if(!email||!senha) { $('l-err').textContent='Preencha email e senha.'; return; }
+  try {
+    const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email,password:senha}) });
+    const d = await r.json();
+    if(!r.ok) { $('l-err').textContent = d.error||'Erro ao entrar.'; return; }
+    token = d.token;
+    localStorage.setItem('estrategista_token', token);
+    usuario = d.user;
+    iniciarApp();
+  } catch(e) { $('l-err').textContent = 'Erro de conexão.'; }
 }
 
-async function logout(){
-  await fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+authToken}});
-  authToken = null;
-  currentUser = null;
-  localStorage.removeItem('auth_token');
-  document.getElementById('screen-auth').style.display='block';
-  document.getElementById('app-screens').style.display='none';
-  document.getElementById('main-nav').style.display='none';
+async function fazerCadastro() {
+  const nome = $('c-nome').value.trim(), email = $('c-email').value.trim();
+  const senha = $('c-senha').value, segmento = $('c-segmento').value.trim();
+  const cidade = $('c-cidade').value.trim(), faturamento = $('c-faturamento').value||'0';
+  const tel = $('c-tel').value.trim();
+  if(!nome||!email||!senha||!segmento||!cidade) { $('c-err').textContent='Preencha todos os campos obrigatórios.'; return; }
+  try {
+    const r = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name:nome,email,password:senha,segmento,cidade,faturamento,tel}) });
+    const d = await r.json();
+    if(!r.ok) { $('c-err').textContent = d.error||'Erro ao criar conta.'; return; }
+    token = d.token;
+    localStorage.setItem('estrategista_token', token);
+    usuario = d.user;
+    iniciarApp();
+  } catch(e) { $('c-err').textContent = 'Erro de conexão.'; }
 }
 
-function enterApp(){
-  document.getElementById('screen-auth').style.display='none';
-  document.getElementById('app-screens').style.display='block';
-  document.getElementById('main-nav').style.display='flex';
-  document.getElementById('nav-name').textContent = currentUser?.name?.split(' ')[0] || '';
-  showScreen('form');
-  loadPlansFromServer();
+function logout() {
+  fetch('/api/auth/logout', { method:'POST', headers:{'Authorization':'Bearer '+token} });
+  token = ''; usuario = null;
+  localStorage.removeItem('estrategista_token');
+  $('LS').style.display = 'flex';
+  $('APP').classList.remove('show');
+  $('l-email').value = ''; $('l-senha').value = '';
 }
 
-async function checkAuth(){
-  if(!authToken) return;
-  try{
-    const resp = await fetch('/api/auth/me',{headers:{'Authorization':'Bearer '+authToken}});
-    if(!resp.ok){localStorage.removeItem('auth_token');authToken=null;return;}
-    currentUser = await resp.json();
-    enterApp();
-  }catch(e){}
+// ── INICIAR APP ────────────────────────────────────────
+async function iniciarApp() {
+  if(!usuario && token) {
+    try {
+      const r = await fetch('/api/auth/me', { headers:{'Authorization':'Bearer '+token} });
+      if(!r.ok) { logout(); return; }
+      usuario = await r.json();
+    } catch(e) { logout(); return; }
+  }
+  if(!usuario) return;
+
+  $('LS').style.display = 'none';
+  $('APP').classList.add('show');
+
+  const porte = calcPorte(usuario.faturamento);
+  $('topav').textContent = (usuario.name||'?')[0].toUpperCase();
+  $('topname').textContent = usuario.name;
+  $('topbadge').textContent = porte.emoji + ' ' + porte.label;
+  $('topbadge').className = 'topbadge ' + porte.cls;
+
+  // Perfil card
+  const pc = $('perfil-card');
+  pc.style.display = 'flex';
+  $('perfil-icon').textContent = segmentoEmoji(usuario.segmento);
+  $('perfil-nome').textContent = usuario.name + ' — ' + (usuario.segmento||'Empreendedor');
+  $('perfil-sub').textContent = (usuario.cidade||'') + (usuario.cidade && usuario.faturamento > 0 ? ' · ' : '') + (usuario.faturamento > 0 ? 'Faturamento atual: R$ ' + (usuario.faturamento||0).toLocaleString('pt-BR') + '/mês' : 'Iniciando agora');
+
+  const fat = parseInt(usuario.faturamento)||0;
+  const ticket = fat > 0 && usuario.segmento ? estimarTicket(usuario.segmento, fat) : 0;
+  $('perfil-stats').innerHTML = [
+    { l:'Porte', v: porte.emoji+' '+porte.label },
+    { l:'Planos gerados', v: usuario.plansGenerated||0 },
+    { l:'Cidade', v: usuario.cidade||'—' },
+  ].map(s=>`<div class="pstat">${s.l}: <strong>${s.v}</strong></div>`).join('');
+
+  $('porte-tag').innerHTML = `<span class="porte-badge ${porte.cls}" style="font-size:11px">${porte.emoji} ${porte.label}</span>`;
+
+  // Pré-preenche o form
+  if(fat > 0) $('f-fat').value = fat;
+  if(ticket > 0) $('f-ticket').value = ticket;
 }
 
-// ==================== NAVIGATION ====================
-function showScreen(n){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));
-  document.getElementById('screen-'+n).classList.add('visible');
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(n==='history') renderHistory();
-  if(n==='tracking') renderTracking();
+function segmentoEmoji(seg) {
+  seg = (seg||'').toLowerCase();
+  if(seg.includes('padari')||seg.includes('confeit')) return '🍞';
+  if(seg.includes('barbear')||seg.includes('salão')||seg.includes('cabel')) return '✂️';
+  if(seg.includes('restaur')||seg.includes('lancho')||seg.includes('comida')) return '🍽️';
+  if(seg.includes('delivery')) return '🛵';
+  if(seg.includes('roupa')||seg.includes('moda')) return '👗';
+  if(seg.includes('mercad')||seg.includes('mercearia')) return '🛒';
+  if(seg.includes('manicure')||seg.includes('pedicure')) return '💅';
+  if(seg.includes('pet')) return '🐶';
+  if(seg.includes('farm')) return '💊';
+  if(seg.includes('tecnolog')||seg.includes('inform')) return '💻';
+  if(seg.includes('constru')||seg.includes('reform')) return '🏗️';
+  if(seg.includes('mecân')) return '🔧';
+  if(seg.includes('limpeza')) return '🧹';
+  if(seg.includes('artesanat')||seg.includes('costura')) return '🧵';
+  if(seg.includes('aula')||seg.includes('ensino')||seg.includes('reforço')) return '📚';
+  return '🏪';
 }
 
-function showSection(n,btn){
-  document.querySelectorAll('.section-content').forEach(s=>s.classList.remove('visible'));
-  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+n).classList.add('visible');
-  btn.classList.add('active');
+function estimarTicket(seg, fat) {
+  // Estimativa baseada no segmento — apenas sugestão inicial
+  seg = seg.toLowerCase();
+  if(seg.includes('padari')||seg.includes('confeit')) return Math.round(fat / 200);
+  if(seg.includes('barbear')) return 25;
+  if(seg.includes('restaur')||seg.includes('lancho')) return 30;
+  if(seg.includes('delivery')) return 35;
+  if(seg.includes('roupa')) return 60;
+  if(seg.includes('mercad')) return 40;
+  if(seg.includes('manicure')) return 35;
+  if(seg.includes('pet')) return 70;
+  return Math.round(fat / 50);
 }
 
-function setStep(n){
-  ['step1-ind','step2-ind','step3-ind'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    el.classList.remove('active','done');
-    if(i+1<n)el.classList.add('done');
-    else if(i+1===n)el.classList.add('active');
-  });
-}
+// ── GERAR PLANO ────────────────────────────────────────
+async function gerarPlano() {
+  const fat     = parseInt($('f-fat').value) || 0;
+  const ticket  = parseInt($('f-ticket').value) || 0;
+  const clientes = parseInt($('f-clientes').value) || 0;
+  const meta    = parseInt($('f-meta').value) || 0;
+  const desafio = $('f-desafio').value.trim();
+  const redes   = $('f-redes').value;
+  const equipe  = $('f-equipe').value;
 
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
+  if(!ticket && fat > 0) { toast('Informe o ticket médio do seu negócio! Ex: R$25 por corte','⚠️'); return; }
 
-function val(id){return document.getElementById(id)?.value||'';}
+  const porte = calcPorte(fat);
+  $('genbtn').disabled = true;
+  $('gen-progress').style.display = 'block';
 
-function animateLoading(){
-  const steps=['ls1','ls2','ls3','ls4','ls5'];
-  let i=0;
-  steps.forEach(id=>{const el=document.getElementById(id);el.classList.remove('active','done');});
-  return new Promise(resolve=>{
-    function next(){
-      if(i>0)document.getElementById(steps[i-1]).classList.replace('active','done');
-      if(i<steps.length){document.getElementById(steps[i]).classList.add('active');i++;setTimeout(next,900+Math.random()*600);}
-      else setTimeout(resolve,300);
+  const stages = [
+    'Analisando seu perfil empresarial...',
+    'Calculando suas métricas reais...',
+    'Buscando tendências do seu mercado...',
+    'Criando estratégias para o seu porte...',
+    'Montando o plano semana a semana...',
+    'Finalizando seu plano personalizado...'
+  ];
+  let stageI = 0;
+  const stageTimer = setInterval(() => {
+    if(stageI < stages.length - 1) {
+      stageI++;
+      $('gen-status').textContent = stages[stageI];
+      $('gen-bar').style.width = (stageI / stages.length * 80) + '%';
     }
-    next();
-  });
-}
+  }, 3000);
 
-// ==================== PLANS ====================
-let localPlans = [];
+  // Prompt totalmente adaptado ao porte
+  const nivelDigital = {
+    nao: 'não tem nenhuma presença digital, nunca usou redes sociais para o negócio',
+    pouco: 'tem perfil nas redes sociais mas não usa direito, posta raramente',
+    sim: 'usa redes sociais regularmente',
+    pago: 'já investe em anúncios pagos e tem boa presença digital'
+  }[redes];
 
-async function loadPlansFromServer(){
-  try{
-    const resp = await fetch('/api/plans',{headers:{'Authorization':'Bearer '+authToken}});
-    if(resp.ok){ localPlans = await resp.json(); updateBadges(); }
-  }catch(e){}
-}
+  const nivelEquipe = {
+    sozinho: 'trabalha completamente sozinho, sem funcionários',
+    familiar: 'conta com ajuda de um familiar mas sem equipe paga',
+    '1-2': 'tem 1 a 2 funcionários',
+    '3+': 'tem 3 ou mais funcionários'
+  }[equipe];
 
-async function savePlanToServer(name, segment, data){
-  try{
-    const resp = await fetch('/api/plans/save',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({name, segment, date: new Date().toLocaleDateString('pt-BR'), data, taskProgress:{}})
-    });
-    if(resp.ok){
-      const result = await resp.json();
-      localPlans.unshift(result.plan);
-      updateBadges();
-      return result.plan.id;
-    }
-  }catch(e){}
-  return null;
-}
+  const clientesEstimados = clientes || (ticket > 0 && fat > 0 ? Math.round(fat/ticket) : '?');
 
-async function updateTaskProgress(planId, taskProgress){
-  try{
-    await fetch(`/api/plans/${planId}/progress`,{
-      method:'PUT',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({taskProgress})
-    });
-    const plan = localPlans.find(p=>p.id===planId);
-    if(plan) plan.taskProgress = taskProgress;
-  }catch(e){}
-}
+  const sys = `Você é um estrategista de negócios especializado em MICRO e PEQUENAS empresas brasileiras.
 
-async function deletePlanFromServer(id){
-  if(!confirm('Excluir este plano?')) return;
-  try{
-    await fetch(`/api/plans/${id}`,{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}});
-    localPlans = localPlans.filter(p=>p.id!==id);
-    updateBadges();
-    renderHistory();
-    toast('Plano excluído.');
-  }catch(e){}
-}
+PERFIL DO EMPRESÁRIO:
+- Nome: ${usuario.name}
+- Negócio: ${usuario.segmento||'não informado'}
+- Cidade: ${usuario.cidade||'não informada'}
+- Porte atual: ${porte.label} (${porte.desc})
+- Faturamento ATUAL: R$ ${fat.toLocaleString('pt-BR')}/mês ${fat === 0 ? '(ainda não fatura — está iniciando)' : ''}
+- Ticket médio REAL: R$ ${ticket || 'não informado'}
+- Clientes por mês: ${clientesEstimados}
+- Meta 3 meses: R$ ${meta.toLocaleString('pt-BR')}/mês ${meta === 0 ? '(não definiu)' : ''}
+- Maior desafio: ${desafio || 'não informado'}
+- Presença digital: ${nivelDigital}
+- Equipe: ${nivelEquipe}
 
-function updateBadges(){
-  document.getElementById('badge-history').textContent = localPlans.length;
-  document.getElementById('badge-tracking').textContent = localPlans.length;
-}
+REGRAS ABSOLUTAS QUE VOCÊ DEVE SEGUIR:
+1. NUNCA use termos técnicos sem explicar. Se usar "ticket médio", explique o que é.
+2. Estratégias devem ser POSSÍVEIS para quem ${fat === 0 ? 'está começando do zero' : `fatura R$${fat.toLocaleString('pt-BR')}`}
+3. Para iniciantes/micro (faturamento até R$3000): ZERO custo ou custo mínimo (menos de R$50)
+4. Para pequenos (R$3000-15000): pode sugerir investimentos pequenos (até R$200/mês)
+5. Para médios+: pode sugerir contratação, ferramentas pagas, anúncios
+6. Metas REALISTAS: crescimento de 20-50% em 3 meses é ótimo. Não prometa dobrar sem base.
+7. Se não tem presença digital: explique o conceito ANTES de pedir para fazer
+8. Se trabalha sozinho: NÃO sugira contratar alguém nas semanas 1-2
+9. Ticket médio deve fazer sentido para o negócio (pão não custa R$50)
+10. Use linguagem simples, direta, como um amigo que entende de negócios
 
-// ==================== GENERATE ====================
-async function startGeneration(){
-  const name=val('biz-name'), segment=val('biz-segment'), city=val('biz-city'),
-    time=val('biz-time'), team=val('biz-team'), revenue=val('biz-revenue'),
-    pain=val('biz-pain'), age=val('biz-age'), ticket=val('biz-ticket'),
-    position=val('biz-position'), social=val('biz-social'), posts=val('biz-posts'),
-    diff=val('biz-diff'), goal=val('biz-goal');
+ESTRUTURA DO PLANO (use EXATAMENTE estes marcadores):
+[DIAGNOSTICO]
+[METRICAS]
+[SEMANA1]
+[SEMANA2]
+[SEMANA3]
+[SEMANA4]
+[MARKETING]
+[CLIENTES]
+[FINANCEIRO]
+[PROXIMOS_PASSOS]`;
 
-  if(!name||!segment||!pain||!goal){toast('Preencha: nome, segmento, dificuldade e meta.');return;}
+  try {
+    const r = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
+      body: JSON.stringify({
+        system: sys,
+        messages: [{ role:'user', content:`Crie o plano estratégico completo para ${usuario.name} — ${usuario.segmento||'empreendedor'} em ${usuario.cidade||'Brasil'}.
 
-  currentProfile={name,segment,city,time,team,revenue,pain,age,ticket,position,social,posts,diff,goal};
-  showScreen('loading'); setStep(2);
+Inclua em cada seção:
+- Linguagem adequada para quem ${fat === 0 ? 'nunca teve negócio antes' : `fatura R$${fat.toLocaleString('pt-BR')}`}
+- Para seções de marketing/branding/digital: SEMPRE comece com "📖 O que é isso?" em 2 linhas simples com exemplo do próprio negócio deles
+- Ações específicas para ${usuario.segmento||'o negócio'}
+- Valores e métricas REAIS (ticket de R$${ticket}, não invente)
+- Tarefas concretas com dias e horários possíveis para quem ${nivelEquipe}
 
-  const profileText=`Nome: ${name}\nSegmento: ${segment}\nCidade: ${city}\nTempo: ${time}\nColaboradores: ${team}\nFaturamento: ${revenue}\nDificuldade principal: ${pain}\nFaixa etária do público: ${age}\nTicket médio: ${ticket}\nPosicionamento: ${position}\nPresença digital: ${social}\nFrequência de posts: ${posts}\nDiferenciais: ${diff}\nMeta 90 dias: ${goal}`;
-
-  const loadPromise = animateLoading();
-  let data;
-  try{
-    const resp = await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({
-        system:`Você é um estrategista de negócios sênior especializado em micro e pequenas empresas brasileiras. Use web_search para buscar: 1) tendências atuais do segmento ${segment} no Brasil em 2025, 2) perfil econômico e oportunidades em ${city}, 3) cidades vizinhas e região de ${city} com potencial de expansão, 4) empresas de referência do segmento ${segment} no Brasil. Use esses dados reais para criar estratégias ULTRA ESPECÍFICAS. NUNCA seja genérico. Responda APENAS em JSON válido, sem markdown.`,
-        messages:[{role:'user',content:`Analise este perfil e gere um plano estratégico PERSONALIZADO com dados reais:\n\n${profileText}\n\nRetorne EXATAMENTE este JSON:\n{"resumo":"diagnóstico específico de 2 frases","geografia":{"cidade_foco":"estratégia específica para ${city} com referências locais reais","cidades_vizinhas":["cidade vizinha 1","cidade vizinha 2","cidade vizinha 3"],"raio_atuacao":"como expandir o raio de atuação","escala_nacional":"estratégia de escala nacional se aplicável"},"tarefas":{"semana1":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"semana2":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]},"marketing":{"estrategia_geral":"...","canais":[{"canal":"...","porque":"...","como":"..."}],"conteudo":"...","acao_imediata":"..."},"branding":{"posicionamento":"...","voz":"...","diferenciais":"...","nome_slogan":"..."},"vendas":{"abordagem":"...","tecnicas":["...","...","..."],"fidelizacao":"...","meta_90dias":"..."},"tendencias":{"do_segmento":[{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."},{"tendencia":"...","impacto":"...","oportunidade":"..."}],"referencia_mercado":[{"empresa":"...","aprendizado":"..."},{"empresa":"...","aprendizado":"..."}]},"publico":{"perfil_detalhado":"...","dores":["...","...","..."],"desejos":["...","...","..."],"onde_encontrar":["...","...","..."],"como_comunicar":"..."}}`}]
+${fat === 0 ? 'ATENÇÃO: Este empreendedor AINDA NÃO FATURA. As estratégias devem focar em conseguir os PRIMEIROS clientes e a PRIMEIRA venda.' : ''}
+${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Não tem presença digital. Antes de qualquer estratégia digital, explique o que é e por que fazer.' : ''}` }]
       })
     });
-    const rawText = await resp.text();
-    const raw = JSON.parse(rawText);
-    const textBlocks = (raw.content||[]).filter(c=>c.type==='text');
-    const text = (textBlocks[textBlocks.length-1]?.text||rawText).replace(/```json|```/g,'').trim();
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    data = JSON.parse(jsonMatch ? jsonMatch[0] : text);
-  }catch(e){
-    console.error(e);
-    toast('Erro ao gerar. Tente novamente.');
-    showScreen('form'); setStep(1); return;
+
+    clearInterval(stageTimer);
+    $('gen-bar').style.width = '100%';
+    $('gen-status').textContent = 'Plano gerado com sucesso!';
+
+    const data = await r.json();
+    let texto = '';
+    if(data.content) {
+      for(const block of data.content) {
+        if(block.type === 'text') texto += block.text;
+      }
+    }
+
+    planoAtual = { fat, ticket, meta, porte: porte.label, segmento: usuario.segmento, cidade: usuario.cidade, texto, geradoEm: new Date().toISOString() };
+    taskProgress = {};
+    renderPlano(planoAtual);
+    salvarPlano(planoAtual);
+
+    setTimeout(() => { $('gen-progress').style.display = 'none'; $('genbtn').disabled = false; }, 1000);
+  } catch(e) {
+    clearInterval(stageTimer);
+    $('gen-progress').style.display = 'none';
+    $('genbtn').disabled = false;
+    toast('Erro ao gerar: ' + e.message, '❌');
   }
-
-  await loadPromise;
-  currentData = data;
-
-  const planId = await savePlanToServer(name, segment, data);
-  currentPlanId = planId;
-
-  renderResult(data, name);
-  showScreen('result'); setStep(3);
 }
 
-// ==================== RENDER ====================
-function renderTasks(tasks){
-  return tasks.map(t=>`
-    <div class="task-check-item" onclick="toggleTask(this)">
-      <div class="task-chk"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0e0e10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="task-text"><strong>${t.title}</strong><span>${t.desc}</span></div>
+// ── RENDERIZAR PLANO ──────────────────────────────────
+const SECOES_CFG = {
+  'DIAGNOSTICO':     { emoji:'🔍', titulo:'Diagnóstico do Seu Negócio',      aprender: null },
+  'METRICAS':        { emoji:'📊', titulo:'Suas Métricas Reais',              aprender: 'metricas' },
+  'SEMANA1':         { emoji:'📅', titulo:'Semana 1 — Primeiros Passos',      aprender: null },
+  'SEMANA2':         { emoji:'📅', titulo:'Semana 2 — Construindo Base',      aprender: null },
+  'SEMANA3':         { emoji:'📅', titulo:'Semana 3 — Acelerando',            aprender: null },
+  'SEMANA4':         { emoji:'📅', titulo:'Semana 4 — Consolidando',          aprender: null },
+  'MARKETING':       { emoji:'📣', titulo:'Marketing para o Seu Negócio',     aprender: 'marketing' },
+  'CLIENTES':        { emoji:'🤝', titulo:'Como Atrair e Fidelizar Clientes', aprender: 'clientes' },
+  'FINANCEIRO':      { emoji:'💰', titulo:'Controle Financeiro Simples',      aprender: 'financeiro' },
+  'PROXIMOS_PASSOS': { emoji:'🚀', titulo:'Próximos Passos (Meses 2 e 3)',    aprender: null },
+};
+
+function renderPlano(plano) {
+  const porte = calcPorte(plano.fat);
+  const el = $('plano-resultado');
+
+  // Extrai seções
+  const secoes = {};
+  let keys = Object.keys(SECOES_CFG);
+  let txt = plano.texto || '';
+  for(let i = 0; i < keys.length; i++) {
+    const k = keys[i];
+    const next = keys[i+1];
+    const re = new RegExp(`\\[${k}\\]([\\s\\S]*?)${next ? `(?=\\[${next}\\])` : '$'}`, 'i');
+    const m = txt.match(re);
+    secoes[k] = m ? m[1].trim() : '';
+  }
+
+  // Conta tarefas totais
+  const todasTarefas = extrairTarefas(plano.texto);
+  const feitas = todasTarefas.filter((_,i) => taskProgress[i]).length;
+  const progPct = todasTarefas.length > 0 ? Math.round(feitas/todasTarefas.length*100) : 0;
+
+  const r = 28, circ = 2*Math.PI*r, dash = circ*(progPct/100);
+  el.innerHTML = `
+    <div class="plano-card">
+      <div class="plano-header">
+        <div>
+          <div class="plano-title">📋 Plano Estratégico — ${plano.segmento||'Seu Negócio'}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:3px">${porte.emoji} ${porte.label} · ${plano.cidade||''} · Gerado em ${new Date(plano.geradoEm||Date.now()).toLocaleDateString('pt-BR')}</div>
+        </div>
+        <div class="plano-actions">
+          <button class="btn bg" onclick="exportarPDF()">📄 PDF</button>
+          <button class="btn bgh" onclick="copiarPlano()">📋 Copiar</button>
+        </div>
+      </div>
+
+      <!-- Progresso -->
+      <div style="padding:16px 20px;background:var(--s2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div class="prog-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="${r}" fill="none" stroke="var(--s3)" stroke-width="6"/>
+            <circle cx="35" cy="35" r="${r}" fill="none" stroke="var(--gold)" stroke-width="6"
+              stroke-dasharray="${dash} ${circ-dash}" stroke-linecap="round"/>
+          </svg>
+          <div class="prog-val">${progPct}%</div>
+        </div>
+        <div style="flex:1;min-width:150px">
+          <div style="font-family:var(--H);font-weight:700;margin-bottom:4px">${feitas} de ${todasTarefas.length} tarefas concluídas</div>
+          <div style="font-size:12px;color:var(--t2)">Continue avançando! Cada tarefa é um passo rumo à sua meta.</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:${progPct}%"></div></div>
+        </div>
+      </div>
+
+      <!-- Seções -->
+      <div class="secoes">
+        ${keys.map((k,si) => {
+          const cfg = SECOES_CFG[k];
+          const conteudo = secoes[k];
+          if(!conteudo) return '';
+
+          // Detecta tarefas desta seção
+          const tarefasSecao = extrairTarefasSecao(conteudo, k, todasTarefas);
+
+          const aprenderBtn = cfg.aprender ? `<button class="btn bb" style="font-size:10px;padding:3px 9px" onclick="abrirModal('${cfg.aprender}')">📖 Aprenda mais</button>` : '';
+          const isAberta = si < 2;
+
+          return `<div class="secao">
+            <div class="sec-header" onclick="toggleSecao(this)">
+              <div class="sec-title">${cfg.emoji} ${cfg.titulo}</div>
+              <div style="display:flex;align-items:center;gap:8px">${aprenderBtn}<span style="color:var(--gold);font-size:14px">${isAberta?'▾':'▸'}</span></div>
+            </div>
+            <div class="sec-body ${isAberta?'open':''}">
+              ${tarefasSecao.length > 0 ? renderTarefas(tarefasSecao, k) : ''}
+              <div class="sec-conteudo">${formatarConteudo(conteudo)}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function toggleSecao(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('span:last-child');
+  body.classList.toggle('open');
+  arrow.textContent = body.classList.contains('open') ? '▾' : '▸';
+}
+
+function formatarConteudo(txt) {
+  return txt
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/📖 O que é isso\?/g, '<strong style="color:var(--blue)">📖 O que é isso?</strong>')
+    .replace(/^(#{1,3})\s+(.+)$/gm, '<strong style="font-size:14px;display:block;margin-top:12px;margin-bottom:4px;color:var(--gold)">$2</strong>')
+    .replace(/^[-•]\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0"><span style="color:var(--gold);flex-shrink:0">›</span><span>$1</span></div>')
+    .replace(/^\d+\.\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0"><span style="color:var(--gold);flex-shrink:0;min-width:16px">•</span><span>$1</span></div>');
+}
+
+function extrairTarefas(txt) {
+  const tarefas = [];
+  const lines = (txt||'').split('\n');
+  lines.forEach(line => {
+    if(/^[\s]*[-•✓]\s+\[?\s*\]?\s*.{5,}/.test(line) || /^\d+\.\s+.{5,}/.test(line)) {
+      const clean = line.replace(/^[\s\d\-•✓\[\]\.]+/, '').trim();
+      if(clean.length > 5) tarefas.push(clean);
+    }
+  });
+  return tarefas;
+}
+
+function extrairTarefasSecao(conteudo, key, todas) {
+  // Para seções de semanas, extrai tarefas específicas
+  if(!key.startsWith('SEMANA')) return [];
+  const semNum = key.replace('SEMANA','');
+  const lines = conteudo.split('\n');
+  const tarefas = [];
+  lines.forEach(line => {
+    if(/^[\s]*[-•]\s+.{5,}/.test(line) || /^\d+\.\s+.{5,}/.test(line)) {
+      const clean = line.replace(/^[\s\d\-•\[\]\.]+/, '').trim();
+      if(clean.length > 5) tarefas.push({ txt: clean, sem: semNum });
+    }
+  });
+  return tarefas.slice(0, 7);
+}
+
+function renderTarefas(tarefas, secKey) {
+  const idBase = secKey.toLowerCase();
+  return `<div style="background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.15);border-radius:10px;padding:12px;margin-bottom:14px">
+    <div style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">✅ Suas Tarefas</div>
+    ${tarefas.map((t,i) => {
+      const tid = idBase + '_' + i;
+      const done = taskProgress[tid] || false;
+      return `<div class="task-item">
+        <div class="task-chk ${done?'done':''}" onclick="toggleTask('${tid}', this, '${secKey}')">${done?'✓':''}</div>
+        <div class="task-txt ${done?'done':''}">${t.txt}</div>
+        <span class="task-semana">S${t.sem||'?'}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function toggleTask(tid, el, secKey) {
+  taskProgress[tid] = !taskProgress[tid];
+  el.classList.toggle('done', taskProgress[tid]);
+  el.textContent = taskProgress[tid] ? '✓' : '';
+  const txtEl = el.nextElementSibling;
+  if(txtEl) txtEl.classList.toggle('done', taskProgress[tid]);
+  // Salva progresso
+  if(planoAtual) {
+    fetch('/api/plans/' + (planoAtual.id||'x') + '/progress', { method:'PUT', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body: JSON.stringify({taskProgress}) }).catch(()=>{});
+  }
+  // Re-renderiza progresso
+  const todasTarefas = extrairTarefas(planoAtual?.texto||'');
+  const feitas = Object.values(taskProgress).filter(Boolean).length;
+  const pct = todasTarefas.length > 0 ? Math.round(feitas/todasTarefas.length*100) : 0;
+  const rv = document.querySelector('.prog-val'); if(rv) rv.textContent = pct+'%';
+  const rb = document.querySelector('.prog-fill'); if(rb) rb.style.width = pct+'%';
+  const rtxt = document.querySelector('.prog-ring + div > div:first-child'); if(rtxt) rtxt.textContent = feitas + ' de ' + todasTarefas.length + ' tarefas concluídas';
+}
+
+// ── ECOSSISTEMA DE APRENDIZADO ─────────────────────────
+const ECO_MODULOS = [
+  { id:'marketing', emoji:'📣', titulo:'O que é Marketing?', cor:'var(--blue)',
+    resumo:'Como fazer as pessoas saberem que você existe',
+    conteudo:`<strong>Marketing é simples: é tudo que você faz para as pessoas saberem que você existe e comprarem de você.</strong>
+
+<div class="exemplo">🍞 <strong>Exemplo na padaria:</strong> Colocar uma plaquinha na calçada com o preço do pão, postar foto do bolo no WhatsApp para os contatos, distribuir cartãozinho no bairro — tudo isso é marketing.</div>
+
+Para uma microempresa ou iniciante, marketing não precisa custar nada. Começa assim:
+
+<strong>1. Boca a boca (o mais poderoso)</strong>
+Toda vez que alguém comprar de você, pergunte: "Você conhece alguém que também precisaria disso?" Uma indicação vale 10 anúncios.
+
+<strong>2. WhatsApp Business (gratuito)</strong>
+Troque seu WhatsApp pessoal pelo Business. Você ganha catálogo de produtos, horário de funcionamento e respostas automáticas. É grátis.
+
+<strong>3. Status do WhatsApp</strong>
+Todo dia, poste uma foto do que você está fazendo/vendendo. Em 30 dias, seus contatos já sabem o que você vende.
+
+<div class="exemplo">✂️ <strong>Exemplo na barbearia:</strong> Todo corte feito, tire uma foto (com permissão). Poste no status. Em 1 semana, todo mundo sabe que você corta bem.</div>
+
+<strong>Só depois que isso estiver funcionando, pense em Instagram, Facebook ou anúncios.</strong>` },
+
+  { id:'financeiro', emoji:'💰', titulo:'Controle Financeiro', cor:'var(--green)',
+    resumo:'Saber quanto entra, quanto sai e o que sobra',
+    conteudo:`<strong>Controle financeiro é saber: quanto entrou, quanto saiu, e o que sobrou.</strong> Só isso já coloca você à frente de 80% dos pequenos negócios.
+
+<div class="exemplo">🍽️ <strong>Exemplo no restaurante:</strong> Se você vendeu R$ 800 hoje e gastou R$ 400 em ingredientes + R$ 100 em gás + R$ 50 em embalagem = R$ 550 de custo. Sobrou R$ 250. Esse é seu lucro do dia.</div>
+
+<strong>Regra do 3 envelopes (sem aplicativo):</strong>
+Todo dinheiro que entrar, separe assim:
+- 50% para pagar custos do negócio (ingredientes, material, aluguel)
+- 30% para você viver (seu salário)
+- 20% para guardar/investir no negócio
+
+<strong>Ticket médio — o número mais importante:</strong>
+Ticket médio é quanto cada cliente gasta por vez. Se você vende pão a R$ 0,50, mas cada cliente compra em média 20 pães = ticket de R$ 10.
+
+Para aumentar o faturamento, você pode:
+1. Atender mais clientes
+2. Fazer cada cliente comprar mais (aumentar o ticket)
+3. Cobrar um pouco mais caro (com qualidade)
+
+<div class="exemplo">✂️ <strong>Na barbearia:</strong> Corte custa R$ 25. Se oferecer sobrancelha por +R$ 10, seu ticket sobe 40%. Sem precisar de novo cliente.</div>` },
+
+  { id:'clientes', emoji:'🤝', titulo:'Atrair e Fidelizar Clientes', cor:'var(--gold)',
+    resumo:'Como conseguir novos clientes e fazer eles voltarem',
+    conteudo:`<strong>Fidelizar clientes é muito mais barato do que conquistar novos.</strong> Um cliente que volta 10 vezes vale 10x mais do que 10 clientes que vêm uma vez.
+
+<strong>Como fazer clientes novos (sem dinheiro):</strong>
+
+1. <strong>Parceria local:</strong> Se você faz marmita, combine com a barbearia do lado de divulgar um ao outro. Custo zero.
+
+2. <strong>Cartão de fidelidade simples:</strong> Compre 9 e o 10° é de graça. Custa R$ 2 imprimir no papel. Funciona há 50 anos.
+
+3. <strong>Peça indicação com desconto:</strong> "Me indica para um amigo e te dou 10% de desconto na próxima compra."
+
+4. <strong>Seja lembrado:</strong> Mande mensagem no aniversário. Chame pelo nome. Lembre do que o cliente gosta. Isso não custa nada e faz toda diferença.
+
+<div class="exemplo">🛵 <strong>No delivery:</strong> Ao entregar, mande uma mensagem: "Obrigado [Nome]! Qualquer coisa, só chamar no WhatsApp." Em 3 meses você tem uma cartela fiel.</div>
+
+<strong>O segredo:</strong> Faça o básico muito bem feito — produto bom, atendimento rápido, seja honesto. O resto vem sozinho.` },
+
+  { id:'metricas', emoji:'📊', titulo:'Entendendo Suas Métricas', cor:'var(--purple)',
+    resumo:'Os números que realmente importam no seu negócio',
+    conteudo:`<strong>Você não precisa de planilha complicada. Precisa saber 4 números:</strong>
+
+<strong>1. Faturamento</strong> — Tudo que entrou no mês
+<strong>2. Custo</strong> — Tudo que você gastou para funcionar
+<strong>3. Lucro</strong> — Faturamento menos Custo (o que sobrou)
+<strong>4. Ticket Médio</strong> — Quanto cada cliente gasta por vez
+
+<div class="exemplo">🍞 <strong>Na padaria:</strong>
+Faturamento: R$ 4.000/mês
+Custo (farinha, fermento, luz, gás): R$ 2.200/mês
+Lucro: R$ 1.800/mês
+Ticket médio: R$ 8 por cliente</div>
+
+<strong>Taxa de Retorno — quantos clientes voltam?</strong>
+Se você atende 100 pessoas por mês e 60 são as mesmas sempre = 60% de retorno. Ótimo.
+Se são sempre pessoas diferentes, precisa trabalhar fidelização.
+
+<strong>Meta realista de crescimento:</strong>
+Crescer 20-30% em 3 meses é excelente para um micro negócio. Não acredite em quem promete dobrar em 1 mês sem investimento.
+
+<strong>Como calcular sua meta:</strong>
+Se fatura R$ 2.000 e quer chegar em R$ 2.600 em 3 meses:
+Precisa vender mais R$ 600. Dividindo pelo ticket médio de R$ 20 = 30 clientes a mais por mês = 1 cliente a mais por dia.
+<strong>É possível? Sim. Parece impossível? Não mais.</strong>` },
+
+  { id:'branding', emoji:'🎨', titulo:'Identidade do Negócio (Branding)', cor:'var(--red)',
+    resumo:'Como fazer seu negócio ser reconhecido e lembrado',
+    conteudo:`<strong>Branding é fazer as pessoas lembrarem de você.</strong> Não precisa de logo caro nem agência. Começa na essência.
+
+<div class="exemplo">✂️ <strong>Barbearia:</strong> "O Rafael que sempre toca funk e atende rápido" já é uma identidade. As pessoas indicam: "vai lá no Rafael". Isso é branding.</div>
+
+<strong>3 coisas que criam identidade sem gastar nada:</strong>
+
+1. <strong>Nome claro e fácil de lembrar</strong>
+"Marmitex da Dona Cida" é melhor que "Alimentação Saudável Premium". Simples e verdadeiro.
+
+2. <strong>Consistência</strong>
+Sempre a mesma embalagem, a mesma forma de atender, o mesmo horário. Consistência cria confiança.
+
+3. <strong>Uma coisa que você faz MELHOR que todo mundo</strong>
+"O melhor coxinha do bairro", "o corte mais rápido da cidade", "a manicure que nunca atrasa". Escolha UMA coisa e seja o melhor nessa.
+
+<strong>Quando crescer um pouco, aí investe:</strong>
+- Cartão de visita: R$ 20
+- Logo simples: R$ 50-100 no Canva ou Fiverr
+- Uniforme com seu nome: R$ 40-60
+
+<strong>Não precisa disso no início. Precisa de produto bom e atendimento honesto primeiro.</strong>` },
+
+  { id:'digital', emoji:'📱', titulo:'Presença Digital para Iniciantes', cor:'var(--blue)',
+    resumo:'Primeiros passos nas redes sociais sem mistério',
+    conteudo:`<strong>Presença digital não é ter o Instagram mais bonito. É ser encontrado quando alguém procura o que você vende.</strong>
+
+<strong>Passo 1 — Antes de qualquer rede social (obrigatório):</strong>
+Crie um <strong>Google Meu Negócio</strong> (gratuito). Acesse business.google.com, cadastre seu negócio com endereço e telefone. Quando alguém pesquisar "barbearia perto de mim", você aparece. É o primeiro passo.
+
+<strong>Passo 2 — WhatsApp Business (gratuito):</strong>
+Configure horário, catálogo de produtos, mensagem automática de boas-vindas. Muitos clientes preferem WhatsApp ao Instagram.
+
+<strong>Passo 3 — Só depois pense em Instagram:</strong>
+Não adianta ter Instagram bonito sem movimento na loja. Primeiro garanta que o negócio funciona bem, depois posta.
+
+<div class="exemplo">🍽️ <strong>No restaurante:</strong> Google Meu Negócio com fotos das pratos + WhatsApp para pedidos = já está à frente de 70% dos concorrentes.</div>
+
+<strong>O que postar (regra simples):</strong>
+- Segunda: foto do produto/serviço
+- Quarta: depoimento de cliente ou bastidor
+- Sexta: promoção ou novidade
+
+<strong>Frequência importa mais que qualidade no início.</strong> Postar 3x por semana de forma consistente por 3 meses é melhor que postar 30 fotos perfeitas uma vez e sumir.` },
+];
+
+function renderEco() {
+  const g = $('eco-grid'); if(!g) return;
+  g.innerHTML = ECO_MODULOS.map(m => `
+    <div onclick="abrirModal('${m.id}')" style="background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:15px;cursor:pointer;transition:all .2s;border-top:3px solid ${m.cor}"
+      onmouseover="this.style.borderColor='${m.cor}';this.style.transform='translateY(-2px)'"
+      onmouseout="this.style.borderColor='var(--bd)';this.style.borderTopColor='${m.cor}';this.style.transform=''">
+      <div style="font-size:26px;margin-bottom:8px">${m.emoji}</div>
+      <div style="font-family:var(--H);font-size:13px;font-weight:700;margin-bottom:4px">${m.titulo}</div>
+      <div style="font-size:11px;color:var(--t2);line-height:1.5">${m.resumo}</div>
+      <div style="font-size:10px;color:${m.cor};font-weight:700;margin-top:8px">Ler agora →</div>
     </div>`).join('');
 }
 
-function toggleTask(el){
-  el.querySelector('.task-chk').classList.toggle('on');
-  el.classList.toggle('done-task');
-  updateProgressRing();
-  if(currentPlanId){
-    const prog = {};
-    document.querySelectorAll('.task-check-item').forEach((item,i)=>{prog['t'+i]=item.classList.contains('done-task');});
-    updateTaskProgress(currentPlanId, prog);
-  }
+function abrirModal(id) {
+  const m = ECO_MODULOS.find(x => x.id === id); if(!m) return;
+  $('mod-title').textContent = m.emoji + ' ' + m.titulo;
+  $('mod-body').innerHTML = m.conteudo;
+  $('MOD').classList.add('open');
+}
+function fecharModal() { $('MOD').classList.remove('open'); }
+$('MOD').addEventListener('click', e => { if(e.target === $('MOD')) fecharModal(); });
+
+// ── SALVAR / CARREGAR PLANOS ──────────────────────────
+async function salvarPlano(plano) {
+  try {
+    const r = await fetch('/api/plans/save', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body: JSON.stringify(plano) });
+    const d = await r.json();
+    if(d.plan) planoAtual.id = d.plan.id;
+    toast('Plano salvo!');
+  } catch(e) {}
 }
 
-function updateProgressRing(){
-  const total = document.querySelectorAll('.task-check-item').length;
-  const done = document.querySelectorAll('.task-check-item.done-task').length;
-  const pct = total ? Math.round((done/total)*100) : 0;
-  const circle = document.getElementById('progress-ring-circle');
-  const pctEl = document.getElementById('ring-pct');
-  const countEl = document.getElementById('ring-count');
-  if(circle){ const offset=138.2-(138.2*pct/100); circle.style.strokeDashoffset=offset; circle.style.stroke=pct===100?'var(--accent2)':pct>50?'var(--accent)':'var(--accent3)'; }
-  if(pctEl) pctEl.textContent=pct+'%';
-  if(countEl) countEl.textContent=done+' de '+total+' tarefas';
-  if(pct===100) toast('🎉 Semana concluída! Parabéns!');
-}
-
-function resultBlock(title,badge,badgeClass,body){
-  return `<div class="result-block"><div class="rb-header"><div class="rb-title">${title}</div><span class="rb-badge ${badgeClass}">${badge}</span></div><div class="rb-body">${body}</div></div>`;
-}
-
-function renderResult(data, name){
-  document.getElementById('result-title').innerHTML=`Plano pronto, <span style="color:var(--accent)">${name}</span>`;
-  document.getElementById('result-sub').textContent=data.resumo||'';
-
-  // Anel de progresso
-  document.getElementById('progress-card-wrap').innerHTML=`
-    <div class="progress-card">
-      <div class="progress-ring-wrap">
-        <div class="ring-svg-wrap">
-          <svg width="64" height="64" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="22" fill="none" stroke="var(--bg3)" stroke-width="5"/>
-            <circle id="progress-ring-circle" cx="32" cy="32" r="22" fill="none" stroke="var(--accent3)" stroke-width="5" stroke-dasharray="138.2" stroke-dashoffset="138.2" stroke-linecap="round" style="transition:stroke-dashoffset .5s ease"/>
-          </svg>
-          <div class="ring-pct" id="ring-pct">0%</div>
+async function carregarHistorico() {
+  const el = $('hist-lista'); if(!el) return;
+  try {
+    const r = await fetch('/api/plans', { headers:{'Authorization':'Bearer '+token} });
+    const planos = await r.json();
+    $('hist-count').textContent = planos.length + ' planos';
+    if(!planos.length) { el.innerHTML = '<div class="empty"><div class="ei">📋</div><div>Ainda sem planos gerados</div></div>'; return; }
+    el.innerHTML = planos.map(p => {
+      const porte = calcPorte(p.fat||0);
+      return `<div class="hist-item" onclick="carregarPlano(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="hist-nome">${p.segmento||'Plano Estratégico'} — ${p.cidade||''}</div>
+          <span class="porte-badge ${porte.cls}">${porte.emoji} ${porte.label}</span>
         </div>
-        <div class="ring-details">
-          <div class="ring-label">Progresso das tarefas</div>
-          <div class="ring-count" id="ring-count">0 de 12 tarefas</div>
+        <div class="hist-meta">
+          Faturamento: R$ ${(p.fat||0).toLocaleString('pt-BR')} · Ticket: R$ ${p.ticket||0} · Meta: R$ ${(p.meta||0).toLocaleString('pt-BR')} · ${new Date(p.geradoEm||p.createdAt||Date.now()).toLocaleDateString('pt-BR')}
         </div>
-      </div>
-    </div>`;
-
-  // Tarefas com semanas progressivas
-  const tw1=data.tarefas?.semana1||[], tw2=data.tarefas?.semana2||[];
-  document.getElementById('sec-tarefas').innerHTML=
-    resultBlock('Semana 1 — Ação imediata','Esta semana','badge-green',`<div>${renderTasks(tw1)}</div>`)+
-    resultBlock('Semana 2 — Aprofundar','Próxima semana','badge-teal',`<div>${renderTasks(tw2)}</div>`)+
-    `<div class="new-week-card"><h3>Semana 3 — Consolidar</h3><p>Complete as semanas 1 e 2 para desbloquear. A IA gera novas tarefas baseadas no seu progresso real.</p><button class="btn btn-teal" style="width:auto;padding:10px 20px;font-size:12px;" onclick="generateNextWeek(3)">Gerar semana 3 com IA</button></div>`+
-    `<div class="new-week-card" style="opacity:.5"><h3>Semana 4 — Escalar</h3><p>Disponível após concluir a semana 3.</p></div>`;
-
-  // Marketing
-  const mk=data.marketing||{};
-  const canais=(mk.canais||[]).map(c=>`<p><strong>${c.canal}</strong> — ${c.porque} ${c.como}</p>`).join('');
-  document.getElementById('sec-marketing').innerHTML=
-    resultBlock('Estratégia geral','Marketing','badge-green',`<p>${mk.estrategia_geral||''}</p>`)+
-    resultBlock('Canais','Onde atuar','badge-teal',canais)+
-    resultBlock('Conteúdo','Como criar','badge-orange',`<p>${mk.conteudo||''}</p>`)+
-    resultBlock('Ação desta semana','Faça agora','badge-purple',`<p>${mk.acao_imediata||''}</p>`);
-
-  // Branding
-  const br=data.branding||{};
-  document.getElementById('sec-branding').innerHTML=
-    resultBlock('Posicionamento','Destaque','badge-green',`<p>${br.posicionamento||''}</p>`)+
-    resultBlock('Voz e tom','Personalidade','badge-teal',`<p>${br.voz||''}</p>`)+
-    resultBlock('Diferenciais','Pontos fortes','badge-orange',`<p>${br.diferenciais||''}</p>`)+
-    resultBlock('Slogan','Tagline','badge-purple',`<p style="font-size:16px;font-style:italic;color:var(--accent);">"${br.nome_slogan||''}"</p>`);
-
-  // Vendas
-  const vn=data.vendas||{};
-  const tec=(vn.tecnicas||[]).map(t=>`<li>${t}</li>`).join('');
-  document.getElementById('sec-vendas').innerHTML=
-    resultBlock('Abordagem','Estratégia','badge-green',`<p>${vn.abordagem||''}</p>`)+
-    resultBlock('Técnicas','Como vender','badge-teal',`<ul>${tec}</ul>`)+
-    resultBlock('Fidelização','Reter clientes','badge-orange',`<p>${vn.fidelizacao||''}</p>`)+
-    resultBlock('Meta 90 dias','Foco','badge-purple',`<p style="font-size:15px;font-weight:500;color:var(--accent);">${vn.meta_90dias||''}</p>`);
-
-  // Tendências
-  const tr=data.tendencias||{};
-  const trendItems=(tr.do_segmento||[]).map((t,i)=>`<div class="trend-item"><div class="trend-num">0${i+1}</div><div class="trend-text"><strong>${t.tendencia}</strong><span>${t.impacto} — ${t.oportunidade}</span></div></div>`).join('');
-  const refItems=(tr.referencia_mercado||[]).map(r=>`<p><strong>${r.empresa}</strong> — ${r.aprendizado}</p>`).join('');
-  document.getElementById('sec-tendencias').innerHTML=
-    resultBlock('Tendências reais','Em alta agora','badge-green',trendItems)+
-    resultBlock('Referências','Aprenda com quem cresceu','badge-teal',refItems);
-
-  // Público
-  const pb=data.publico||{};
-  const dores=(pb.dores||[]).map(d=>`<li>${d}</li>`).join('');
-  const desejos=(pb.desejos||[]).map(d=>`<li>${d}</li>`).join('');
-  const onde=(pb.onde_encontrar||[]).map(o=>`<span class="insight-pill">${o}</span>`).join('');
-  document.getElementById('sec-publico').innerHTML=
-    resultBlock('Cliente ideal','Perfil','badge-green',`<p>${pb.perfil_detalhado||''}</p>`)+
-    resultBlock('Dores e desejos','O que move','badge-teal',`<strong style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">DORES</strong><ul>${dores}</ul><strong style="font-size:11px;color:var(--muted);display:block;margin:12px 0 6px;">DESEJOS</strong><ul>${desejos}</ul>`)+
-    resultBlock('Onde encontrar','Canais','badge-orange',onde)+
-    resultBlock('Como comunicar','Tom certo','badge-purple',`<p>${pb.como_comunicar||''}</p>`);
-
-  // Geografia
-  const geo=data.geografia||{};
-  const vizinhas=(geo.cidades_vizinhas||[]).map(c=>`<span class="insight-pill">${c}</span>`).join('');
-  document.getElementById('sec-geografia').innerHTML=
-    resultBlock('Estratégia local',`${currentProfile?.city||'Sua cidade'}`,'badge-green',`<p>${geo.cidade_foco||''}</p>`)+
-    resultBlock('Cidades vizinhas','Expansão regional','badge-teal',`<p style="margin-bottom:8px">Mercados que você pode alcançar:</p>${vizinhas}`)+
-    resultBlock('Expandir o raio','Crescimento local','badge-orange',`<p>${geo.raio_atuacao||''}</p>`)+
-    resultBlock('Escala nacional','Próximo nível','badge-purple',`<p>${geo.escala_nacional||''}</p>`);
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = '<div class="empty"><div class="ei">❌</div><div>Erro ao carregar</div></div>'; }
 }
 
-// ==================== SEMANA PROGRESSIVA ====================
-async function generateNextWeek(weekNum){
-  if(!currentData||!currentProfile){toast('Gere um plano primeiro.');return;}
-  toast('Gerando semana '+weekNum+'...');
+function carregarPlano(plano) {
+  planoAtual = plano;
+  taskProgress = plano.taskProgress || {};
+  renderPlano(plano);
+  goTab('plano', document.querySelectorAll('.tab')[0]);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-  const done = document.querySelectorAll('.task-check-item.done-task').length;
-  const total = document.querySelectorAll('.task-check-item').length;
-  const pct = total ? Math.round((done/total)*100) : 0;
+// ── EXPORTAR PDF ──────────────────────────────────────
+function exportarPDF() {
+  if(!planoAtual) { toast('Gere um plano primeiro!','⚠️'); return; }
+  try {
+    const {jsPDF} = window.jspdf;
+    const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const PW=210, M=18;
+    let y=0;
 
-  const prompt=`Com base no perfil: Segmento: ${currentProfile.segment}, Cidade: ${currentProfile.city}, Dificuldade: ${currentProfile.pain}. O empreendedor completou ${pct}% das tarefas anteriores. Gere 6 tarefas ESPECÍFICAS e AVANÇADAS para a SEMANA ${weekNum}, construindo sobre o progresso feito. Retorne APENAS este JSON sem markdown: {"tarefas":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}]}`;
+    doc.setFillColor(8,12,20); doc.rect(0,0,PW,297,'F');
+    doc.setFillColor(245,166,35); doc.rect(0,0,PW,38,'F');
+    doc.setTextColor(0,0,0);
+    doc.setFontSize(20); doc.setFont('helvetica','bold');
+    doc.text('Estrategista IA — Plano Estratégico', M, 15);
+    doc.setFontSize(10); doc.setFont('helvetica','normal');
+    doc.text(`${planoAtual.segmento||'Negócio'} · ${planoAtual.cidade||''} · ${new Date(planoAtual.geradoEm||Date.now()).toLocaleDateString('pt-BR')}`, M, 23);
+    doc.text(`Faturamento: R$ ${(planoAtual.fat||0).toLocaleString('pt-BR')} | Ticket: R$ ${planoAtual.ticket||0} | Meta: R$ ${(planoAtual.meta||0).toLocaleString('pt-BR')}`, M, 30);
+    y = 48;
 
-  try{
-    const resp = await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({
-        system:'Você é um estrategista de negócios. Responda APENAS em JSON válido, sem markdown.',
-        messages:[{role:'user',content:prompt}]
-      })
+    doc.setTextColor(255,255,255);
+    const linhas = doc.splitTextToSize(planoAtual.texto.replace(/\[.*?\]/g,'').replace(/\*\*/g,''), PW-2*M);
+    linhas.forEach(linha => {
+      if(y > 275) { doc.addPage(); doc.setFillColor(8,12,20); doc.rect(0,0,PW,297,'F'); y=20; }
+      doc.setFontSize(9.5); doc.setFont('helvetica','normal');
+      if(linha.startsWith('#')) { doc.setTextColor(245,166,35); doc.setFont('helvetica','bold'); doc.setFontSize(11); }
+      else { doc.setTextColor(220,235,255); }
+      doc.text(linha.replace(/^#+\s*/, ''), M, y);
+      y += linha.startsWith('#') ? 9 : 5.5;
     });
-    const rawText = await resp.text();
-    const raw = JSON.parse(rawText);
-    const textBlocks = (raw.content||[]).filter(c=>c.type==='text');
-    const text = (textBlocks[textBlocks.length-1]?.text||rawText).replace(/```json|```/g,'').trim();
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    const data = JSON.parse(jsonMatch ? jsonMatch[0] : text);
 
-    const newTasks = renderTasks(data.tarefas||[]);
-    const weekCards = document.querySelectorAll('.new-week-card');
-    if(weekCards.length>0){
-      weekCards[0].outerHTML = resultBlock(`Semana ${weekNum} — Gerada com IA`,`Semana ${weekNum}`,'badge-purple',`<div>${newTasks}</div>`);
-    }
-    toast('Semana '+weekNum+' gerada!');
-    updateProgressRing();
-  }catch(e){
-    console.error(e);
-    toast('Erro ao gerar semana '+weekNum+'. Tente novamente.');
+    doc.save(`plano_${(planoAtual.segmento||'negocio').replace(/\s/g,'-').toLowerCase()}_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.pdf`);
+    toast('PDF gerado!');
+  } catch(e) { toast('Erro ao gerar PDF: '+e.message,'❌'); }
+}
+
+function copiarPlano() {
+  if(!planoAtual) return;
+  navigator.clipboard.writeText(planoAtual.texto).then(() => toast('Plano copiado!')).catch(()=>{});
+}
+
+// ── INIT ──────────────────────────────────────────────
+(async function() {
+  if(token) {
+    await iniciarApp();
   }
-}
-
-// ==================== HISTORY ====================
-function renderHistory(){
-  const el=document.getElementById('history-list');
-  if(!localPlans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano ainda</strong><p>Gere seu primeiro plano estratégico.</p></div>`;return;}
-  el.innerHTML=localPlans.map(p=>{
-    const done=Object.values(p.taskProgress||{}).filter(Boolean).length;
-    const total=(p.data?.tarefas?.semana1||[]).length+(p.data?.tarefas?.semana2||[]).length;
-    const pct=total?Math.round((done/total)*100):0;
-    return `<div class="hist-card">
-      <div class="hc-top"><div><div class="hc-name">${p.name}</div><div class="hc-seg">${p.segment}</div></div><div class="hc-date">${p.date}</div></div>
-      <p class="hc-summary">${p.data?.resumo||''}</p>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.875rem">
-        <span class="rb-badge badge-green">${pct}% concluído</span>
-        ${p.data?.branding?.nome_slogan?`<span class="rb-badge badge-purple">"${p.data.branding.nome_slogan}"</span>`:''}
-      </div>
-      <div class="hc-actions">
-        <button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button>
-        <button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button>
-        <button class="btn btn-red" onclick="deletePlanFromServer('${p.id}')">Excluir</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function loadPlan(id){
-  const plan=localPlans.find(p=>p.id===id);
-  if(!plan) return;
-  currentData=plan.data; currentProfile={name:plan.name,segment:plan.segment};
-  currentPlanId=plan.id;
-  renderResult(plan.data, plan.name);
-  showScreen('result'); setStep(3);
-}
-
-// ==================== TRACKING ====================
-function renderTracking(){
-  const el=document.getElementById('tracking-list');
-  if(!localPlans.length){el.innerHTML=`<div class="empty-state"><strong>Nenhum plano</strong><p>Gere um plano primeiro.</p></div>`;return;}
-  el.innerHTML=localPlans.map(p=>{
-    const tw1=p.data?.tarefas?.semana1||[], tw2=p.data?.tarefas?.semana2||[];
-    const total=tw1.length+tw2.length, prog=p.taskProgress||{};
-    const done=Object.values(prog).filter(Boolean).length;
-    const pct=total?Math.round((done/total)*100):0;
-    const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';
-    const t1=tw1.map((t,i)=>{const k=`w1_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
-    const t2=tw2.map((t,i)=>{const k=`w2_${i}`,d=prog[k]||false;return `<div class="ptc-task ${d?'done-task':''}" onclick="toggleTracking('${p.id}','${k}',this)"><div class="ptc-chk ${d?'on':''}"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5L3 5.5L8 1" stroke="#0e0e10" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="ptc-task-text">${t.title}</div></div>`;}).join('');
-    return `<div class="plan-track-card" id="ptc-${p.id}">
-      <div class="ptc-header"><div><div class="ptc-name">${p.name}</div><div class="ptc-seg">${p.segment} · ${p.date}</div></div><span class="rb-badge badge-green">${pct}%</span></div>
-      <div class="ptc-prog-label"><span>Progresso</span><span id="pl-${p.id}">${done}/${total}</span></div>
-      <div class="ptc-prog-bar"><div class="ptc-prog-fill" id="pf-${p.id}" style="width:${pct}%;background:${fc};"></div></div>
-      <div class="week-toggle"><button class="wtab on" onclick="swTab('${p.id}','w1',this)">Semana 1</button><button class="wtab" onclick="swTab('${p.id}','w2',this)">Semana 2</button></div>
-      <div id="tw1-${p.id}">${t1}</div><div id="tw2-${p.id}" style="display:none">${t2}</div>
-      <div class="ptc-actions"><button class="btn btn-ghost" onclick="loadPlan('${p.id}')">Ver plano</button><button class="btn btn-teal" onclick="downloadPlanPDF('${p.id}')">PDF</button></div>
-    </div>`;
-  }).join('');
-}
-
-function swTab(id,w,btn){
-  const c=document.getElementById('ptc-'+id);
-  c.querySelectorAll('.wtab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  document.getElementById('tw1-'+id).style.display=w==='w1'?'block':'none';
-  document.getElementById('tw2-'+id).style.display=w==='w2'?'block':'none';
-}
-
-async function toggleTracking(planId,key,el){
-  const plan=localPlans.find(p=>p.id===planId);
-  if(!plan) return;
-  if(!plan.taskProgress) plan.taskProgress={};
-  plan.taskProgress[key]=!plan.taskProgress[key];
-  el.querySelector('.ptc-chk').classList.toggle('on');
-  el.classList.toggle('done-task');
-  const tw1=plan.data?.tarefas?.semana1||[], tw2=plan.data?.tarefas?.semana2||[];
-  const total=tw1.length+tw2.length, done=Object.values(plan.taskProgress).filter(Boolean).length;
-  const pct=total?Math.round((done/total)*100):0;
-  const fc=pct===100?'var(--accent)':pct>50?'var(--accent2)':'var(--accent3)';
-  document.getElementById('pf-'+planId).style.width=pct+'%';
-  document.getElementById('pf-'+planId).style.background=fc;
-  document.getElementById('pl-'+planId).textContent=`${done}/${total}`;
-  document.querySelector(`#ptc-${planId} .rb-badge`).textContent=`${pct}%`;
-  await updateTaskProgress(planId, plan.taskProgress);
-  if(pct===100) toast('🎉 Todas as tarefas concluídas!');
-}
-
-// ==================== PDF ====================
-function buildPDF(data,name,segment){
-  const lines=[];
-  const a=(t,s)=>lines.push({text:t,style:s||'body'});
-  a('ESTRATEGISTA IA','header');a(`Plano: ${name}`,'title');a(`${segment} · ${new Date().toLocaleDateString('pt-BR')}`,'meta');
-  a('','spacer');a('DIAGNÓSTICO','section');a(data.resumo||'');
-  a('','spacer');a('TAREFAS SEMANA 1','section');(data.tarefas?.semana1||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});
-  a('','spacer');a('TAREFAS SEMANA 2','section');(data.tarefas?.semana2||[]).forEach((t,i)=>{a(`${i+1}. ${t.title}`,'task-title');a(t.desc,'task-desc');});
-  a('','spacer');a('MARKETING','section');a(data.marketing?.estrategia_geral||'');(data.marketing?.canais||[]).forEach(c=>a(`• ${c.canal}: ${c.porque}`));a('Ação: '+(data.marketing?.acao_imediata||''),'highlight');
-  a('','spacer');a('BRANDING','section');a('Posicionamento: '+(data.branding?.posicionamento||''));a('Slogan: "'+(data.branding?.nome_slogan||'')+'"','highlight');
-  a('','spacer');a('VENDAS','section');a(data.vendas?.abordagem||'');(data.vendas?.tecnicas||[]).forEach(t=>a('• '+t));a('Meta: '+(data.vendas?.meta_90dias||''),'highlight');
-  a('','spacer');a('EXPANSÃO GEOGRÁFICA','section');a('Cidade: '+(data.geografia?.cidade_foco||''));a('Expansão: '+(data.geografia?.raio_atuacao||''));
-  a('','spacer');a('PÚBLICO','section');a(data.publico?.perfil_detalhado||'');(data.publico?.dores||[]).forEach(d=>a('• '+d));
-  return lines;
-}
-
-function renderPDF(lines,filename){
-  const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
-  const W=210,ml=18,cw=W-36;let y=20;
-  const ac=[62,158,117],dk=[14,14,16],gy=[120,120,112],lg=[240,240,235];
-  doc.setFillColor(...ac);doc.rect(0,0,W,14,'F');
-  lines.forEach(l=>{
-    if(y>272){doc.addPage();y=20;}
-    switch(l.style){
-      case 'header':doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text(l.text,ml,9);y=24;break;
-      case 'title':doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...dk);const tl=doc.splitTextToSize(l.text,cw);doc.text(tl,ml,y);y+=tl.length*8+3;break;
-      case 'meta':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);doc.text(l.text,ml,y);y+=6;break;
-      case 'spacer':y+=4;break;
-      case 'section':doc.setFillColor(...ac);doc.roundedRect(ml,y,cw,7,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text(l.text,ml+4,y+4.8);y+=12;break;
-      case 'task-title':doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...dk);const tt=doc.splitTextToSize(l.text,cw-4);doc.text(tt,ml+2,y);y+=tt.length*5+1;break;
-      case 'task-desc':doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gy);const td=doc.splitTextToSize(l.text,cw-6);doc.text(td,ml+4,y);y+=td.length*4.5+3;break;
-      case 'highlight':doc.setFillColor(...lg);const hl=doc.splitTextToSize(l.text,cw-8);const hh=hl.length*5+6;doc.roundedRect(ml,y-1,cw,hh,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...ac);doc.text(hl,ml+4,y+3.5);y+=hh+4;break;
-      default:doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(...dk);const bl=doc.splitTextToSize(l.text||'',cw);doc.text(bl,ml,y);y+=bl.length*5+2;
-    }
-  });
-  const tp=doc.getNumberOfPages();
-  for(let p=1;p<=tp;p++){doc.setPage(p);doc.setFillColor(...ac);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text('Estrategista IA — estrategista-ia-app-production.up.railway.app',ml,292);doc.text(`${p}/${tp}`,W-ml,292,'right');}
-  doc.save(filename);
-}
-
-function downloadPDF(){
-  if(!currentData||!currentProfile) return;
-  renderPDF(buildPDF(currentData,currentProfile.name,currentProfile.segment),`plano-${currentProfile.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);
-  toast('PDF baixando...');
-}
-
-function downloadPlanPDF(id){
-  const p=localPlans.find(p=>p.id===id);
-  if(!p) return;
-  renderPDF(buildPDF(p.data,p.name,p.segment),`plano-${p.name.replace(/\s+/g,'-').toLowerCase()}.pdf`);
-  toast('PDF baixando...');
-}
-
-// Verificar auth ao carregar
-checkAuth();
+})();
 </script>
 </body>
 </html>
