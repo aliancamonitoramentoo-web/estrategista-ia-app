@@ -201,82 +201,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .srv-gerar-btn{width:100%;background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;border-radius:11px;padding:14px;font-family:var(--H);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-top:4px;}
 .srv-gerar-btn:hover{transform:translateY(-1px);}
 
-@media(max-width:640px){
-  /* Login */
-  #LS{padding:16px;}
-  .lbox{border-radius:16px;padding:22px 18px;width:100%;}
-  .fg{margin-bottom:12px;}
-  .li{padding:13px;font-size:15px;border-radius:11px;}
-  .fg2{grid-template-columns:1fr;}
-  .lbtn{padding:15px;font-size:16px;border-radius:13px;}
-  .hint{font-size:12px;}
 
-  /* Topbar sticky */
-  .topbar{position:sticky;top:0;z-index:100;height:50px;padding:0 14px;}
-  .topname{display:none;}
-  .topbadge{display:none;}
-
-  /* Main — rola com o body, padding extra embaixo para o bottom nav */
-  .main{padding:12px 12px 80px;max-width:100%;}
-
-  /* Bottom nav FIXO */
-  .bottom-nav{
-    display:flex!important;
-    position:fixed;
-    bottom:0;left:0;right:0;
-    height:62px;
-    background:var(--s1);
-    border-top:1px solid var(--bd);
-    z-index:500;
-    padding-bottom:env(safe-area-inset-bottom);
-  }
-  .bn-item{
-    flex:1;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:2px;border:none;background:none;
-    color:var(--t3);cursor:pointer;font-family:var(--F);
-    font-size:10px;font-weight:600;transition:color .15s;padding:6px 2px;
-  }
-  .bn-item.on{color:var(--gold);}
-  .bn-icon{font-size:20px;line-height:1;}
-  .tabs{display:none;}
-
-  /* Cards */
-  .perfil-card{flex-direction:row;padding:12px 14px;gap:10px;border-radius:13px;margin-bottom:12px;}
-  .perfil-icon{width:40px;height:40px;font-size:20px;border-radius:11px;flex-shrink:0;}
-  .perfil-nome{font-size:14px;}
-  .perfil-sub{font-size:11px;}
-  .perfil-stats{gap:5px;margin-top:5px;}
-  .pstat{padding:3px 7px;font-size:10px;}
-  #porte-tag{display:none;}
-  .form-card{padding:14px;border-radius:13px;margin-bottom:12px;}
-  .form-title{font-size:14px;margin-bottom:12px;}
-  .genbtn{padding:16px;font-size:16px;border-radius:13px;}
-  .plano-header{padding:12px 14px;flex-direction:column;gap:8px;}
-  .plano-title{font-size:14px;}
-  .plano-actions{width:100%;}
-  .btn{padding:7px 11px;font-size:11px;}
-  .secoes{padding:12px;}
-  .secao{margin-bottom:10px;border-radius:11px;}
-  .sec-header{padding:12px 13px;}
-  .sec-title{font-size:13px;}
-  .sec-body{padding:12px;}
-  .sec-conteudo{font-size:13px;line-height:1.75;}
-  .task-item{gap:10px;padding:10px 0;}
-  .task-chk{width:22px;height:22px;border-radius:6px;}
-  .task-txt{font-size:13px;}
-  .modal{width:100%;border-radius:20px 20px 0 0;position:fixed;bottom:0;max-height:85vh;margin:0;padding:20px 20px 36px;}
-  .modal-bg.open{align-items:flex-end;}
-  .toast{bottom:72px;right:12px;left:12px;transform:translateY(130%);border-radius:13px;}
-  .toast.show{transform:translateY(0);}
-  #eco-grid{grid-template-columns:1fr 1fr!important;}
-  .srv-grid{grid-template-columns:repeat(4,1fr);gap:6px;}
-  .srv-btn{padding:9px 4px;}
-  .srv-btn-icon{font-size:19px;}
-  .srv-btn-label{font-size:9px;}
-  .trilha-card{margin-bottom:12px;}
-  .fase-item{gap:10px;}
-  .fase-circle{width:36px;height:36px;font-size:16px;}
-}
 @media(max-width:360px){
   .lbox img{width:190px!important;}
   #eco-grid{grid-template-columns:1fr!important;}
@@ -335,7 +260,6 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 
 @media(max-width:640px){
   #APP.show{display:flex;flex-direction:column;min-height:100vh;}
-  .main{flex:1;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;}
   /* Login mobile — scroll livre */
   #LS{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 40%,rgba(245,166,35,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
   .lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);margin:auto;}
@@ -372,12 +296,11 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
   .hint{font-size:12px;}
 
   /* App — bottom navigation */
-  /* scroll gerenciado pelo .main */
-  .topbar{height:52px;padding:0 16px;}
+  .topbar{height:52px;padding:0 16px;position:sticky;top:0;z-index:100;}
   .topname{display:none;}
   .topbadge{display:none;}
 
-  .main{flex:1;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;}
+  .main{padding:14px 14px 90px;max-width:100%;margin:0;width:100%;}
 
   /* Bottom nav bar */
   .bottom-nav{
