@@ -20,7 +20,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px;}
 
 /* ── LOGIN / CADASTRO ── */
-#LS{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+#LS{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch;
   background:radial-gradient(ellipse at 20% 40%,rgba(61,155,255,.08),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
 .lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);}
 .llogo{display:flex;align-items:center;gap:13px;margin-bottom:6px;justify-content:center;}
@@ -46,7 +46,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .porte-grande{background:rgba(255,69,96,.15);color:var(--red);}
 
 /* ── APP ── */
-#APP{display:none;height:100vh;flex-direction:column;overflow:hidden;}
+#APP{display:none;height:100vh;flex-direction:column;overflow:hidden;position:relative;}
 #APP.show{display:flex;}
 .topbar{height:56px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:100;}
 .toplogo{display:flex;align-items:center;gap:10px;}
@@ -59,7 +59,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .logoutbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;transition:color .2s;padding:4px;}
 .logoutbtn:hover{color:var(--red);}
 
-.main{flex:1;overflow-y:auto;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;}
+.main{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;}
 
 /* ── PERFIL CARD ── */
 .perfil-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
@@ -256,13 +256,28 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .medal-btn{background:var(--gold);color:#000;border:none;border-radius:10px;padding:12px 28px;font-family:var(--H);font-size:14px;font-weight:800;cursor:pointer;}
 
 @media(max-width:640px){
-  #APP.show{height:100dvh;}
+  #APP.show{height:100dvh;height:100vh;}
   .main{
-    padding:14px 14px 24px;
-    max-width:100%;
-    height:calc(100dvh - 52px - 64px);
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
+    padding:14px 14px 24px !important;
+    max-width:100% !important;
+    height:calc(100vh - 52px - 64px) !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-behavior:smooth;
+    will-change:scroll-position;
+  }
+  /* Login mobile — scroll livre */
+  #LS{
+    align-items:flex-start !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    padding:20px !important;
+  }
+  .lbox{
+    width:100%;
+    margin:auto 0;
+    padding:20px !important;
   }
 
   /* Login — tela cheia sem card flutuante */
@@ -287,9 +302,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 
   /* Formulário com scroll interno */
   #tab-login, #tab-cadastro{
-    flex:1;
-    padding:16px 20px 100px;
-    overflow-y:auto;
+    padding:16px 20px 30px;
   }
 
   .fg{margin-bottom:14px;}
@@ -503,31 +516,8 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
       <div class="fg"><label>Seu Nome *</label><input class="li" id="c-nome" placeholder="Como você se chama?"></div>
       <div class="fg"><label>E-mail *</label><input class="li" id="c-email" type="email" placeholder="seu@email.com"></div>
       <div class="fg"><label>Senha *</label><input class="li" id="c-senha" type="password" placeholder="Mínimo 6 caracteres"></div>
-      <div class="fg2">
-        <div class="fg"><label>Seu Negócio / Segmento *</label>
-          <input class="li" id="c-segmento" list="seg-list" placeholder="Ex: Padaria, Barbearia, Delivery...">
-          <datalist id="seg-list">
-            <option>Padaria / Confeitaria</option><option>Barbearia / Salão</option>
-            <option>Restaurante / Lanchonete</option><option>Delivery de comida</option>
-            <option>Loja de roupas</option><option>Mercadinho / Mercearia</option>
-            <option>Serviços gerais / Manutenção</option><option>Artesanato / Costura</option>
-            <option>Cabeleireira autônoma</option><option>Manicure / Pedicure</option>
-            <option>Personal trainer</option><option>Aulas particulares / Reforço escolar</option>
-            <option>Venda de salgados / Marmitas</option><option>Chaveiro</option>
-            <option>Mecânica / Auto elétrica</option><option>Farmácia</option>
-            <option>Pet shop / Banho e tosa</option><option>Limpeza e higienização</option>
-            <option>Construção / Reforma</option><option>Tecnologia / Informática</option>
-            <option>Consultoria</option><option>E-commerce</option><option>Outro</option>
-          </datalist>
-        </div>
-        <div class="fg"><label>Cidade *</label><input class="li" id="c-cidade" placeholder="Ex: Recife, PE"></div>
-      </div>
-      <div class="fg">
-        <label>Faturamento Mensal Atual (R$)</label>
-        <input class="li" id="c-faturamento" type="number" placeholder="0 — se ainda não faturou, deixe 0" min="0" oninput="mostrarPorte(this.value)">
-        <div class="hint">Coloque o valor <strong>real de hoje</strong>. Se ainda não vendeu nada, coloque 0. Quanto mais real, melhor o plano.</div>
-        <div id="porte-preview" style="margin-top:6px"></div>
-      </div>
+<div class="fg"><label>Cidade *</label><input class="li" id="c-cidade" placeholder="Ex: Recife, PE"></div>
+
       <div class="fg">
         <label>WhatsApp (opcional)</label>
         <input class="li" id="c-tel" type="tel" placeholder="(81) 99999-0000">
