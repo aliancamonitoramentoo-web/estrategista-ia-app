@@ -1032,10 +1032,11 @@ async function fazerLogin() {
 
 async function fazerCadastro() {
   const nome = $('c-nome').value.trim(), email = $('c-email').value.trim();
-  const senha = $('c-senha').value, segmento = $('c-segmento').value.trim();
-  const cidade = $('c-cidade').value.trim(), faturamento = $('c-faturamento').value||'0';
-  const tel = $('c-tel').value.trim();
-  if(!nome||!email||!senha||!segmento||!cidade) { $('c-err').textContent='Preencha todos os campos obrigatórios.'; return; }
+  const senha = $('c-senha').value;
+  const cidade = ($('c-cidade')?.value||'').trim();
+  const faturamento = '0', segmento = '';
+  const tel = ($('c-tel')?.value||'').trim();
+  if(!nome||!email||!senha) { $('c-err').textContent='Preencha nome, email e senha.'; return; }
   try {
     const r = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name:nome,email,password:senha,segmento,cidade,faturamento,tel}) });
     const d = await r.json();
