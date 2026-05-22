@@ -46,7 +46,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .porte-grande{background:rgba(255,69,96,.15);color:var(--red);}
 
 /* ── APP ── */
-#APP{display:none;min-height:100vh;flex-direction:column;}
+#APP{display:none;height:100vh;flex-direction:column;overflow:hidden;}
 #APP.show{display:flex;}
 .topbar{height:56px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:100;}
 .toplogo{display:flex;align-items:center;gap:10px;}
@@ -59,7 +59,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .logoutbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;transition:color .2s;padding:4px;}
 .logoutbtn:hover{color:var(--red);}
 
-.main{flex:1;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;}
+.main{flex:1;overflow-y:auto;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;}
 
 /* ── PERFIL CARD ── */
 .perfil-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
@@ -214,6 +214,14 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .medal-btn{background:var(--gold);color:#000;border:none;border-radius:10px;padding:12px 28px;font-family:var(--H);font-size:14px;font-weight:800;cursor:pointer;}
 
 @media(max-width:640px){
+  #APP.show{height:100dvh;}
+  .main{
+    padding:14px 14px 24px;
+    max-width:100%;
+    height:calc(100dvh - 52px - 64px);
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
 
   /* Login — tela cheia sem card flutuante */
   #LS{padding:0;align-items:flex-start;background:#080c14;}
@@ -250,7 +258,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
   .hint{font-size:12px;}
 
   /* App — bottom navigation */
-  #APP.show{padding-bottom:70px;}
+  /* scroll gerenciado pelo .main */
   .topbar{height:52px;padding:0 16px;}
   .topname{display:none;}
   .topbadge{display:none;}
