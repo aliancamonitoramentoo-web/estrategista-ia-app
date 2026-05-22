@@ -166,6 +166,53 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 /* ══════════════════════════════════════
    📱 MOBILE — experiência completa
 ══════════════════════════════════════ */
+
+/* ── TRILHA DE CONQUISTAS ── */
+.trilha-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:20px;animation:fi .3s;}
+.trilha-header{background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(0,217,126,.06));border-bottom:1px solid var(--bd);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.trilha-titulo{font-family:var(--H);font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.trilha-prog-geral{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:8px;}
+.trilha-body{padding:16px 20px;}
+
+.fase-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(30,45,69,.5);position:relative;}
+.fase-item:last-child{border-bottom:none;}
+.fase-item::before{content:'';position:absolute;left:19px;top:52px;bottom:-14px;width:2px;background:var(--bd);z-index:0;}
+.fase-item:last-child::before{display:none;}
+
+.fase-circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;z-index:1;transition:all .3s;}
+.fase-circle.done{background:rgba(0,217,126,.15);border:2px solid var(--green);}
+.fase-circle.active{background:rgba(245,166,35,.15);border:2px solid var(--gold);animation:pulso 2s infinite;}
+.fase-circle.locked{background:var(--s2);border:2px solid var(--bd);}
+@keyframes pulso{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.4)}50%{box-shadow:0 0 0 8px rgba(245,166,35,0)}}
+
+.fase-conteudo{flex:1;min-width:0;}
+.fase-nome{font-family:var(--H);font-size:14px;font-weight:700;margin-bottom:2px;}
+.fase-sub{font-size:11px;color:var(--t2);margin-bottom:8px;}
+.fase-barra{height:5px;background:var(--s2);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.fase-barra-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+.fase-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 9px;border-radius:20px;font-weight:700;}
+.badge-done{background:rgba(0,217,126,.15);color:var(--green);}
+.badge-active{background:rgba(245,166,35,.15);color:var(--gold);}
+.badge-locked{background:var(--s2);color:var(--t3);}
+
+.fase-tarefas{margin-top:10px;background:var(--s2);border-radius:10px;padding:10px 12px;display:none;}
+.fase-tarefas.open{display:block;}
+.fase-tarefa{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(30,45,69,.6);}
+.fase-tarefa:last-child{border-bottom:none;}
+.ftchk{width:22px;height:22px;border-radius:7px;border:2px solid var(--bd2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;flex-shrink:0;}
+.ftchk.done{background:var(--green);border-color:var(--green);color:#000;}
+.fttxt{flex:1;font-size:13px;line-height:1.4;}
+.fttxt.done{text-decoration:line-through;color:var(--t3);}
+
+.medal-popup{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:5000;display:none;align-items:center;justify-content:center;}
+.medal-popup.show{display:flex;}
+.medal-box{background:var(--s1);border:1px solid var(--gold);border-radius:20px;padding:32px 28px;text-align:center;max-width:320px;width:90%;animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.medal-emoji{font-size:60px;display:block;margin-bottom:12px;}
+.medal-titulo{font-family:var(--H);font-size:20px;font-weight:800;color:var(--gold);margin-bottom:8px;}
+.medal-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
+.medal-btn{background:var(--gold);color:#000;border:none;border-radius:10px;padding:12px 28px;font-family:var(--H);font-size:14px;font-weight:800;cursor:pointer;}
+
 @media(max-width:640px){
 
   /* Login — tela cheia sem card flutuante */
@@ -485,6 +532,23 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
         <div id="porte-tag"></div>
       </div>
 
+
+      <!-- TRILHA DE CONQUISTAS -->
+      <div class="trilha-card" id="trilha-card" style="display:none">
+        <div class="trilha-header">
+          <div class="trilha-titulo">🗺️ Trilha de Conquistas</div>
+          <div class="trilha-prog-geral">
+            <div style="width:80px;height:5px;background:var(--s2);border-radius:3px;overflow:hidden">
+              <div class="prog-fill" id="trilha-barra-geral" style="width:0%"></div>
+            </div>
+            <span id="trilha-pct-geral">0%</span>
+          </div>
+        </div>
+        <div class="trilha-body" id="trilha-body">
+          <div style="text-align:center;padding:20px;color:var(--t3);font-size:13px">Gere seu plano para ver a trilha</div>
+        </div>
+      </div>
+
       <!-- Form geração -->
       <div class="form-card" id="form-card">
         <div class="form-title">🎯 Gerar Meu Plano Estratégico</div>
@@ -567,6 +631,17 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
         <div id="hist-lista"></div>
       </div>
     </div>
+  </div>
+</div>
+
+
+<!-- POPUP MEDALHA -->
+<div class="medal-popup" id="MEDAL">
+  <div class="medal-box">
+    <span class="medal-emoji" id="medal-emoji">🏆</span>
+    <div class="medal-titulo" id="medal-titulo">Semana completa!</div>
+    <div class="medal-sub" id="medal-sub">Você concluiu todas as tarefas!</div>
+    <button class="medal-btn" onclick="fecharMedal()">Continuar 🚀</button>
   </div>
 </div>
 
@@ -907,8 +982,10 @@ ${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Não tem prese
     }
 
     planoAtual = { fat, ticket, meta, porte: porte.label, segmento: usuario.segmento, cidade: usuario.cidade, texto, geradoEm: new Date().toISOString() };
+  trilhaProgress = {}; trilhaTarefas = {};
     taskProgress = {};
     renderPlano(planoAtual);
+    renderTrilha();
     salvarPlano(planoAtual);
 
     setTimeout(() => { $('gen-progress').style.display = 'none'; $('genbtn').disabled = false; }, 1000);
@@ -933,6 +1010,151 @@ const SECOES_CFG = {
   'FINANCEIRO':      { emoji:'💰', titulo:'Controle Financeiro Simples',      aprender: 'financeiro' },
   'PROXIMOS_PASSOS': { emoji:'🚀', titulo:'Próximos Passos (Meses 2 e 3)',    aprender: null },
 };
+
+
+// ── TRILHA DE CONQUISTAS ────────────────────────────────────────
+const FASES_CFG = [
+  { key:'S1', nome:'Semana 1', emoji:'🌱', cor:'var(--blue)',   medalha:'🥉', msg:'Primeiro passo dado! Você completou a Semana 1.' },
+  { key:'S2', nome:'Semana 2', emoji:'🔥', cor:'var(--gold)',   medalha:'🥈', msg:'Você está crescendo! Semana 2 concluída com sucesso.' },
+  { key:'S3', nome:'Semana 3', emoji:'⚡', cor:'var(--purple)', medalha:'🥇', msg:'Incrível! Semana 3 completa. Você é um estrategista!' },
+  { key:'S4', nome:'Semana 4', emoji:'🏆', cor:'var(--green)',  medalha:'🏆', msg:'PARABÉNS! Você completou o plano inteiro. Agora escale!' },
+];
+
+let trilhaProgress = {}; // {S1_0: true, S1_1: false, ...}
+let trilhaTarefas  = {}; // {S1: ['tarefa1','tarefa2',...], S2:[...]}
+
+function fecharMedal(){ $('MEDAL').classList.remove('show'); }
+
+function mostrarMedal(fase){
+  const cfg = FASES_CFG.find(f=>f.key===fase);
+  if(!cfg) return;
+  $('medal-emoji').textContent  = cfg.medalha;
+  $('medal-titulo').textContent = cfg.nome + ' completa! ' + cfg.medalha;
+  $('medal-sub').textContent    = cfg.msg;
+  $('MEDAL').classList.add('show');
+}
+
+function extrairTarefasDaFase(texto, faseNum){
+  // Extrai tarefas da seção SEMANA correspondente
+  const keys = ['SEMANA1','SEMANA2','SEMANA3','SEMANA4'];
+  const key = keys[faseNum-1];
+  const next = keys[faseNum] || 'MARKETING';
+  const re = new RegExp(`\\[${key}\\]([\\s\\S]*?)(?=\\[${next}\\]|$)`, 'i');
+  const m = (texto||'').match(re);
+  if(!m) return [];
+  const secao = m[1];
+  const tarefas = [];
+  secao.split('\n').forEach(line => {
+    if(/^[\s]*[-•]\s+.{5,}/.test(line)||/^\d+\.\s+.{5,}/.test(line)){
+      const clean = line.replace(/^[\s\d\-•\[\]\.]+/,'').trim();
+      if(clean.length>5) tarefas.push(clean);
+    }
+  });
+  return tarefas.slice(0,7);
+}
+
+function renderTrilha(){
+  const card = $('trilha-card');
+  if(!planoAtual){ if(card) card.style.display='none'; return; }
+  if(card) card.style.display='block';
+
+  const body = $('trilha-body'); if(!body) return;
+
+  // Reconstrói tarefas por fase
+  FASES_CFG.forEach((f,i) => {
+    if(!trilhaTarefas[f.key] || trilhaTarefas[f.key].length===0){
+      trilhaTarefas[f.key] = extrairTarefasDaFase(planoAtual.texto, i+1);
+    }
+  });
+
+  // Calcula progresso geral
+  let totalFeitas=0, totalTarefas=0;
+  FASES_CFG.forEach(f => {
+    const ts = trilhaTarefas[f.key]||[];
+    totalTarefas += ts.length;
+    ts.forEach((_,i) => { if(trilhaProgress[f.key+'_'+i]) totalFeitas++; });
+  });
+  const pctGeral = totalTarefas>0 ? Math.round(totalFeitas/totalTarefas*100) : 0;
+  const barG = $('trilha-barra-geral'); if(barG) barG.style.width=pctGeral+'%';
+  const pctG = $('trilha-pct-geral'); if(pctG) pctG.textContent=pctGeral+'%';
+
+  // Determina fase ativa (primeira não completa)
+  let faseAtiva = 3; // default última
+  for(let i=0;i<FASES_CFG.length;i++){
+    const f=FASES_CFG[i];
+    const ts=trilhaTarefas[f.key]||[];
+    const feitas=ts.filter((_,j)=>trilhaProgress[f.key+'_'+j]).length;
+    if(feitas<ts.length){ faseAtiva=i; break; }
+  }
+
+  body.innerHTML = FASES_CFG.map((f,fi) => {
+    const ts = trilhaTarefas[f.key]||[];
+    const feitas = ts.filter((_,i)=>trilhaProgress[f.key+'_'+i]).length;
+    const pct = ts.length>0 ? Math.round(feitas/ts.length*100) : 0;
+    const isDone   = ts.length>0 && feitas===ts.length;
+    const isActive = fi===faseAtiva && !isDone;
+    const isLocked = fi>faseAtiva && !isDone;
+    const statusCls = isDone?'done':isActive?'active':'locked';
+    const badgeCls  = isDone?'badge-done':isActive?'badge-active':'badge-locked';
+    const badgeTxt  = isDone?'✓ Completa':isActive?'Em curso':'🔒 Bloqueada';
+    const corBarra  = isDone?'var(--green)':isActive?'var(--gold)':'var(--t3)';
+
+    return `<div class="fase-item">
+      <div class="fase-circle ${statusCls}">${isDone?'✅':isActive?f.emoji:'🔒'}</div>
+      <div class="fase-conteudo">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
+          <div class="fase-nome">${f.nome}</div>
+          <span class="fase-badge ${badgeCls}">${badgeTxt}</span>
+        </div>
+        <div class="fase-sub">${feitas} de ${ts.length} tarefas concluídas</div>
+        <div class="fase-barra"><div class="fase-barra-fill" style="width:${pct}%;background:${corBarra}"></div></div>
+        ${!isLocked && ts.length>0 ? `
+        <div style="margin-top:6px">
+          <button onclick="toggleFaseTarefas('fase-t-${fi}')" style="background:none;border:none;color:var(--t2);font-size:11px;cursor:pointer;padding:0;font-family:var(--F)">
+            ${isActive?'▾ Ver tarefas':'▾ Ver detalhes'}
+          </button>
+        </div>
+        <div class="fase-tarefas ${isActive?'open':''}" id="fase-t-${fi}">
+          ${ts.map((t,ti)=>{
+            const done=trilhaProgress[f.key+'_'+ti]||false;
+            return `<div class="fase-tarefa">
+              <div class="ftchk ${done?'done':''}" onclick="toggleFaseTarefa('${f.key}',${ti},${fi},this)">${done?'✓':''}</div>
+              <span class="fttxt ${done?'done':''}">${t}</span>
+            </div>`;
+          }).join('')}
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleFaseTarefas(id){
+  const el=document.getElementById(id); if(!el) return;
+  el.classList.toggle('open');
+}
+
+function toggleFaseTarefa(faseKey, idx, faseIdx, el){
+  trilhaProgress[faseKey+'_'+idx] = !trilhaProgress[faseKey+'_'+idx];
+  const done = trilhaProgress[faseKey+'_'+idx];
+  el.classList.toggle('done', done);
+  el.textContent = done?'✓':'';
+  const txt = el.nextElementSibling;
+  if(txt) txt.classList.toggle('done', done);
+
+  // Salva progresso no servidor
+  if(planoAtual?.id){
+    fetch('/api/plans/'+planoAtual.id+'/progress',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({taskProgress:trilhaProgress})}).catch(()=>{});
+  }
+
+  // Verifica se a fase foi concluída
+  const ts = trilhaTarefas[faseKey]||[];
+  const feitas = ts.filter((_,i)=>trilhaProgress[faseKey+'_'+i]).length;
+  if(feitas===ts.length && ts.length>0){
+    setTimeout(()=>mostrarMedal(faseKey), 400);
+  }
+
+  renderTrilha();
+}
 
 function renderPlano(plano) {
   const porte = calcPorte(plano.fat);
@@ -1286,7 +1508,10 @@ async function carregarHistorico() {
 function carregarPlano(plano) {
   planoAtual = plano;
   taskProgress = plano.taskProgress || {};
+  trilhaProgress = plano.taskProgress || {};
+  trilhaTarefas = {};
   renderPlano(plano);
+  renderTrilha();
   goTab('plano', document.querySelectorAll('.tab')[0]);
   window.scrollTo({top:0,behavior:'smooth'});
 }
