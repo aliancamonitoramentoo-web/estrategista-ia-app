@@ -20,9 +20,8 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px;}
 
 /* ── LOGIN / CADASTRO ── */
-#LS{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  background:radial-gradient(ellipse at 20% 40%,rgba(61,155,255,.08),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
-.lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);}
+#LS{min-height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 40%,rgba(245,166,35,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
+.lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);margin:auto;}
 .llogo{display:flex;align-items:center;gap:13px;margin-bottom:6px;justify-content:center;}
 .lmark{width:52px;height:52px;border-radius:14px;background:linear-gradient(145deg,var(--gold),#8a5000);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 22px rgba(245,166,35,.4);}
 .lbrand{font-family:var(--H);font-size:18px;font-weight:800;}
@@ -46,8 +45,8 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .porte-grande{background:rgba(255,69,96,.15);color:var(--red);}
 
 /* ── APP ── */
-#APP{display:none;height:100vh;flex-direction:column;overflow:hidden;position:relative;}
-#APP.show{display:flex;}
+#APP{display:none;height:100vh;flex-direction:column;}
+#APP.show{display:flex;height:100vh;flex-direction:column;overflow:hidden;}
 .topbar{height:56px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:100;}
 .toplogo{display:flex;align-items:center;gap:10px;}
 .topmark{width:34px;height:34px;border-radius:9px;background:linear-gradient(145deg,var(--gold),#8a5000);display:flex;align-items:center;justify-content:center;font-size:17px;}
@@ -59,7 +58,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .logoutbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;transition:color .2s;padding:4px;}
 .logoutbtn:hover{color:var(--red);}
 
-.main{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;}
+.main{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;}
 
 /* ── PERFIL CARD ── */
 .perfil-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
@@ -203,10 +202,125 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 .srv-gerar-btn:hover{transform:translateY(-1px);}
 
 @media(max-width:640px){
+  /* Login — scroll livre */
+  #LS{
+    padding:16px;
+    align-items:flex-start;
+    min-height:100vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .lbox{
+    border-radius:16px;
+    padding:24px 20px;
+    margin:16px auto;
+    width:100%;
+  }
+  #tab-login, #tab-cadastro{ padding:0; }
+  .fg{margin-bottom:12px;}
+  .li{padding:13px 13px;font-size:15px;border-radius:11px;}
+  .fg2{grid-template-columns:1fr;}
+  .lbtn{padding:15px;font-size:16px;border-radius:13px;}
+  .hint{font-size:12px;}
+
+  /* App — topbar fixa + área scrollável + bottom nav fixo */
+  #APP.show{
+    height:100vh;
+    height:100dvh;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .topbar{
+    height:52px;
+    flex-shrink:0;
+    padding:0 16px;
+  }
+  .topname{display:none;}
+  .topbadge{display:none;}
+  .main{
+    flex:1;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    padding:14px 14px 20px;
+    max-width:100%;
+    /* desconta topbar 52px + bottom nav 64px */
+    height:calc(100vh - 52px - 64px);
+    height:calc(100dvh - 52px - 64px);
+  }
+  /* Bottom nav */
+  .bottom-nav{
+    display:flex!important;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    height:64px;
+    background:var(--s1);
+    border-top:1px solid var(--bd);
+    z-index:200;
+    padding:0 4px;
+    padding-bottom:env(safe-area-inset-bottom);
+    flex-shrink:0;
+  }
+  .bn-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:3px;border:none;background:none;
+    color:var(--t3);cursor:pointer;padding:6px 2px;
+    font-family:var(--F);font-size:10px;font-weight:600;transition:color .15s;
+  }
+  .bn-item.on{color:var(--gold);}
+  .bn-icon{font-size:19px;line-height:1;}
+  .tabs{display:none;}
+
+  /* Cards */
+  .perfil-card{flex-direction:row;padding:12px 14px;gap:10px;border-radius:13px;margin-bottom:12px;}
+  .perfil-icon{width:40px;height:40px;font-size:20px;border-radius:11px;flex-shrink:0;}
+  .perfil-nome{font-size:14px;}
+  .perfil-sub{font-size:11px;}
+  .perfil-stats{gap:5px;margin-top:5px;}
+  .pstat{padding:3px 7px;font-size:10px;}
+  #porte-tag{display:none;}
+  .form-card{padding:14px;border-radius:13px;margin-bottom:12px;}
+  .form-title{font-size:14px;margin-bottom:12px;}
+  .genbtn{padding:16px;font-size:16px;border-radius:13px;}
+
+  /* Plano */
+  .plano-header{padding:12px 14px;flex-direction:column;align-items:flex-start;gap:8px;}
+  .plano-title{font-size:14px;}
+  .plano-actions{width:100%;}
+  .btn{padding:7px 11px;font-size:11px;}
+  .secoes{padding:12px;}
+  .secao{margin-bottom:10px;border-radius:11px;}
+  .sec-header{padding:12px 13px;}
+  .sec-title{font-size:13px;}
+  .sec-body{padding:12px;}
+  .sec-conteudo{font-size:13px;line-height:1.75;}
+  .prog-ring{width:54px;height:54px;}
+  .prog-val{font-size:13px;}
+  .task-item{gap:10px;padding:11px 0;}
+  .task-chk{width:22px;height:22px;border-radius:6px;}
+  .task-txt{font-size:13px;}
+
+  /* Modal como sheet */
+  .modal{width:100%;max-width:100%;border-radius:20px 20px 0 0;position:fixed;bottom:0;max-height:85vh;margin:0;padding:20px 20px 36px;}
+  .modal-bg.open{align-items:flex-end;}
+
+  /* Toast acima do nav */
+  .toast{bottom:74px;right:12px;left:12px;transform:translateY(130%);border-radius:13px;}
+  .toast.show{transform:translateY(0);}
+
+  /* Eco */
+  #eco-grid{grid-template-columns:1fr 1fr!important;}
+
+  /* Suporte */
   .srv-grid{grid-template-columns:repeat(4,1fr);gap:6px;}
-  .srv-btn{padding:10px 5px;}
-  .srv-btn-icon{font-size:20px;}
+  .srv-btn{padding:9px 4px;}
+  .srv-btn-icon{font-size:19px;}
   .srv-btn-label{font-size:9px;}
+}
+@media(max-width:360px){
+  .lbox img{width:200px!important;}
+  #eco-grid{grid-template-columns:1fr!important;}
+  .srv-grid{grid-template-columns:repeat(4,1fr);}
 }
 
 /* ── TRILHA DE CONQUISTAS ── */
@@ -257,33 +371,14 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 
 @media(max-width:640px){
   #APP.show{height:100dvh;height:100vh;}
-  .main{
-    padding:14px 14px 24px !important;
-    max-width:100% !important;
-    height:calc(100vh - 52px - 64px) !important;
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    -webkit-overflow-scrolling:touch !important;
-    scroll-behavior:smooth;
-    will-change:scroll-position;
-  }
+  .main{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;}
   /* Login mobile — scroll livre */
-  #LS{
-    align-items:flex-start !important;
-    overflow-y:auto !important;
-    -webkit-overflow-scrolling:touch !important;
-    padding:20px !important;
-  }
-  .lbox{
-    width:100%;
-    margin:auto 0;
-    padding:20px !important;
-  }
+  #LS{min-height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 40%,rgba(245,166,35,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
+  .lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);margin:auto;}
 
   /* Login — tela cheia sem card flutuante */
-  #LS{padding:0;align-items:flex-start;background:#080c14;}
-  .lbox{max-width:100%;border-radius:0;border:none;padding:0;background:transparent;box-shadow:none;
-    display:flex;flex-direction:column;min-height:100vh;}
+  #LS{min-height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 40%,rgba(245,166,35,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
+  .lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);margin:auto;}
 
   /* Hero section no topo */
   .lbox > .llogo{
@@ -318,7 +413,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
   .topname{display:none;}
   .topbadge{display:none;}
 
-  .main{padding:14px 14px 20px;max-width:100%;}
+  .main{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px;max-width:900px;margin:0 auto;width:100%;-webkit-overflow-scrolling:touch;}
 
   /* Bottom nav bar */
   .bottom-nav{
