@@ -167,6 +167,48 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
    📱 MOBILE — experiência completa
 ══════════════════════════════════════ */
 
+
+/* ── SUPORTE / CONSULTORIA ── */
+.suporte-greet{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:15px;margin-bottom:16px;}
+.suporte-greet-top{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+.suporte-emoji{font-size:30px;}
+.suporte-greet-nome{font-family:var(--H);font-size:15px;font-weight:800;}
+.suporte-greet-sub{font-size:11px;color:var(--t2);margin-top:2px;}
+.dica-rotativa{background:var(--s2);border-left:3px solid var(--gold);border-radius:0 9px 9px 0;padding:10px 13px;font-size:12.5px;color:var(--t2);line-height:1.6;cursor:pointer;transition:background .2s;}
+.dica-rotativa:hover{background:var(--s3);}
+.dica-rotativa strong{color:var(--gold);}
+
+.srv-sec-title{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.2px;margin:16px 0 10px;}
+.srv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.srv-btn{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.srv-btn:hover{border-color:var(--gold);background:var(--goldl);}
+.srv-btn.on{border-color:var(--gold);background:var(--goldl);}
+.srv-btn-icon{font-size:22px;}
+.srv-btn-label{font-size:10px;font-weight:700;color:var(--t2);line-height:1.2;}
+.srv-btn.on .srv-btn-label{color:var(--gold);}
+
+.srv-area{display:none;animation:fi .25s;}
+.srv-area.show{display:block;}
+.srv-area-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:12px;}
+.srv-area-header{padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;}
+.srv-area-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.srv-area-titulo{font-family:var(--H);font-size:14px;font-weight:800;}
+.srv-area-sub{font-size:11px;color:var(--t2);margin-top:1px;}
+.srv-area-body{padding:15px 16px;}
+.srv-dica{background:var(--s2);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:12.5px;color:var(--t2);line-height:1.75;}
+.srv-dica strong{color:var(--t1);}
+.srv-dica h4{font-size:12px;color:var(--gold);font-weight:700;margin:10px 0 5px;font-family:var(--H);}
+.srv-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;margin-bottom:12px;}
+.srv-gerar-btn{width:100%;background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;border-radius:11px;padding:14px;font-family:var(--H);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-top:4px;}
+.srv-gerar-btn:hover{transform:translateY(-1px);}
+
+@media(max-width:640px){
+  .srv-grid{grid-template-columns:repeat(4,1fr);gap:6px;}
+  .srv-btn{padding:10px 5px;}
+  .srv-btn-icon{font-size:20px;}
+  .srv-btn-label{font-size:9px;}
+}
+
 /* ── TRILHA DE CONQUISTAS ── */
 .trilha-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:20px;animation:fi .3s;}
 .trilha-header{background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(0,217,126,.06));border-bottom:1px solid var(--bd);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
@@ -503,7 +545,10 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
     <button class="bn-item on" id="bn-plano" onclick="goTab('plano',document.querySelectorAll('.tab')[0]);bnActive('bn-plano')">
       <span class="bn-icon">🧠</span><span>Plano</span>
     </button>
-    <button class="bn-item" id="bn-aprender" onclick="goTab('aprender',document.querySelectorAll('.tab')[1]);bnActive('bn-aprender')">
+    <button class="bn-item" id="bn-suporte" onclick="goTab('suporte',document.querySelectorAll('.tab')[1]);bnActive('bn-suporte')">
+      <span class="bn-icon">⚡</span><span>Suporte</span>
+    </button>
+    <button class="bn-item" id="bn-aprender" onclick="goTab('aprender',document.querySelectorAll('.tab')[2]);bnActive('bn-aprender')">
       <span class="bn-icon">📚</span><span>Aprender</span>
     </button>
     <button class="bn-item" id="bn-historico" onclick="goTab('historico',document.querySelectorAll('.tab')[2]);bnActive('bn-historico')">
@@ -522,6 +567,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
   <div class="main">
     <div class="tabs">
       <button class="tab on" onclick="goTab('plano',this)">🧠 Meu Plano</button>
+      <button class="tab" onclick="goTab('suporte',this)">⚡ Suporte</button>
       <button class="tab" onclick="goTab('aprender',this)">📚 Aprender</button>
       <button class="tab" onclick="goTab('historico',this)">📋 Histórico</button>
     </div>
@@ -616,6 +662,232 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);min-height:100vh;
 
       <!-- Resultado -->
       <div id="plano-resultado"></div>
+    </div>
+
+
+    <!-- ── TAB SUPORTE ── -->
+    <div id="tab-suporte" style="display:none">
+      <!-- Saudação + dica rotativa -->
+      <div class="suporte-greet">
+        <div class="suporte-greet-top">
+          <div class="suporte-emoji" id="sp-emoji">🏪</div>
+          <div>
+            <div class="suporte-greet-nome" id="sp-nome">Olá, empreendedor!</div>
+            <div class="suporte-greet-sub" id="sp-sub">Em que posso te ajudar hoje?</div>
+          </div>
+        </div>
+        <div class="dica-rotativa" id="dica-rotativa" onclick="proximaDica()" title="Clique para nova dica">
+          <strong>💡 Dica do dia:</strong> <span id="dica-txt">Clientes fidelizados gastam em média 35% mais que novos. Invista em quem já compra de você.</span>
+          <div style="font-size:10px;color:var(--t3);margin-top:5px">Toque para ver outra dica →</div>
+        </div>
+      </div>
+
+      <!-- Grid de áreas -->
+      <div class="srv-sec-title">Escolha uma área de apoio</div>
+      <div class="srv-grid">
+        <div class="srv-btn" onclick="abrirArea('vendas',this)"><div class="srv-btn-icon">💰</div><div class="srv-btn-label">Vendas</div></div>
+        <div class="srv-btn" onclick="abrirArea('marketing',this)"><div class="srv-btn-icon">📣</div><div class="srv-btn-label">Marketing</div></div>
+        <div class="srv-btn" onclick="abrirArea('financeiro',this)"><div class="srv-btn-icon">💳</div><div class="srv-btn-label">Financeiro</div></div>
+        <div class="srv-btn" onclick="abrirArea('clientes',this)"><div class="srv-btn-icon">🤝</div><div class="srv-btn-label">Clientes</div></div>
+        <div class="srv-btn" onclick="abrirArea('redes',this)"><div class="srv-btn-icon">📱</div><div class="srv-btn-label">Redes Sociais</div></div>
+        <div class="srv-btn" onclick="abrirArea('equipe',this)"><div class="srv-btn-icon">👥</div><div class="srv-btn-label">Equipe</div></div>
+        <div class="srv-btn" onclick="abrirArea('network',this)"><div class="srv-btn-icon">🌐</div><div class="srv-btn-label">Network</div></div>
+        <div class="srv-btn" onclick="abrirArea('organizacao',this)"><div class="srv-btn-icon">📋</div><div class="srv-btn-label">Organização</div></div>
+      </div>
+
+      <!-- Áreas de conteúdo -->
+      <div id="sp-areas">
+
+        <div id="area-vendas" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:var(--goldl)">💰</div>
+              <div><div class="srv-area-titulo">Vendas</div><div class="srv-area-sub">Como fechar mais negócios</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:var(--goldl);color:var(--gold)">💡 Aplique hoje mesmo</span>
+              <div class="srv-dica">
+                <h4>1. Venda adicional no atendimento</h4>
+                Ao finalizar o serviço, ofereça algo complementar. Um item a mais por R$10-20 pode aumentar seu faturamento em 25% sem precisar de nenhum cliente novo.
+                <h4>2. Pacote ou assinatura mensal</h4>
+                Ofereça um pacote fixo mensal com desconto. Garante renda previsível e fideliza o cliente ao mesmo tempo. Ex: "4x por mês por R$80" em vez de R$25 por vez.
+                <h4>3. Programa de indicação</h4>
+                "Me indica um amigo e você ganha desconto na próxima compra." Simples, barato e muito eficaz — 30% dos novos clientes vêm por indicação.
+                <h4>4. Urgência real</h4>
+                "Promoção só essa semana" ou "últimas vagas de horário" cria senso de urgência sem mentir. Use quando for verdade.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('vendas')">✨ Gerar plano de vendas com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-marketing" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(61,155,255,.12)">📣</div>
+              <div><div class="srv-area-titulo">Marketing</div><div class="srv-area-sub">Atrair clientes sem gastar muito</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(61,155,255,.12);color:var(--blue)">📱 Custo zero</span>
+              <div class="srv-dica">
+                <h4>1. Google Meu Negócio (obrigatório)</h4>
+                Cadastre grátis em business.google.com. Quando alguém buscar seu tipo de negócio perto daqui, você aparece. É o passo 1 de qualquer estratégia digital.
+                <h4>2. WhatsApp Business</h4>
+                Crie catálogo de produtos, horário de atendimento e mensagem automática de boas-vindas. Tudo grátis. Profissionaliza a imagem instantaneamente.
+                <h4>3. Status diário</h4>
+                1 foto do seu trabalho por dia no status do WhatsApp. Em 30 dias, todos os seus contatos sabem o que você faz e oferecem.
+                <h4>4. Antes e depois</h4>
+                Para serviços visuais, foto antes/depois é o conteúdo mais poderoso. Gera engajamento orgânico sem precisar de anúncio.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('marketing')">✨ Gerar estratégia de marketing com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-financeiro" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(0,217,126,.12)">💳</div>
+              <div><div class="srv-area-titulo">Financeiro</div><div class="srv-area-sub">Organizar entradas e saídas</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(0,217,126,.12);color:var(--green)">💰 Controle real</span>
+              <div class="srv-dica">
+                <h4>Regra dos 3 envelopes</h4>
+                Todo dinheiro que entrar, separe assim:<br>
+                <strong>50%</strong> — custos do negócio (produto, aluguel, luz)<br>
+                <strong>30%</strong> — seu salário pessoal<br>
+                <strong>20%</strong> — guardar para crescer ou cobrir imprevistos
+                <h4>Separe sua conta pessoal da do negócio</h4>
+                Misturar é o erro mais comum. Abra uma conta separada (pode ser conta digital gratuita como Nubank ou Inter) só para o negócio.
+                <h4>Anote tudo por 30 dias</h4>
+                Só de anotar o que entra e sai por 1 mês você descobre onde está perdendo dinheiro. Use um caderno, planilha ou app gratuito.
+                <h4>Aumente o ticket antes de buscar mais clientes</h4>
+                Dobrar o número de clientes é difícil. Aumentar o ticket médio em 20% é muito mais fácil e já faz diferença imediata.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('financeiro')">✨ Criar planilha financeira com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-clientes" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(176,143,255,.12)">🤝</div>
+              <div><div class="srv-area-titulo">Gestão de Clientes</div><div class="srv-area-sub">Fidelizar e conhecer sua base</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(176,143,255,.12);color:var(--purple)">👥 Fidelize mais</span>
+              <div class="srv-dica">
+                <h4>CRM simples sem app</h4>
+                Anote em uma planilha: nome, telefone, última visita, o que gosta. Isso já é um CRM. Clientes que se sentem lembrados voltam mais.
+                <h4>Mande mensagem para quem sumiu</h4>
+                Todo mês, veja quem não veio há 30 dias e mande uma mensagem personalizada. Taxa de retorno aumenta 40%.
+                <h4>Cartão fidelidade</h4>
+                Compre 9 e o 10° é de graça. Custa R$2 imprimir e funciona há décadas. Simples e eficaz.
+                <h4>Aniversário</h4>
+                Mande parabéns no aniversário com um cupom de desconto. Custo zero, impacto enorme na fidelização.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('clientes')">✨ Criar estratégia de fidelização com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-redes" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(255,140,66,.12)">📱</div>
+              <div><div class="srv-area-titulo">Redes Sociais</div><div class="srv-area-sub">O que postar e quando</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(255,140,66,.12);color:var(--orange)">📅 3x por semana</span>
+              <div class="srv-dica">
+                <h4>Calendário semanal simples</h4>
+                <strong>Segunda</strong> — Foto do seu produto ou serviço<br>
+                <strong>Quarta</strong> — Bastidor: você trabalhando ou depoimento de cliente<br>
+                <strong>Sexta</strong> — Promoção, novidade ou dica útil para o seu público
+                <h4>Não precisa ser perfeito</h4>
+                Consistência vale mais que qualidade. Postar 3x por semana por 3 meses com celular comum bate qualquer post mensal profissional.
+                <h4>Reels e Stories primeiro</h4>
+                O algoritmo do Instagram favorece Reels. Um vídeo simples de 15 segundos mostrando seu trabalho alcança mais que 10 fotos.
+                <h4>Responda todos os comentários</h4>
+                Engajamento gera mais alcance. Responder comentários e DMs nas primeiras horas do post aumenta o alcance em até 3x.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('redes')">✨ Gerar calendário de posts com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-equipe" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(255,69,96,.12)">👥</div>
+              <div><div class="srv-area-titulo">Equipe</div><div class="srv-area-sub">Motivar e melhorar o desempenho</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(255,69,96,.12);color:var(--red)">💪 Equipe motivada</span>
+              <div class="srv-dica">
+                <h4>Meta coletiva com recompensa pequena</h4>
+                "Se batermos R$X esse mês, todo mundo ganha um almoço." Cria senso de equipe e engajamento real sem custar muito.
+                <h4>Feedback semanal de 10 minutos</h4>
+                Toda sexta, 10 minutos com cada colaborador. O que foi bom, o que pode melhorar. Evita conflitos e aumenta desempenho.
+                <h4>Reconhecimento público</h4>
+                Poste nas redes sociais da empresa reconhecendo um colaborador. Custo zero, motivação enorme.
+                <h4>Treinamento interno gratuito</h4>
+                Compartilhe vídeos do YouTube sobre o ofício. Crie um grupo no WhatsApp só para aprendizado. Equipe que aprende junto cresce junto.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('equipe')">✨ Criar plano de equipe com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-network" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(61,155,255,.12)">🌐</div>
+              <div><div class="srv-area-titulo">Network</div><div class="srv-area-sub">Parcerias e conexões certas</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(61,155,255,.12);color:var(--blue)">🤝 Custo zero</span>
+              <div class="srv-dica">
+                <h4>Parceria local com negócio complementar</h4>
+                Encontre um negócio que atende o mesmo público mas não compete com você. Proponha divulgação cruzada. Ex: barbearia + loja de roupas masculinas.
+                <h4>Como abordar</h4>
+                "Oi, sou dono do negócio X aqui do lado. Que tal a gente divulgar um ao outro? Custo zero para os dois." Direto e simples.
+                <h4>Grupos de WhatsApp de empresários locais</h4>
+                Entre em grupos de empreendedores da sua cidade. Troca de indicação entre membros é comum e gratuita.
+                <h4>Associações comerciais</h4>
+                CDL, SEBRAE, Associação Comercial da sua cidade. Muitos eventos gratuitos de networking e capacitação.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('network')">✨ Mapear parcerias estratégicas com IA</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="area-organizacao" class="srv-area">
+          <div class="srv-area-card">
+            <div class="srv-area-header">
+              <div class="srv-area-ic" style="background:rgba(0,217,126,.12)">📋</div>
+              <div><div class="srv-area-titulo">Organização</div><div class="srv-area-sub">Processos e rotina do negócio</div></div>
+            </div>
+            <div class="srv-area-body">
+              <span class="srv-tag" style="background:rgba(0,217,126,.12);color:var(--green)">⚙️ Mais controle</span>
+              <div class="srv-dica">
+                <h4>Abrir e fechar o caixa todo dia</h4>
+                5 minutos por dia anotando o que entrou e saiu. Simples assim. Em 1 mês você tem clareza total do seu negócio.
+                <h4>Lista semanal de tarefas</h4>
+                Todo domingo, 10 minutos: o que preciso fazer essa semana? Priorize as 3 mais importantes. O resto é bônus.
+                <h4>Agenda de atendimento definida</h4>
+                Horários fixos reduzem no-show em até 60%. Use o WhatsApp Business para confirmar automaticamente.
+                <h4>Checklist diário de abertura</h4>
+                Crie uma lista do que precisa estar pronto antes de abrir. Padroniza o processo e evita esquecimentos.
+              </div>
+              <button class="srv-gerar-btn" onclick="gerarConteudoIA('organizacao')">✨ Criar rotina organizada com IA</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <!-- ── TAB APRENDER ── -->
@@ -744,10 +1016,11 @@ function showTab(id, btn) {
   $('l-err').textContent = ''; $('c-err').textContent = '';
 }
 function goTab(id, btn) {
-  ['plano','aprender','historico'].forEach(t => $('tab-'+t).style.display = t===id?'block':'none');
+  ['plano','suporte','aprender','historico'].forEach(t => $('tab-'+t).style.display = t===id?'block':'none');
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
   if(id === 'aprender') renderEco();
+  if(id === 'suporte') iniciarSuporteTab();
   if(id === 'historico') carregarHistorico();
 }
 ['l-email','l-senha'].forEach(id => { const el = $(id); if(el) el.addEventListener('keydown', e => { if(e.key==='Enter') fazerLogin(); }); });
