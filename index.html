@@ -391,6 +391,101 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
   .lbox>.llogo img{width:200px!important;}
   #eco-grid{grid-template-columns:1fr!important;}
 }
+
+/* ── VISUAL MODERNO E COLORIDO ── */
+.form-card{
+  background:linear-gradient(160deg,#0f1828,#0d1420)!important;
+  border:1px solid var(--bd)!important;
+  position:relative;
+  overflow:hidden;
+}
+.form-card::before{
+  content:'';position:absolute;top:-50%;right:-20%;width:60%;height:120%;
+  background:radial-gradient(circle,rgba(245,166,35,.08),transparent 70%);
+  pointer-events:none;
+}
+.form-title{
+  background:linear-gradient(135deg,var(--gold),#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-size:18px!important;
+}
+.li{
+  transition:all .25s cubic-bezier(.4,0,.2,1)!important;
+}
+.li:focus{
+  border-color:var(--gold)!important;
+  box-shadow:0 0 0 3px rgba(245,166,35,.12)!important;
+  transform:translateY(-1px);
+}
+.fg label{
+  color:#9db4d4!important;
+  display:flex;align-items:center;gap:5px;
+}
+.genbtn{
+  background:linear-gradient(135deg,#f5a623,#ff8c42,#f5a623)!important;
+  background-size:200% 200%!important;
+  animation:gradShift 3s ease infinite;
+  box-shadow:0 6px 24px rgba(245,166,35,.35)!important;
+  position:relative;overflow:hidden;
+}
+@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.genbtn::after{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  animation:shine 3s infinite;
+}
+@keyframes shine{0%{left:-100%}50%,100%{left:100%}}
+
+/* Plano header colorido */
+.plano-header{
+  background:linear-gradient(135deg,rgba(245,166,35,.18),rgba(176,143,255,.1),rgba(61,155,255,.08))!important;
+}
+.plano-title{
+  background:linear-gradient(135deg,var(--gold),#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Seções com cores vivas */
+.secao{transition:all .2s;}
+.secao:hover{border-color:var(--bd2);}
+.sec-header{
+  background:linear-gradient(135deg,var(--s2),var(--s1))!important;
+}
+.sec-title{
+  background:linear-gradient(135deg,#edf2ff,#9db4d4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Perfil card vibrante */
+.perfil-card{
+  background:linear-gradient(135deg,rgba(245,166,35,.1),rgba(176,143,255,.06))!important;
+  border:1px solid rgba(245,166,35,.2)!important;
+}
+.perfil-icon{
+  background:linear-gradient(135deg,var(--gold),#ff8c42)!important;
+  box-shadow:0 4px 16px rgba(245,166,35,.3);
+}
+.perfil-nome{
+  background:linear-gradient(135deg,#edf2ff,var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Tabs/bottom nav coloridos */
+.tab.on{
+  background:linear-gradient(135deg,var(--gold),#ff8c42)!important;
+  color:#000!important;
+}
+.bn-item.on .bn-icon{
+  transform:scale(1.15);
+  filter:drop-shadow(0 0 8px rgba(245,166,35,.5));
+}
+.bn-icon{transition:all .2s;}
+
+/* Suporte cards coloridos */
+.srv-btn{transition:all .25s cubic-bezier(.4,0,.2,1)!important;}
+.srv-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.3);}
+.srv-btn.on{transform:translateY(-2px);}
+
 </style>
 </head>
 <body>
@@ -547,6 +642,20 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
       <!-- Form geração -->
       <div class="form-card" id="form-card">
         <div class="form-title">🎯 Gerar Meu Plano Estratégico</div>
+        <div class="fg">
+          <label>Seu Negócio / Segmento</label>
+          <input class="li" id="f-segmento" list="seg-list2" placeholder="Ex: Padaria, Barbearia, Delivery...">
+          <datalist id="seg-list2">
+            <option>Padaria / Confeitaria</option><option>Barbearia / Salão</option>
+            <option>Restaurante / Lanchonete</option><option>Delivery de comida</option>
+            <option>Loja de roupas</option><option>Mercadinho / Mercearia</option>
+            <option>Serviços gerais / Manutenção</option><option>Artesanato / Costura</option>
+            <option>Manicure / Pedicure</option><option>Personal trainer</option>
+            <option>Venda de salgados / Marmitas</option><option>Mecânica</option>
+            <option>Pet shop</option><option>Farmácia</option><option>Tecnologia</option>
+            <option>Construção / Reforma</option><option>Consultoria</option><option>E-commerce</option><option>Outro</option>
+          </datalist>
+        </div>
         <div class="fg2">
           <div class="fg">
             <label>Faturamento Atual (R$/mês)</label>
@@ -556,7 +665,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
           <div class="fg">
             <label>Ticket Médio (R$)</label>
             <input class="li" id="f-ticket" type="number" placeholder="Ex: pão R$0,50 · corte R$25" min="0">
-            <div class="hint">Quanto um cliente gasta <strong>por compra</strong> no seu negócio?</div>
+            <div class="hint">Quanto um cliente gasta <strong>por compra</strong>?</div>
           </div>
         </div>
         <div class="fg2">
@@ -567,30 +676,53 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
           <div class="fg">
             <label>Meta de Faturamento em 3 meses (R$)</label>
             <input class="li" id="f-meta" type="number" placeholder="Quanto quer chegar?" min="0">
-            <div class="hint">Seja <strong>realista</strong>. Dobrar em 3 meses já é ótimo.</div>
+            <div class="hint">Seja <strong>realista</strong>. Dobrar já é ótimo.</div>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="fg">
+            <label>⏳ Há quanto tempo tem o negócio?</label>
+            <select class="li" id="f-tempo">
+              <option value="ideia">Ainda é só uma ideia</option>
+              <option value="menos6m">Menos de 6 meses</option>
+              <option value="6m-1a">6 meses a 1 ano</option>
+              <option value="1-3a">1 a 3 anos</option>
+              <option value="mais3a">Mais de 3 anos</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>🎯 Quem é seu cliente ideal?</label>
+            <input class="li" id="f-cliente-ideal" placeholder="Ex: famílias do bairro, jovens, empresas...">
           </div>
         </div>
         <div class="fg">
-          <label>Maior Desafio Hoje</label>
-          <input class="li" id="f-desafio" placeholder="Ex: poucos clientes, não sei divulgar, sem dinheiro para investir...">
+          <label>⚔️ Qual seu maior concorrente?</label>
+          <input class="li" id="f-concorrente" placeholder="Ex: a padaria da esquina, lojas grandes, ninguém...">
+          <div class="hint">A IA vai analisar como você pode se <strong>diferenciar</strong> dele.</div>
         </div>
         <div class="fg">
-          <label>Tem presença nas redes sociais?</label>
-          <select class="li" id="f-redes">
-            <option value="nao">Não, nunca mexi com isso</option>
-            <option value="pouco">Tenho perfil mas não uso direito</option>
-            <option value="sim">Sim, uso regularmente</option>
-            <option value="pago">Sim, já invisto em anúncios pagos</option>
-          </select>
+          <label>🔥 Maior Desafio Hoje</label>
+          <input class="li" id="f-desafio" placeholder="Ex: poucos clientes, não sei divulgar, sem dinheiro...">
         </div>
-        <div class="fg">
-          <label>Trabalha sozinho ou tem equipe?</label>
-          <select class="li" id="f-equipe">
-            <option value="sozinho">Trabalho sozinho</option>
-            <option value="familiar">Ajuda de familiar (não pago)</option>
-            <option value="1-2">1 a 2 funcionários</option>
-            <option value="3+">3 ou mais funcionários</option>
-          </select>
+        <div class="fg2">
+          <div class="fg">
+            <label>📱 Presença nas redes sociais?</label>
+            <select class="li" id="f-redes">
+              <option value="nao">Não, nunca mexi</option>
+              <option value="pouco">Tenho mas não uso direito</option>
+              <option value="sim">Sim, uso regularmente</option>
+              <option value="pago">Sim, já invisto em anúncios</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>👥 Trabalha sozinho ou tem equipe?</label>
+            <select class="li" id="f-equipe">
+              <option value="sozinho">Trabalho sozinho</option>
+              <option value="familiar">Ajuda de familiar</option>
+              <option value="1-2">1 a 2 funcionários</option>
+              <option value="3+">3 ou mais funcionários</option>
+            </select>
+          </div>
         </div>
         <div id="gen-progress" style="display:none;margin-bottom:14px">
           <div style="font-size:12px;color:var(--t2);margin-bottom:6px" id="gen-status">Gerando seu plano...</div>
@@ -1103,6 +1235,21 @@ async function gerarPlano() {
   const desafio = $('f-desafio').value.trim();
   const redes   = $('f-redes').value;
   const equipe  = $('f-equipe').value;
+  const segmento = ($('f-segmento')?.value||'').trim();
+  const tempo    = $('f-tempo')?.value || 'menos6m';
+  const clienteIdeal = ($('f-cliente-ideal')?.value||'').trim();
+  const concorrente  = ($('f-concorrente')?.value||'').trim();
+
+  // Atualiza o segmento do usuário se preenchido
+  if(segmento) usuario.segmento = segmento;
+
+  const tempoLabel = {
+    ideia:'ainda é só uma ideia, não começou',
+    menos6m:'menos de 6 meses (bem no início)',
+    '6m-1a':'entre 6 meses e 1 ano',
+    '1-3a':'entre 1 e 3 anos (já estabelecido)',
+    mais3a:'mais de 3 anos (consolidado)'
+  }[tempo];
 
   if(!ticket && fat > 0) { toast('Informe o ticket médio do seu negócio! Ex: R$25 por corte','⚠️'); return; }
 
@@ -1159,6 +1306,9 @@ PERFIL DO EMPRESÁRIO:
 - Maior desafio: ${desafio || 'não informado'}
 - Presença digital: ${nivelDigital}
 - Equipe: ${nivelEquipe}
+- Tempo de negócio: ${tempoLabel}
+- Cliente ideal: ${clienteIdeal || 'não definido — ajude a definir'}
+- Maior concorrente: ${concorrente || 'não informado'}
 
 🔍 PESQUISA OBRIGATÓRIA NA WEB (use a ferramenta de busca ANTES de escrever):
 1. Pesquise "${usuario.segmento||'negócio'} ${usuario.cidade||''}" para entender o mercado local e a concorrência real.
@@ -1166,6 +1316,7 @@ PERFIL DO EMPRESÁRIO:
 3. Pesquise cidades VIZINHAS de ${usuario.cidade||''} — identifique oportunidades de expansão e mercados próximos não atendidos.
 4. Pesquise tendências atuais do segmento ${usuario.segmento||'negócio'} no Brasil em 2026.
 5. Se possível, pesquise o nome do negócio para ver se já tem presença online (Google, redes).
+${concorrente ? '6. Pesquise sobre o concorrente "'+concorrente+'" e analise como o cliente pode se diferenciar dele.' : ''}
 SEMPRE cite dados concretos que encontrou (nome de bairros reais, cidades vizinhas reais, números reais do setor).
 
 REGRAS ABSOLUTAS:
@@ -1211,6 +1362,9 @@ Inclua:
 - Valores e métricas REAIS (ticket R$${ticket}, não invente)
 - Tarefas concretas para quem ${nivelEquipe}
 - O plano DETALHADO é só dos 30 dias (4 semanas). Os dias 60 e 90 ficam como PRÉVIA bloqueada.
+${clienteIdeal ? '- Estratégias focadas no cliente ideal: '+clienteIdeal : '- Ajude a definir o cliente ideal'}
+${concorrente ? '- Mostre como se diferenciar do concorrente: '+concorrente : ''}
+- Considere que o negócio ${tempoLabel}
 
 ${fat === 0 ? 'ATENÇÃO: AINDA NÃO FATURA. Foque em conseguir os PRIMEIROS clientes.' : ''}
 ${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Sem presença digital. Explique conceitos antes.' : ''}` }]
@@ -1541,11 +1695,24 @@ function toggleSecao(header) {
 
 function formatarConteudo(txt) {
   return txt
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Remove separadores soltos (--- ou ===)
+    .replace(/^[\s]*[-=]{3,}[\s]*$/gm, '<hr style="border:none;border-top:1px solid var(--bd);margin:14px 0">')
+    // Remove ## ou ### soltos (sem texto depois)
+    .replace(/^[\s]*#{1,4}[\s]*$/gm, '')
+    // Cabeçalhos markdown ### Título → título dourado
+    .replace(/^[\s]*(#{1,4})\s+(.+)$/gm, '<div style="font-family:var(--H);font-size:14px;font-weight:800;color:var(--gold);margin:14px 0 6px;display:flex;align-items:center;gap:6px">$2</div>')
+    // Negrito
+    .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--t1)">$1</strong>')
+    // Destaque "O que é isso?"
     .replace(/📖 O que é isso\?/g, '<strong style="color:var(--blue)">📖 O que é isso?</strong>')
-    .replace(/^(#{1,3})\s+(.+)$/gm, '<strong style="font-size:14px;display:block;margin-top:12px;margin-bottom:4px;color:var(--gold)">$2</strong>')
-    .replace(/^[-•]\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0"><span style="color:var(--gold);flex-shrink:0">›</span><span>$1</span></div>')
-    .replace(/^\d+\.\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0"><span style="color:var(--gold);flex-shrink:0;min-width:16px">•</span><span>$1</span></div>');
+    // Horários em destaque (ex: 9h-12h:)
+    .replace(/^(\s*)[›\-•]?\s*(\d{1,2}h(?:-\d{1,2}h)?)\s*:/gm, '$1<span style="display:inline-block;background:var(--goldl);color:var(--gold);font-weight:700;font-size:11px;padding:2px 8px;border-radius:6px;margin-right:6px">$2</span>')
+    // Bullets - ou •
+    .replace(/^[\s]*[-•]\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:5px 0;line-height:1.6"><span style="color:var(--gold);flex-shrink:0">›</span><span>$1</span></div>')
+    // Listas numeradas
+    .replace(/^[\s]*\d+\.\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:5px 0;line-height:1.6"><span style="color:var(--gold);flex-shrink:0;min-width:16px">•</span><span>$1</span></div>')
+    // Remove múltiplas quebras de linha
+    .replace(/\n{3,}/g, '\n\n');
 }
 
 function extrairTarefas(txt) {
