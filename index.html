@@ -1084,6 +1084,17 @@ function estimarTicket(seg, fat) {
 }
 
 // ── GERAR PLANO ────────────────────────────────────────
+
+function novoPlano(){
+  const fc = $('form-card'); if(fc) fc.style.display='block';
+  const res = $('plano-resultado'); if(res) res.innerHTML='';
+  const tc = $('trilha-card'); if(tc) tc.style.display='none';
+  // Limpa os campos para um novo plano
+  ['f-fat','f-ticket','f-clientes','f-meta','f-desafio'].forEach(id=>{ const e=$(id); if(e) e.value=''; });
+  window.scrollTo({top:0,behavior:'smooth'});
+  toast('Preencha para gerar um novo plano!');
+}
+
 async function gerarPlano() {
   const fat     = parseInt($('f-fat').value) || 0;
   const ticket  = parseInt($('f-ticket').value) || 0;
@@ -1210,6 +1221,8 @@ ${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Não tem prese
     renderPlano(planoAtual);
     renderTrilha();
     salvarPlano(planoAtual);
+    // Esconde o formulário de geração depois que o plano fica pronto
+    const fc = $('form-card'); if(fc) fc.style.display='none';
 
     setTimeout(() => { $('gen-progress').style.display = 'none'; $('genbtn').disabled = false; }, 1000);
   } catch(e) {
@@ -1411,6 +1424,7 @@ function renderPlano(plano) {
         <div class="plano-actions">
           <button class="btn bg" onclick="exportarPDF()">📄 PDF</button>
           <button class="btn bgh" onclick="copiarPlano()">📋 Copiar</button>
+          <button class="btn bgh" onclick="novoPlano()">🔄 Novo Plano</button>
         </div>
       </div>
 
@@ -1735,6 +1749,7 @@ function carregarPlano(plano) {
   trilhaTarefas = {};
   renderPlano(plano);
   renderTrilha();
+  const fcc = $('form-card'); if(fcc) fcc.style.display='none';
   goTab('plano', document.querySelectorAll('.tab')[0]);
   window.scrollTo({top:0,behavior:'smooth'});
 }
