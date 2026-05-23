@@ -1144,11 +1144,12 @@ async function gerarPlano() {
 
   const clientesEstimados = clientes || (ticket > 0 && fat > 0 ? Math.round(fat/ticket) : '?');
 
-  const sys = `Você é um estrategista de negócios especializado em MICRO e PEQUENAS empresas brasileiras.
+  const nomeEmpresa = usuario.segmento || usuario.name;
+  const sys = `Você é um consultor de negócios SÊNIOR da GAM (Grupo Aliança Monitoramento), especializado em micro e pequenas empresas brasileiras. Você faz análises REAIS e PROFUNDAS, não genéricas.
 
 PERFIL DO EMPRESÁRIO:
 - Nome: ${usuario.name}
-- Negócio: ${usuario.segmento||'não informado'}
+- Negócio/Segmento: ${usuario.segmento||'não informado'}
 - Cidade: ${usuario.cidade||'não informada'}
 - Porte atual: ${porte.label} (${porte.desc})
 - Faturamento ATUAL: R$ ${fat.toLocaleString('pt-BR')}/mês ${fat === 0 ? '(ainda não fatura — está iniciando)' : ''}
@@ -1159,29 +1160,39 @@ PERFIL DO EMPRESÁRIO:
 - Presença digital: ${nivelDigital}
 - Equipe: ${nivelEquipe}
 
-REGRAS ABSOLUTAS QUE VOCÊ DEVE SEGUIR:
-1. NUNCA use termos técnicos sem explicar. Se usar "ticket médio", explique o que é.
-2. Estratégias devem ser POSSÍVEIS para quem ${fat === 0 ? 'está começando do zero' : `fatura R$${fat.toLocaleString('pt-BR')}`}
-3. Para iniciantes/micro (faturamento até R$3000): ZERO custo ou custo mínimo (menos de R$50)
-4. Para pequenos (R$3000-15000): pode sugerir investimentos pequenos (até R$200/mês)
-5. Para médios+: pode sugerir contratação, ferramentas pagas, anúncios
-6. Metas REALISTAS: crescimento de 20-50% em 3 meses é ótimo. Não prometa dobrar sem base.
-7. Se não tem presença digital: explique o conceito ANTES de pedir para fazer
-8. Se trabalha sozinho: NÃO sugira contratar alguém nas semanas 1-2
-9. Ticket médio deve fazer sentido para o negócio (pão não custa R$50)
-10. Use linguagem simples, direta, como um amigo que entende de negócios
+🔍 PESQUISA OBRIGATÓRIA NA WEB (use a ferramenta de busca ANTES de escrever):
+1. Pesquise "${usuario.segmento||'negócio'} ${usuario.cidade||''}" para entender o mercado local e a concorrência real.
+2. Pesquise sobre a cidade ${usuario.cidade||''} — perfil econômico, população, poder de compra, principais bairros comerciais.
+3. Pesquise cidades VIZINHAS de ${usuario.cidade||''} — identifique oportunidades de expansão e mercados próximos não atendidos.
+4. Pesquise tendências atuais do segmento ${usuario.segmento||'negócio'} no Brasil em 2026.
+5. Se possível, pesquise o nome do negócio para ver se já tem presença online (Google, redes).
+SEMPRE cite dados concretos que encontrou (nome de bairros reais, cidades vizinhas reais, números reais do setor).
 
-ESTRUTURA DO PLANO (use EXATAMENTE estes marcadores):
-[DIAGNOSTICO]
-[METRICAS]
-[SEMANA1]
-[SEMANA2]
-[SEMANA3]
-[SEMANA4]
-[MARKETING]
-[CLIENTES]
-[FINANCEIRO]
-[PROXIMOS_PASSOS]`;
+REGRAS ABSOLUTAS:
+1. NUNCA use termos técnicos sem explicar (ex: ao dizer "ticket médio", explique).
+2. Estratégias POSSÍVEIS para quem ${fat === 0 ? 'começa do zero' : `fatura R$${fat.toLocaleString('pt-BR')}`}.
+3. Micro/iniciante (até R$3000): custo zero ou mínimo (<R$50).
+4. Pequeno (R$3000-15000): investimentos pequenos (até R$200/mês).
+5. Médio+: pode sugerir contratação e anúncios pagos.
+6. Metas REALISTAS: crescer 20-50% em 3 meses é ótimo.
+7. Sem presença digital: explique o conceito ANTES.
+8. Trabalha sozinho: não sugira contratar nas primeiras semanas.
+9. Ticket médio coerente com o negócio.
+10. Linguagem simples e direta, como um consultor amigo.
+11. Use DADOS REAIS da pesquisa — cite a cidade dele, bairros reais, cidades vizinhas reais. NADA genérico.
+
+ESTRUTURA (use EXATAMENTE estes marcadores):
+[DIAGNOSTICO] — Análise real do mercado local dele, concorrência na cidade, oportunidades nas cidades vizinhas. Cite nomes reais.
+[METRICAS] — Números reais do negócio e do setor na região.
+[ANALISE_LOCAL] — Análise detalhada da cidade ${usuario.cidade||''} e cidades vizinhas com oportunidades concretas.
+[SEMANA1] — Tarefas concretas da semana 1 (primeiros 7 dias).
+[SEMANA2] — Tarefas da semana 2.
+[SEMANA3] — Tarefas da semana 3.
+[SEMANA4] — Tarefas da semana 4.
+[MARKETING] — Marketing real para a região dele.
+[CLIENTES] — Como atrair clientes da cidade e arredores.
+[FINANCEIRO] — Controle financeiro.
+[PREVIA6090] — Apenas uma PRÉVIA curta e instigante do que viria nos dias 31-60 e 61-90, SEM detalhar. Termine dizendo que o plano completo de 60 e 90 dias está disponível com o consultor GAM. Máximo 4 linhas. Crie expectativa.`;
 
   try {
     const r = await fetch('/api/generate', {
@@ -1189,17 +1200,20 @@ ESTRUTURA DO PLANO (use EXATAMENTE estes marcadores):
       headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
       body: JSON.stringify({
         system: sys,
-        messages: [{ role:'user', content:`Crie o plano estratégico completo para ${usuario.name} — ${usuario.segmento||'empreendedor'} em ${usuario.cidade||'Brasil'}.
+        messages: [{ role:'user', content:`Faça uma análise REAL e gere o plano de 30 DIAS para ${usuario.name} — ${usuario.segmento||'empreendedor'} em ${usuario.cidade||'Brasil'}.
 
-Inclua em cada seção:
-- Linguagem adequada para quem ${fat === 0 ? 'nunca teve negócio antes' : `fatura R$${fat.toLocaleString('pt-BR')}`}
-- Para seções de marketing/branding/digital: SEMPRE comece com "📖 O que é isso?" em 2 linhas simples com exemplo do próprio negócio deles
-- Ações específicas para ${usuario.segmento||'o negócio'}
-- Valores e métricas REAIS (ticket de R$${ticket}, não invente)
-- Tarefas concretas com dias e horários possíveis para quem ${nivelEquipe}
+PRIMEIRO pesquise na web: o mercado de ${usuario.segmento||'negócio'} em ${usuario.cidade||'Brasil'}, a economia da cidade, as cidades vizinhas e as tendências do setor. Use esses dados reais no plano.
 
-${fat === 0 ? 'ATENÇÃO: Este empreendedor AINDA NÃO FATURA. As estratégias devem focar em conseguir os PRIMEIROS clientes e a PRIMEIRA venda.' : ''}
-${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Não tem presença digital. Antes de qualquer estratégia digital, explique o que é e por que fazer.' : ''}` }]
+Inclua:
+- Análise REAL da localização (cite bairros e cidades vizinhas reais que você encontrou)
+- Linguagem para quem ${fat === 0 ? 'nunca teve negócio' : `fatura R$${fat.toLocaleString('pt-BR')}`}
+- Para marketing/digital: comece com "📖 O que é isso?" em 2 linhas com exemplo do negócio dele
+- Valores e métricas REAIS (ticket R$${ticket}, não invente)
+- Tarefas concretas para quem ${nivelEquipe}
+- O plano DETALHADO é só dos 30 dias (4 semanas). Os dias 60 e 90 ficam como PRÉVIA bloqueada.
+
+${fat === 0 ? 'ATENÇÃO: AINDA NÃO FATURA. Foque em conseguir os PRIMEIROS clientes.' : ''}
+${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Sem presença digital. Explique conceitos antes.' : ''}` }]
       })
     });
 
@@ -1236,6 +1250,7 @@ ${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Não tem prese
 // ── RENDERIZAR PLANO ──────────────────────────────────
 const SECOES_CFG = {
   'DIAGNOSTICO':     { emoji:'🔍', titulo:'Diagnóstico do Seu Negócio',      aprender: null },
+  'ANALISE_LOCAL':   { emoji:'📍', titulo:'Análise da Sua Região',           aprender: null },
   'METRICAS':        { emoji:'📊', titulo:'Suas Métricas Reais',              aprender: 'metricas' },
   'SEMANA1':         { emoji:'📅', titulo:'Semana 1 — Primeiros Passos',      aprender: null },
   'SEMANA2':         { emoji:'📅', titulo:'Semana 2 — Construindo Base',      aprender: null },
@@ -1244,7 +1259,6 @@ const SECOES_CFG = {
   'MARKETING':       { emoji:'📣', titulo:'Marketing para o Seu Negócio',     aprender: 'marketing' },
   'CLIENTES':        { emoji:'🤝', titulo:'Como Atrair e Fidelizar Clientes', aprender: 'clientes' },
   'FINANCEIRO':      { emoji:'💰', titulo:'Controle Financeiro Simples',      aprender: 'financeiro' },
-  'PROXIMOS_PASSOS': { emoji:'🚀', titulo:'Próximos Passos (Meses 2 e 3)',    aprender: null },
 };
 
 
@@ -1469,6 +1483,51 @@ function renderPlano(plano) {
             </div>
           </div>`;
         }).join('')}
+
+        <!-- PRÉVIA BLOQUEADA 60/90 DIAS -->
+        <div class="secao" style="border-color:var(--gold);background:linear-gradient(135deg,rgba(245,166,35,.06),transparent)">
+          <div class="sec-header" style="cursor:default">
+            <div class="sec-title">🔒 Plano de 60 e 90 Dias</div>
+            <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--goldl);color:var(--gold);font-weight:700">EXCLUSIVO</span>
+          </div>
+          <div class="sec-body open">
+            <div style="background:var(--s2);border-radius:10px;padding:14px;margin-bottom:12px">
+              <div style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">👀 Prévia do que vem por aí</div>
+              <div class="sec-conteudo" style="opacity:.85">${secoes['PREVIA6090'] ? formatarConteudo(secoes['PREVIA6090']) : 'Nos dias 31-90 você vai escalar o que construiu: expansão para cidades vizinhas, aumento de ticket, automação de processos e estratégias avançadas de fidelização.'}</div>
+            </div>
+            <!-- Cards bloqueados -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+              <div style="position:relative;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;overflow:hidden">
+                <div style="filter:blur(3px);opacity:.5">
+                  <div style="font-family:var(--H);font-weight:800;font-size:14px;margin-bottom:6px">📈 Dias 31-60</div>
+                  <div style="font-size:11px;color:var(--t2);line-height:1.6">Expansão de canais · Aumento de ticket · Parcerias locais · Primeiras automações</div>
+                </div>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,12,20,.4)">
+                  <span style="font-size:28px">🔒</span>
+                </div>
+              </div>
+              <div style="position:relative;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;overflow:hidden">
+                <div style="filter:blur(3px);opacity:.5">
+                  <div style="font-family:var(--H);font-weight:800;font-size:14px;margin-bottom:6px">🚀 Dias 61-90</div>
+                  <div style="font-size:11px;color:var(--t2);line-height:1.6">Escala regional · Contratação · Marketing pago · Sistema de indicações</div>
+                </div>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,12,20,.4)">
+                  <span style="font-size:28px">🔒</span>
+                </div>
+              </div>
+            </div>
+            <!-- CTA -->
+            <div style="background:linear-gradient(135deg,var(--gold),#e8940a);border-radius:12px;padding:16px;text-align:center">
+              <div style="font-family:var(--H);font-weight:800;font-size:14px;color:#000;margin-bottom:4px">Quer o plano completo de 90 dias?</div>
+              <div style="font-size:12px;color:#1a1a1a;margin-bottom:12px;line-height:1.5">Fale com um consultor da GAM e desbloqueie seu plano detalhado de crescimento.</div>
+              <a href="https://wa.me/5581992303390?text=${encodeURIComponent('Olá! Gerei meu plano no Estrategista IA e quero desbloquear o plano completo de 60 e 90 dias.')}" target="_blank"
+                style="display:inline-flex;align-items:center;gap:7px;background:#000;color:var(--gold);border-radius:9px;padding:11px 22px;font-weight:800;font-size:13px;text-decoration:none">
+                💬 Falar com Consultor GAM
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>`;
 }
