@@ -168,11 +168,13 @@ app.put('/api/plans/:id/progress', (req, res) => {
 
 // ── GENERATE ──────────────────────────────────────────
 app.post('/api/generate', async (req, res) => {
-  const user = getUser(req.headers.authorization?.replace('Bearer ', ''));
-  if (!user) return res.status(401).json({ error: 'Não autenticado.' });
-
+  // Aceita com ou sem autenticação
   const API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!API_KEY) return res.status(500).json({ error: 'API key não configurada.' });
+  if (!API_KEY) return res.status(500).json({ error: 'API key não configurada no servidor.' });
+
+  if (!req.body.system || !req.body.messages) {
+    return res.status(400).json({ error: 'Envie system e messages no body.' });
+  }
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -193,7 +195,7 @@ app.post('/api/generate', async (req, res) => {
     const text = await response.text();
     res.status(response.status).send(text);
   } catch(e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Erro ao conectar com a IA: ' + e.message });
   }
 });
 
