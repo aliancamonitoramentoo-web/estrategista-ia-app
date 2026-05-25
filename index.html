@@ -486,6 +486,32 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
 .srv-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.3);}
 .srv-btn.on{transform:translateY(-2px);}
 
+
+/* ── FIX: força inputs escuros mesmo com autofill do navegador ── */
+.li, input.li, select.li, textarea.li{
+  background:#121a2a !important;
+  color:#edf2ff !important;
+  -webkit-text-fill-color:#edf2ff !important;
+}
+.li::placeholder{color:#3d5878 !important;}
+/* Autofill do Chrome/Safari */
+.li:-webkit-autofill,
+.li:-webkit-autofill:hover,
+.li:-webkit-autofill:focus,
+.li:-webkit-autofill:active{
+  -webkit-box-shadow:0 0 0 1000px #121a2a inset !important;
+  -webkit-text-fill-color:#edf2ff !important;
+  caret-color:#edf2ff !important;
+  transition:background-color 9999s ease-in-out 0s !important;
+}
+.li:focus{
+  background:#172035 !important;
+  border-color:#f5a623 !important;
+  box-shadow:0 0 0 3px rgba(245,166,35,.12) !important;
+}
+/* Select dropdown options */
+.li option{background:#121a2a !important;color:#edf2ff !important;}
+
 </style>
 </head>
 <body>
@@ -663,9 +689,9 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
             <div class="hint">Coloque o que você <strong>fatura hoje de verdade</strong>. Pode ser 0.</div>
           </div>
           <div class="fg">
-            <label>Ticket Médio (R$)</label>
-            <input class="li" id="f-ticket" type="number" placeholder="Ex: pão R$0,50 · corte R$25" min="0">
-            <div class="hint">Quanto um cliente gasta <strong>por compra</strong>?</div>
+            <label>💵 Ticket Médio (R$)</label>
+            <input class="li" id="f-ticket" type="number" placeholder="Ex: 25" min="0">
+            <div class="hint">É o valor médio que <strong>cada cliente gasta numa compra</strong>. Ex: se vende cortes de R$25 e R$35, seu ticket médio é ~R$30. Some suas vendas do dia e divida pelo nº de clientes.</div>
           </div>
         </div>
         <div class="fg2">
@@ -699,6 +725,17 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
           <label>⚔️ Qual seu maior concorrente?</label>
           <input class="li" id="f-concorrente" placeholder="Ex: a padaria da esquina, lojas grandes, ninguém...">
           <div class="hint">A IA vai analisar como você pode se <strong>diferenciar</strong> dele.</div>
+        </div>
+        <div class="fg">
+          <label>🎯 Qual seu objetivo principal agora?</label>
+          <select class="li" id="f-objetivo">
+            <option value="vender">Vender mais / conseguir mais clientes</option>
+            <option value="organizar">Organizar e profissionalizar o negócio</option>
+            <option value="crescer">Crescer e expandir (mais unidades/produtos)</option>
+            <option value="lucro">Aumentar o lucro (ganhar mais com o que já tenho)</option>
+            <option value="comecar">Estou começando do zero</option>
+          </select>
+          <div class="hint">A IA vai <strong>priorizar estratégias</strong> para esse objetivo.</div>
         </div>
         <div class="fg">
           <label>🔥 Maior Desafio Hoje</label>
@@ -1222,7 +1259,7 @@ function novoPlano(){
   const res = $('plano-resultado'); if(res) res.innerHTML='';
   const tc = $('trilha-card'); if(tc) tc.style.display='none';
   // Limpa os campos para um novo plano
-  ['f-fat','f-ticket','f-clientes','f-meta','f-desafio'].forEach(id=>{ const e=$(id); if(e) e.value=''; });
+  ['f-fat','f-ticket','f-clientes','f-meta','f-desafio','f-cliente-ideal','f-concorrente'].forEach(id=>{ const e=$(id); if(e) e.value=''; });
   window.scrollTo({top:0,behavior:'smooth'});
   toast('Preencha para gerar um novo plano!');
 }
@@ -1239,6 +1276,14 @@ async function gerarPlano() {
   const tempo    = $('f-tempo')?.value || 'menos6m';
   const clienteIdeal = ($('f-cliente-ideal')?.value||'').trim();
   const concorrente  = ($('f-concorrente')?.value||'').trim();
+  const objetivo = $('f-objetivo')?.value || 'vender';
+  const objetivoLabel = {
+    vender:'vender mais e conseguir mais clientes',
+    organizar:'organizar e profissionalizar o negócio',
+    crescer:'crescer e expandir o negócio',
+    lucro:'aumentar o lucro com o que já tem',
+    comecar:'começar o negócio do zero'
+  }[objetivo];
 
   // Atualiza o segmento do usuário se preenchido
   if(segmento) usuario.segmento = segmento;
@@ -1309,6 +1354,7 @@ PERFIL DO EMPRESÁRIO:
 - Tempo de negócio: ${tempoLabel}
 - Cliente ideal: ${clienteIdeal || 'não definido — ajude a definir'}
 - Maior concorrente: ${concorrente || 'não informado'}
+- 🎯 OBJETIVO PRINCIPAL: ${objetivoLabel} ← PRIORIZE estratégias para isso!
 
 🔍 PESQUISA OBRIGATÓRIA NA WEB (use a ferramenta de busca ANTES de escrever):
 1. Pesquise "${usuario.segmento||'negócio'} ${usuario.cidade||''}" para entender o mercado local e a concorrência real.
@@ -1365,6 +1411,7 @@ Inclua:
 ${clienteIdeal ? '- Estratégias focadas no cliente ideal: '+clienteIdeal : '- Ajude a definir o cliente ideal'}
 ${concorrente ? '- Mostre como se diferenciar do concorrente: '+concorrente : ''}
 - Considere que o negócio ${tempoLabel}
+- FOCO PRINCIPAL do plano: ${objetivoLabel}. Todas as ações devem servir a esse objetivo.
 
 ${fat === 0 ? 'ATENÇÃO: AINDA NÃO FATURA. Foque em conseguir os PRIMEIROS clientes.' : ''}
 ${!redes.includes('sim') && !redes.includes('pago') ? 'ATENÇÃO: Sem presença digital. Explique conceitos antes.' : ''}` }]
