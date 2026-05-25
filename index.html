@@ -31,7 +31,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
 .ltab button.on{background:var(--gold);color:#000;font-weight:800;}
 .fg{margin-bottom:11px;}
 .fg label{display:block;font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.9px;font-weight:700;margin-bottom:5px;}
-.li{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:10px 13px;color:var(--t1);font-family:var(--F);font-size:13px;outline:none;transition:border-color .2s;}
+.li{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:9px 12px;color:var(--t1);font-family:var(--F);font-size:13px;outline:none;transition:border-color .2s;}
 .li:focus{border-color:var(--gold);}
 .li option{background:var(--s2);}
 .lbtn{width:100%;background:var(--gold);color:#000;border:none;border-radius:9px;padding:13px;font-family:var(--H);font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px;}
@@ -80,7 +80,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
 .eco-content.show{display:block;}
 
 /* ── FORM PLANO ── */
-.form-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:20px;margin-bottom:20px;}
+.form-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:20px;}
 .form-title{font-family:var(--H);font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:9px;}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .hint{font-size:11px;color:var(--t3);margin-top:4px;line-height:1.5;}
@@ -288,7 +288,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
     padding:16px 20px 30px;
   }
 
-  .fg{margin-bottom:12px;}
+  .fg{margin-bottom:10px;}
   .fg label{font-size:11px;margin-bottom:6px;}
   .li{padding:14px 14px;font-size:15px;border-radius:12px;}
   .fg2{grid-template-columns:1fr;}
@@ -511,6 +511,11 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
 }
 /* Select dropdown options */
 .li option{background:#121a2a !important;color:#edf2ff !important;}
+
+
+/* Campo focado rola para posição visível ao abrir teclado mobile */
+.li{scroll-margin-top:70px;scroll-margin-bottom:120px;}
+.fg{scroll-margin-top:70px;}
 
 </style>
 </head>
@@ -735,11 +740,10 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;}
             <option value="lucro">Aumentar o lucro (ganhar mais com o que já tenho)</option>
             <option value="comecar">Estou começando do zero</option>
           </select>
-          <div class="hint">A IA vai <strong>priorizar estratégias</strong> para esse objetivo.</div>
         </div>
         <div class="fg">
           <label>🔥 Maior Desafio Hoje</label>
-          <input class="li" id="f-desafio" placeholder="Ex: poucos clientes, não sei divulgar, sem dinheiro...">
+          <input class="li" id="f-desafio" placeholder="Ex: poucos clientes, não sei divulgar...">
         </div>
         <div class="fg2">
           <div class="fg">
