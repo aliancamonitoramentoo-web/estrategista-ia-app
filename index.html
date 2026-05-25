@@ -16,7 +16,7 @@
   --F:'DM Sans',sans-serif;--H:'Syne',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;}
+/* height removido para permitir scroll */
 body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;min-height:100vh;}
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px;}
 
@@ -59,7 +59,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;mi
 .logoutbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;transition:color .2s;padding:4px;}
 .logoutbtn:hover{color:var(--red);}
 
-.main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 20px 60px;width:100%;}
+.main{padding:24px 20px 60px;max-width:680px;margin:0 auto;width:100%;}
 
 /* ── PERFIL CARD ── */
 .perfil-card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
@@ -262,7 +262,7 @@ body{font-family:var(--F);background:var(--bg);color:var(--t1);font-size:14px;mi
 @media(max-width:640px){
   #APP.show{display:block;}
   .topbar{height:56px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:100;}
-  .main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 24px;width:100%;}
+  .main{padding:14px 14px 90px;max-width:100%;width:100%;}
   /* Login mobile — scroll livre */
   #LS{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 40%,rgba(245,166,35,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(61,155,255,.05),transparent 50%);}
   .lbox{width:100%;max-width:460px;background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.7);margin:auto;}
