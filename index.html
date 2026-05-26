@@ -1,277 +1,221 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VendaMais — Dicas de Vendas com IA</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; }
-    body {
-      background: #09090E;
-      color: #EDEBE6;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VendaMais — Dicas de Vendas com IA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:#09090E;color:#EDEBE6;font-family:'Georgia','Times New Roman',serif;min-height:100vh;display:flex;flex-direction:column}
 
-    /* HEADER */
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 28px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      background: rgba(9,9,14,0.96);
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(10px);
-    }
-    .logo { display: flex; align-items: center; gap: 9px; cursor: pointer; text-decoration: none; }
-    .logo-icon { font-size: 20px; }
-    .logo-text { font-size: 18px; font-weight: 700; color: #FF6B35; letter-spacing: -0.4px; }
-    .header-right { display: flex; gap: 8px; align-items: center; }
-    .nav-btn {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #999; border-radius: 8px;
-      padding: 7px 14px; font-size: 13px; cursor: pointer;
-      font-family: sans-serif; transition: all 0.2s;
-    }
-    .nav-btn.active { color: #FF6B35; border-color: rgba(255,107,53,0.4); }
-    .nav-btn:hover { filter: brightness(1.2); }
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(9,9,14,0.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.logo{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none}
+.logo-icon{font-size:20px}.logo-text{font-size:18px;font-weight:700;color:#FF6B35;letter-spacing:-0.4px}
+.header-right{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.nav-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#999;border-radius:8px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:sans-serif;transition:all .2s;white-space:nowrap}
+.nav-btn.active{color:#FF6B35;border-color:rgba(255,107,53,0.4)}
+.nav-btn:hover{filter:brightness(1.2)}
+.user-chip{background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3);color:#FF6B35;border-radius:20px;padding:5px 12px;font-size:12px;font-family:sans-serif;cursor:pointer}
 
-    /* MAIN */
-    main { flex: 1; max-width: 780px; margin: 0 auto; width: 100%; padding: 0 20px; }
-    .page { padding: 52px 0 60px; animation: fadeIn 0.35s ease both; }
+/* ── MAIN ── */
+main{flex:1;max-width:800px;margin:0 auto;width:100%;padding:0 20px}
+.page{padding:48px 0 60px;animation:fadeIn .35s ease both}
+.hidden{display:none!important}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes blink { 50% { opacity: 0; } }
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
-    /* STEP BAR */
-    .step-bar { display: flex; gap: 6px; margin-bottom: 32px; }
-    .step-seg { flex: 1; height: 3px; border-radius: 4px; background: rgba(255,255,255,0.1); transition: background 0.3s; }
-    .step-seg.active { background: #FF6B35; }
+/* ── AUTH MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal{background:#13131A;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:36px;width:100%;max-width:400px;position:relative;animation:slideDown .3s ease}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#555;font-size:20px;cursor:pointer;font-family:sans-serif}
+.modal-title{font-size:22px;font-weight:700;margin-bottom:6px;letter-spacing:-0.5px}
+.modal-sub{color:#555;font-size:14px;margin-bottom:28px;font-family:sans-serif}
+.modal-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden}
+.modal-tab{flex:1;padding:10px;background:transparent;border:none;color:#666;font-size:13px;cursor:pointer;font-family:sans-serif;transition:all .2s}
+.modal-tab.active{background:#FF6B35;color:#000;font-weight:700}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;color:#555;font-family:sans-serif;margin-bottom:6px;letter-spacing:.3px}
+.form-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none}
+.form-input:focus{border-color:rgba(255,107,53,0.5);box-shadow:0 0 0 3px rgba(255,107,53,0.06)}
+.btn-auth{width:100%;background:#FF6B35;color:#000;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:4px}
+.auth-error{background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:#e88;font-family:sans-serif;margin-bottom:12px}
+.auth-divider{text-align:center;color:#333;font-size:12px;font-family:sans-serif;margin:16px 0}
 
-    /* HERO */
-    .hero { text-align: center; padding-top: 20px; }
-    .hero-badge {
-      display: inline-block;
-      border: 1px solid rgba(255,107,53,0.35); color: #FF6B35;
-      background: rgba(255,107,53,0.08); border-radius: 24px;
-      padding: 5px 16px; font-size: 13px; margin-bottom: 28px; font-family: sans-serif;
-    }
-    .hero-title {
-      font-size: clamp(34px, 5vw, 58px); font-weight: 700;
-      letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 22px;
-    }
-    .hero-em { color: #FF6B35; font-style: italic; }
-    .hero-sub {
-      font-size: 17px; color: #777; max-width: 480px;
-      margin: 0 auto 36px; line-height: 1.7; font-family: sans-serif;
-    }
-    .hero-cta {
-      background: #FF6B35; color: #000; border: none;
-      border-radius: 12px; padding: 15px 32px;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      font-family: sans-serif; letter-spacing: 0.3px;
-    }
-    .hero-note { color: #444; font-size: 13px; margin-top: 14px; font-family: sans-serif; }
+/* ── STEP BAR ── */
+.step-bar{display:flex;gap:6px;margin-bottom:32px}
+.step-seg{flex:1;height:3px;border-radius:4px;background:rgba(255,255,255,0.1);transition:background .3s}
+.step-seg.active{background:#FF6B35}
 
-    /* STEP TITLES */
-    .step-title { font-size: clamp(20px,3vw,28px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-    .step-sub { color: #666; font-size: 15px; margin-bottom: 28px; font-family: sans-serif; }
+/* ── HERO ── */
+.hero{text-align:center;padding-top:20px}
+.hero-badge{display:inline-block;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;background:rgba(255,107,53,0.08);border-radius:24px;padding:5px 16px;font-size:13px;margin-bottom:28px;font-family:sans-serif}
+.hero-title{font-size:clamp(34px,5vw,56px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:22px}
+.hero-em{color:#FF6B35;font-style:italic}
+.hero-sub{font-size:17px;color:#777;max-width:480px;margin:0 auto 36px;line-height:1.7;font-family:sans-serif}
+.hero-cta{background:#FF6B35;color:#000;border:none;border-radius:12px;padding:15px 32px;font-size:16px;font-weight:700;cursor:pointer;font-family:sans-serif}
+.hero-note{color:#444;font-size:13px;margin-top:14px;font-family:sans-serif}
 
-    /* SECTOR GRID */
-    .sector-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px; margin-bottom: 8px;
-    }
-    .sector-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px; padding: 14px 12px;
-      cursor: pointer; display: flex; flex-direction: column;
-      align-items: center; gap: 8px; transition: all 0.18s;
-      font-family: sans-serif; color: #ccc;
-    }
-    .sector-card:hover { background: rgba(255,255,255,0.06); }
-    .sector-card.selected { background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.5); color: #FF6B35; }
-    .sector-icon { font-size: 22px; }
-    .sector-label { font-size: 12px; text-align: center; line-height: 1.3; }
+/* ── STEPS ── */
+.step-title{font-size:clamp(20px,3vw,28px);font-weight:700;margin-bottom:8px;letter-spacing:-0.5px}
+.step-sub{color:#666;font-size:15px;margin-bottom:28px;font-family:sans-serif}
 
-    /* CHIPS */
-    .field-label { font-size: 13px; color: #666; margin-bottom: 12px; font-family: sans-serif; }
-    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px; padding: 10px 16px;
-      font-size: 13px; color: #bbb; cursor: pointer;
-      font-family: sans-serif; transition: all 0.15s;
-    }
-    .chip:hover { background: rgba(255,255,255,0.07); }
-    .chip.selected { background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.5); color: #FF6B35; }
+/* ── SECTOR ── */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin-bottom:8px}
+.sector-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .18s;font-family:sans-serif;color:#ccc}
+.sector-card:hover{background:rgba(255,255,255,0.06)}
+.sector-card.selected{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.5);color:#FF6B35}
+.sector-icon{font-size:22px}.sector-label{font-size:12px;text-align:center;line-height:1.3}
 
-    /* TICKET */
-    .ticket-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; max-width: 460px; }
-    .ticket-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; padding: 20px;
-      cursor: pointer; font-size: 15px; color: #ccc;
-      font-family: sans-serif; transition: all 0.18s; text-align: center;
-    }
-    .ticket-card:hover { background: rgba(255,255,255,0.06); }
-    .ticket-card.selected { background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.5); color: #FF6B35; font-weight: 700; }
+/* ── CHIPS ── */
+.field-label{font-size:13px;color:#666;margin-bottom:12px;font-family:sans-serif}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 16px;font-size:13px;color:#bbb;cursor:pointer;font-family:sans-serif;transition:all .15s}
+.chip:hover{background:rgba(255,255,255,0.07)}
+.chip.selected{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.5);color:#FF6B35}
 
-    /* CHALLENGES */
-    .challenge-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
-    .challenge-btn {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 24px; padding: 10px 18px;
-      font-size: 13px; color: #bbb; cursor: pointer;
-      font-family: sans-serif; transition: all 0.15s;
-    }
-    .challenge-btn:hover { background: rgba(255,255,255,0.06); }
-    .challenge-btn.selected { background: rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.5); color: #FF6B35; }
-    .challenge-btn.disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+/* ── TICKET ── */
+.ticket-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:460px}
+.ticket-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;cursor:pointer;font-size:15px;color:#ccc;font-family:sans-serif;transition:all .18s;text-align:center}
+.ticket-card:hover{background:rgba(255,255,255,0.06)}
+.ticket-card.selected{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.5);color:#FF6B35;font-weight:700}
 
-    /* PROFILE SUMMARY */
-    .profile-summary {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;
-    }
-    .summary-title { font-size: 11px; color: #555; font-family: sans-serif; margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
-    .summary-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 14px; color: #aaa; font-family: sans-serif; margin-bottom: 12px; }
-    .summary-desafios { display: flex; gap: 8px; flex-wrap: wrap; }
-    .des-badge {
-      background: rgba(255,107,53,0.1);
-      border: 1px solid rgba(255,107,53,0.25);
-      color: #FF6B35; border-radius: 6px;
-      padding: 3px 10px; font-size: 12px; font-family: sans-serif;
-    }
+/* ── CHALLENGES ── */
+.challenge-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.challenge-btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:10px 18px;font-size:13px;color:#bbb;cursor:pointer;font-family:sans-serif;transition:all .15s}
+.challenge-btn:hover{background:rgba(255,255,255,0.06)}
+.challenge-btn.selected{background:rgba(255,107,53,0.15);border-color:rgba(255,107,53,0.5);color:#FF6B35}
+.challenge-btn.disabled{opacity:.35;cursor:default;pointer-events:none}
 
-    /* TEXTAREA */
-    textarea {
-      width: 100%; background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px; padding: 14px;
-      color: #EDEBE6; font-size: 14px;
-      font-family: sans-serif; line-height: 1.6;
-      resize: vertical; outline: none;
-    }
-    textarea:focus { border-color: rgba(255,107,53,0.4); box-shadow: 0 0 0 3px rgba(255,107,53,0.06); }
+/* ── PROFILE SUMMARY ── */
+.profile-summary{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.summary-title{font-size:11px;color:#555;font-family:sans-serif;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase}
+.summary-row{display:flex;gap:10px;flex-wrap:wrap;font-size:14px;color:#aaa;font-family:sans-serif;margin-bottom:12px}
+.summary-desafios{display:flex;gap:8px;flex-wrap:wrap}
+.des-badge{background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);color:#FF6B35;border-radius:6px;padding:3px 10px;font-size:12px;font-family:sans-serif}
 
-    /* NAVIGATION */
-    .step-nav { display: flex; gap: 12px; margin-top: 36px; justify-content: flex-end; }
-    .btn-back {
-      background: transparent; border: 1px solid rgba(255,255,255,0.1);
-      color: #666; border-radius: 10px; padding: 12px 20px;
-      font-size: 14px; cursor: pointer; font-family: sans-serif;
-    }
-    .btn-next {
-      background: #FF6B35; color: #000; border: none;
-      border-radius: 10px; padding: 12px 24px;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      font-family: sans-serif; transition: opacity 0.2s;
-    }
-    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-generate {
-      background: #FF6B35; color: #000; border: none;
-      border-radius: 10px; padding: 14px 28px;
-      font-size: 15px; font-weight: 700; cursor: pointer; font-family: sans-serif;
-    }
-    button:hover:not(:disabled) { filter: brightness(1.1); }
+/* ── TEXTAREA ── */
+textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;line-height:1.6;resize:vertical;outline:none}
+textarea:focus{border-color:rgba(255,107,53,0.4);box-shadow:0 0 0 3px rgba(255,107,53,0.06)}
 
-    /* RESULT */
-    .profile-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-    .badge {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 6px; padding: 4px 12px;
-      font-size: 12px; color: #888; font-family: sans-serif;
-    }
-    .page-title { font-size: clamp(22px,3vw,32px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-    .page-sub { color: #555; font-size: 15px; margin-bottom: 28px; font-family: sans-serif; }
-    .result-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px; padding: 28px; min-height: 200px;
-    }
-    .loading-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 40px 0; }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(255,107,53,0.15);
-      border-top: 3px solid #FF6B35;
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
-    .loading-text { color: #555; font-size: 14px; font-family: sans-serif; }
-    .result-text {
-      font-size: 15px; line-height: 1.85; color: #DEDBD5;
-      white-space: pre-line; margin-bottom: 24px; font-family: sans-serif;
-    }
-    .result-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn-save {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #ccc; border-radius: 8px;
-      padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: sans-serif;
-    }
-    .btn-new {
-      background: transparent;
-      border: 1px solid rgba(255,107,53,0.35);
-      color: #FF6B35; border-radius: 8px;
-      padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: sans-serif;
-    }
-    .cursor-blink {
-      display: inline-block; color: #FF6B35;
-      animation: blink 0.7s step-end infinite;
-    }
+/* ── NAV BUTTONS ── */
+.step-nav{display:flex;gap:12px;margin-top:36px;justify-content:flex-end}
+.btn-back{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#666;border-radius:10px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:sans-serif}
+.btn-next{background:#FF6B35;color:#000;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif;transition:opacity .2s}
+.btn-next:disabled{opacity:.4;cursor:not-allowed}
+.btn-generate{background:#FF6B35;color:#000;border:none;border-radius:10px;padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif}
+button:hover:not(:disabled){filter:brightness(1.1)}
 
-    /* SAVED */
-    .empty { color: #444; text-align: center; padding: 60px 0; font-family: sans-serif; }
-    .saved-list { display: flex; flex-direction: column; gap: 16px; }
-    .saved-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 22px;
-    }
-    .saved-meta { font-size: 12px; color: #555; font-family: sans-serif; margin-bottom: 12px; }
-    .saved-text { font-size: 14px; line-height: 1.8; color: #ccc; white-space: pre-line; margin-bottom: 16px; font-family: sans-serif; }
-    .btn-remove {
-      background: transparent;
-      border: 1px solid rgba(255,60,60,0.25);
-      color: #c66; border-radius: 6px;
-      padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: sans-serif;
-    }
+/* ── RESULT ── */
+.profile-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.badge{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 12px;font-size:12px;color:#888;font-family:sans-serif}
+.page-title{font-size:clamp(22px,3vw,32px);font-weight:700;margin-bottom:8px;letter-spacing:-0.5px}
+.page-sub{color:#555;font-size:15px;margin-bottom:28px;font-family:sans-serif}
+.result-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:28px;min-height:200px}
+.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:18px;padding:40px 0}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,107,53,0.15);border-top:3px solid #FF6B35;border-radius:50%;animation:spin .9s linear infinite}
+.loading-text{color:#555;font-size:14px;font-family:sans-serif}
+.result-text{font-size:15px;line-height:1.85;color:#DEDBD5;white-space:pre-line;margin-bottom:24px;font-family:sans-serif}
+.result-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.btn-save{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#ccc;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:sans-serif}
+.btn-new{background:transparent;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:sans-serif}
+.btn-export{background:rgba(76,201,240,0.1);border:1px solid rgba(76,201,240,0.3);color:#4CC9F0;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:sans-serif}
+.btn-whatsapp{background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25D366;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:sans-serif}
+.cursor-blink{display:inline-block;color:#FF6B35;animation:blink .7s step-end infinite}
 
-    /* HIDDEN */
-    .hidden { display: none !important; }
+/* ── SAVED / TRACKING ── */
+.empty{color:#444;text-align:center;padding:60px 0;font-family:sans-serif}
+.saved-list{display:flex;flex-direction:column;gap:16px}
+.saved-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:22px}
+.saved-meta{font-size:12px;color:#555;font-family:sans-serif;margin-bottom:8px}
+.saved-date{font-size:11px;color:#333;font-family:sans-serif;margin-bottom:12px}
+.saved-text{font-size:14px;line-height:1.8;color:#ccc;white-space:pre-line;margin-bottom:16px;font-family:sans-serif}
+.saved-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.track-btns{display:flex;gap:6px;flex-wrap:wrap}
+.track-btn{border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:sans-serif;border:1px solid;transition:all .2s}
+.track-btn.todo{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:#666}
+.track-btn.doing{background:rgba(249,199,79,0.1);border-color:rgba(249,199,79,0.4);color:#F9C74F}
+.track-btn.done{background:rgba(0,201,167,0.1);border-color:rgba(0,201,167,0.4);color:#00C9A7}
+.track-badge{border-radius:20px;padding:4px 10px;font-size:11px;font-family:sans-serif;font-weight:600}
+.track-badge.todo{background:rgba(255,255,255,0.05);color:#555}
+.track-badge.doing{background:rgba(249,199,79,0.15);color:#F9C74F}
+.track-badge.done{background:rgba(0,201,167,0.15);color:#00C9A7}
+.saved-actions{display:flex;gap:6px}
+.btn-remove{background:transparent;border:1px solid rgba(255,60,60,0.25);color:#c66;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:sans-serif}
+.btn-export-sm{background:transparent;border:1px solid rgba(76,201,240,0.25);color:#4CC9F0;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:sans-serif}
 
-    /* FOOTER */
-    footer {
-      text-align: center; padding: 20px;
-      color: #222; font-size: 12px; font-family: sans-serif;
-      border-top: 1px solid rgba(255,255,255,0.04);
-    }
+/* ── TRACKING FILTERS ── */
+.filter-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.filter-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#777;border-radius:20px;padding:7px 16px;font-size:13px;cursor:pointer;font-family:sans-serif}
+.filter-btn.active{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35}
 
-    @media (max-width: 480px) {
-      header { padding: 12px 16px; }
-      .sector-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); }
-      .ticket-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+/* ── CLOUD BANNER ── */
+.cloud-banner{background:linear-gradient(135deg,rgba(255,107,53,0.08),rgba(132,94,194,0.08));border:1px dashed rgba(255,107,53,0.3);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cloud-banner-text{font-size:13px;color:#888;font-family:sans-serif}
+.cloud-banner-text strong{color:#ccc}
+.btn-cloud-login{background:#FF6B35;color:#000;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:sans-serif}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:20px;color:#222;font-size:12px;font-family:sans-serif;border-top:1px solid rgba(255,255,255,0.04)}
+
+@media(max-width:480px){
+  header{padding:10px 14px}
+  .header-right{gap:4px}
+  .nav-btn{padding:6px 9px;font-size:11px}
+  .sector-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .ticket-grid{grid-template-columns:1fr 1fr}
+  .result-actions{gap:6px}
+}
+</style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ── AUTH MODAL ── -->
+<div class="modal-overlay hidden" id="auth-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAuth()">×</button>
+    <h2 class="modal-title">VendaMais</h2>
+    <p class="modal-sub">Salve suas dicas na nuvem e acesse de qualquer dispositivo.</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Entrar</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Criar conta</button>
+    </div>
+    <div id="auth-error" class="auth-error hidden"></div>
+    <div id="form-login">
+      <div class="form-group">
+        <label class="form-label">E-MAIL</label>
+        <input class="form-input" id="login-email" type="email" placeholder="seu@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">SENHA</label>
+        <input class="form-input" id="login-pass" type="password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-auth" onclick="doLogin()">Entrar</button>
+    </div>
+    <div id="form-register" class="hidden">
+      <div class="form-group">
+        <label class="form-label">NOME</label>
+        <input class="form-input" id="reg-name" type="text" placeholder="Seu nome"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-MAIL</label>
+        <input class="form-input" id="reg-email" type="email" placeholder="seu@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">SENHA</label>
+        <input class="form-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"/>
+      </div>
+      <button class="btn-auth" onclick="doRegister()">Criar conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
 <header>
   <a class="logo" onclick="goHome()">
     <span class="logo-icon">⚡</span>
@@ -279,387 +223,435 @@
   </a>
   <div class="header-right">
     <button class="nav-btn hidden" id="btn-restart" onclick="goHome()">← Recomeçar</button>
+    <button class="nav-btn" id="btn-track-nav" onclick="showView('track')">📊 Acompanhamento</button>
     <button class="nav-btn" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
+    <span class="user-chip hidden" id="user-chip" onclick="doLogout()"></span>
+    <button class="nav-btn hidden" id="btn-login-nav" onclick="openAuth()">☁ Entrar</button>
   </div>
 </header>
 
 <main>
 
-  <!-- ── VIEW: ONBOARD ──────────────────────────────────────────────── -->
-  <div id="view-onboard" class="page">
+<!-- ── ONBOARD ── -->
+<div id="view-onboard" class="page">
 
-    <!-- STEP 0: HERO -->
-    <div id="step-0" class="hero">
-      <div class="hero-badge">✦ Para qualquer tipo de empresa</div>
-      <h1 class="hero-title">Dicas de vendas<br><em class="hero-em">feitas para o seu negócio</em></h1>
-      <p class="hero-sub">Responda 4 perguntas rápidas. A IA gera recomendações cirúrgicas para o seu segmento — sem papo genérico.</p>
-      <button class="hero-cta" onclick="goStep(1)">Começar agora →</button>
-      <p class="hero-note">Leva menos de 2 minutos · Gratuito</p>
-    </div>
+  <!-- STEP 0 -->
+  <div id="step-0" class="hero">
+    <div class="hero-badge">✦ Para qualquer tipo de empresa</div>
+    <h1 class="hero-title">Dicas de vendas<br><em class="hero-em">feitas para o seu negócio</em></h1>
+    <p class="hero-sub">Responda 4 perguntas rápidas. A IA gera recomendações cirúrgicas para o seu segmento — sem papo genérico.</p>
+    <button class="hero-cta" onclick="goStep(1)">Começar agora →</button>
+    <p class="hero-note">Leva menos de 2 minutos · Gratuito</p>
+  </div>
 
-    <!-- STEP 1: SETOR -->
-    <div id="step-1" class="hidden">
-      <div class="step-bar" id="bar-1"></div>
-      <h2 class="step-title">Qual é o segmento da sua empresa?</h2>
-      <p class="step-sub">Escolha o que melhor descreve seu negócio.</p>
-      <div class="sector-grid" id="sector-grid"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(0)">← Voltar</button>
-        <button class="btn-next" id="next-1" disabled onclick="goStep(2)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: PORTE + MODELO -->
-    <div id="step-2" class="hidden">
-      <div class="step-bar" id="bar-2"></div>
-      <h2 class="step-title">Porte e modelo de vendas</h2>
-      <p class="step-sub">Isso muda completamente a estratégia recomendada.</p>
-      <div class="field-label">Tamanho da empresa</div>
-      <div class="chip-row" id="size-chips"></div>
-      <div class="field-label" style="margin-top:28px">Modelo de venda</div>
-      <div class="chip-row" id="model-chips"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(1)">← Voltar</button>
-        <button class="btn-next" id="next-2" disabled onclick="goStep(3)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3: TICKET -->
-    <div id="step-3" class="hidden">
-      <div class="step-bar" id="bar-3"></div>
-      <h2 class="step-title">Qual é o ticket médio das suas vendas?</h2>
-      <p class="step-sub">O valor muda a abordagem, o canal e o processo de venda.</p>
-      <div class="ticket-grid" id="ticket-grid"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(2)">← Voltar</button>
-        <button class="btn-next" id="next-3" disabled onclick="goStep(4)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: DESAFIOS -->
-    <div id="step-4" class="hidden">
-      <div class="step-bar" id="bar-4"></div>
-      <h2 class="step-title">Quais são seus maiores desafios de vendas?</h2>
-      <p class="step-sub">Escolha até 3. As dicas serão focadas nisso.</p>
-      <div class="challenge-grid" id="challenge-grid"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(3)">← Voltar</button>
-        <button class="btn-next" id="next-4" disabled onclick="goStep(5)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 5: CONTEXTO + GERAR -->
-    <div id="step-5" class="hidden">
-      <div class="step-bar" id="bar-5"></div>
-      <h2 class="step-title">Quer adicionar mais contexto?</h2>
-      <p class="step-sub">Opcional — mas quanto mais específico, melhor a resposta.</p>
-      <div class="profile-summary">
-        <div class="summary-title">Seu perfil:</div>
-        <div class="summary-row" id="summary-row"></div>
-        <div class="summary-desafios" id="summary-des"></div>
-      </div>
-      <textarea id="extra-context" rows="4" placeholder='Ex: "Tenho 3 vendedores, trabalhamos com indicações e nosso maior concorrente baixou o preço 15% este mês..."'></textarea>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(4)">← Voltar</button>
-        <button class="btn-generate" onclick="generateTips()">✨ Gerar minhas dicas</button>
-      </div>
-    </div>
-
-  </div><!-- /view-onboard -->
-
-  <!-- ── VIEW: RESULT ───────────────────────────────────────────────── -->
-  <div id="view-result" class="page hidden">
-    <div class="profile-badges" id="result-badges"></div>
-    <h2 class="page-title" id="result-title">Suas Dicas Personalizadas</h2>
-    <p class="page-sub" id="result-sub">Específicas para o seu segmento e desafios.</p>
-    <div class="result-box" id="result-box">
-      <div class="loading-wrap" id="loading-wrap">
-        <div class="spinner"></div>
-        <p class="loading-text" id="loading-text">Consultando especialista...</p>
-      </div>
-      <div id="result-content" class="hidden">
-        <p class="result-text" id="result-text"></p>
-        <div class="result-actions">
-          <button class="btn-save" onclick="saveCurrent()">🔖 Salvar estas dicas</button>
-          <button class="btn-new" onclick="goHome()">↺ Nova consulta</button>
-        </div>
-      </div>
+  <!-- STEP 1 -->
+  <div id="step-1" class="hidden">
+    <div class="step-bar" id="bar-1"></div>
+    <h2 class="step-title">Qual é o segmento da sua empresa?</h2>
+    <p class="step-sub">Escolha o que melhor descreve seu negócio.</p>
+    <div class="sector-grid" id="sector-grid"></div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(0)">← Voltar</button>
+      <button class="btn-next" id="next-1" disabled onclick="goStep(2)">Continuar →</button>
     </div>
   </div>
 
-  <!-- ── VIEW: SAVED ────────────────────────────────────────────────── -->
-  <div id="view-saved" class="page hidden">
-    <h2 class="page-title">Dicas Salvas</h2>
-    <div id="saved-container"></div>
+  <!-- STEP 2 -->
+  <div id="step-2" class="hidden">
+    <div class="step-bar" id="bar-2"></div>
+    <h2 class="step-title">Porte e modelo de vendas</h2>
+    <p class="step-sub">Isso muda completamente a estratégia recomendada.</p>
+    <div class="field-label">Tamanho da empresa</div>
+    <div class="chip-row" id="size-chips"></div>
+    <div class="field-label" style="margin-top:28px">Modelo de venda</div>
+    <div class="chip-row" id="model-chips"></div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(1)">← Voltar</button>
+      <button class="btn-next" id="next-2" disabled onclick="goStep(3)">Continuar →</button>
+    </div>
   </div>
+
+  <!-- STEP 3 -->
+  <div id="step-3" class="hidden">
+    <div class="step-bar" id="bar-3"></div>
+    <h2 class="step-title">Qual é o ticket médio das suas vendas?</h2>
+    <p class="step-sub">O valor muda a abordagem, o canal e o processo de venda.</p>
+    <div class="ticket-grid" id="ticket-grid"></div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(2)">← Voltar</button>
+      <button class="btn-next" id="next-3" disabled onclick="goStep(4)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="step-4" class="hidden">
+    <div class="step-bar" id="bar-4"></div>
+    <h2 class="step-title">Quais são seus maiores desafios de vendas?</h2>
+    <p class="step-sub">Escolha até 3. As dicas serão focadas nisso.</p>
+    <div class="challenge-grid" id="challenge-grid"></div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(3)">← Voltar</button>
+      <button class="btn-next" id="next-4" disabled onclick="goStep(5)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div id="step-5" class="hidden">
+    <div class="step-bar" id="bar-5"></div>
+    <h2 class="step-title">Quer adicionar mais contexto?</h2>
+    <p class="step-sub">Opcional — mas quanto mais específico, melhor a resposta.</p>
+    <div class="profile-summary">
+      <div class="summary-title">Seu perfil:</div>
+      <div class="summary-row" id="summary-row"></div>
+      <div class="summary-desafios" id="summary-des"></div>
+    </div>
+    <textarea id="extra-context" rows="4" placeholder='Ex: "Tenho 3 vendedores, trabalhamos com indicações e nosso maior concorrente baixou o preço 15% este mês..."'></textarea>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(4)">← Voltar</button>
+      <button class="btn-generate" onclick="generateTips()">✨ Gerar minhas dicas</button>
+    </div>
+  </div>
+
+</div><!-- /view-onboard -->
+
+<!-- ── RESULT ── -->
+<div id="view-result" class="page hidden">
+  <div class="profile-badges" id="result-badges"></div>
+  <h2 class="page-title" id="result-title">Suas Dicas Personalizadas</h2>
+  <p class="page-sub" id="result-sub">Específicas para o seu segmento e desafios.</p>
+  <div class="result-box" id="result-box">
+    <div class="loading-wrap" id="loading-wrap">
+      <div class="spinner"></div>
+      <p class="loading-text" id="loading-text">Consultando especialista...</p>
+    </div>
+    <div id="result-content" class="hidden">
+      <p class="result-text" id="result-text"></p>
+      <div class="result-actions">
+        <button class="btn-save" onclick="saveCurrent()">🔖 Salvar</button>
+        <button class="btn-export" onclick="exportPDF()">⬇ PDF</button>
+        <button class="btn-whatsapp" onclick="shareWhatsApp()">📲 WhatsApp</button>
+        <button class="btn-new" onclick="goHome()">↺ Nova consulta</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SAVED ── -->
+<div id="view-saved" class="page hidden">
+  <h2 class="page-title">Dicas Salvas</h2>
+  <div id="saved-container"></div>
+</div>
+
+<!-- ── TRACKING ── -->
+<div id="view-track" class="page hidden">
+  <h2 class="page-title">Acompanhamento</h2>
+  <p class="page-sub">Acompanhe o status de cada dica salva.</p>
+  <div class="filter-row">
+    <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Todas</button>
+    <button class="filter-btn" id="filter-todo" onclick="setFilter('todo')">⚪ Pendente</button>
+    <button class="filter-btn" id="filter-doing" onclick="setFilter('doing')">🟡 Em andamento</button>
+    <button class="filter-btn" id="filter-done" onclick="setFilter('done')">🟢 Concluída</button>
+  </div>
+  <div id="track-container"></div>
+</div>
 
 </main>
 
 <footer>VendaMais · IA de vendas para empresas de todos os segmentos</footer>
 
 <script>
-// ─── DADOS ────────────────────────────────────────────────────────────────────
-const SECTORS = [
-  { id:"varejo",      label:"Varejo / Loja Física",       icon:"🏪" },
-  { id:"ecommerce",   label:"E-commerce",                 icon:"🛒" },
-  { id:"saas",        label:"SaaS / Software",            icon:"💻" },
-  { id:"alimentacao", label:"Alimentação / Food Service", icon:"🍽️" },
-  { id:"saude",       label:"Saúde / Clínicas",           icon:"🏥" },
-  { id:"educacao",    label:"Educação / Cursos",          icon:"🎓" },
-  { id:"imobiliario", label:"Imobiliário",                icon:"🏢" },
-  { id:"industria",   label:"Indústria / Manufatura",     icon:"🏭" },
-  { id:"financeiro",  label:"Financeiro / Seguros",       icon:"💰" },
-  { id:"servicos",    label:"Serviços Profissionais",     icon:"💼" },
-  { id:"agencia",     label:"Agência / Marketing",        icon:"📣" },
-  { id:"logistica",   label:"Logística / Transporte",     icon:"🚚" },
-  { id:"construcao",  label:"Construção / Reforma",       icon:"🔨" },
-  { id:"beleza",      label:"Beleza / Estética",          icon:"✨" },
-  { id:"outro",       label:"Outro segmento",             icon:"🔷" },
+// ── DADOS ──────────────────────────────────────────────────────────────────
+const SECTORS=[
+  {id:"varejo",label:"Varejo / Loja Física",icon:"🏪"},
+  {id:"ecommerce",label:"E-commerce",icon:"🛒"},
+  {id:"saas",label:"SaaS / Software",icon:"💻"},
+  {id:"alimentacao",label:"Alimentação / Food Service",icon:"🍽️"},
+  {id:"saude",label:"Saúde / Clínicas",icon:"🏥"},
+  {id:"educacao",label:"Educação / Cursos",icon:"🎓"},
+  {id:"imobiliario",label:"Imobiliário",icon:"🏢"},
+  {id:"industria",label:"Indústria / Manufatura",icon:"🏭"},
+  {id:"financeiro",label:"Financeiro / Seguros",icon:"💰"},
+  {id:"servicos",label:"Serviços Profissionais",icon:"💼"},
+  {id:"agencia",label:"Agência / Marketing",icon:"📣"},
+  {id:"logistica",label:"Logística / Transporte",icon:"🚚"},
+  {id:"construcao",label:"Construção / Reforma",icon:"🔨"},
+  {id:"beleza",label:"Beleza / Estética",icon:"✨"},
+  {id:"outro",label:"Outro segmento",icon:"🔷"},
 ];
-const SIZES = [
-  { id:"mei",     label:"MEI / Autônomo" },
-  { id:"micro",   label:"Micro (até 9 func.)" },
-  { id:"pequena", label:"Pequena (10–49)" },
-  { id:"media",   label:"Média (50–249)" },
-  { id:"grande",  label:"Grande (250+)" },
+const SIZES=[
+  {id:"mei",label:"MEI / Autônomo"},
+  {id:"micro",label:"Micro (até 9 func.)"},
+  {id:"pequena",label:"Pequena (10–49)"},
+  {id:"media",label:"Média (50–249)"},
+  {id:"grande",label:"Grande (250+)"},
 ];
-const MODELS = [
-  { id:"b2c",   label:"B2C — vendo para pessoas físicas" },
-  { id:"b2b",   label:"B2B — vendo para empresas" },
-  { id:"ambos", label:"Ambos (B2C + B2B)" },
-  { id:"b2g",   label:"B2G — vendo para governo" },
+const MODELS=[
+  {id:"b2c",label:"B2C — vendo para pessoas físicas"},
+  {id:"b2b",label:"B2B — vendo para empresas"},
+  {id:"ambos",label:"Ambos (B2C + B2B)"},
+  {id:"b2g",label:"B2G — vendo para governo"},
 ];
-const TICKETS = [
-  { id:"baixo",     label:"Até R$200" },
-  { id:"medio",     label:"R$200 – R$2.000" },
-  { id:"alto",      label:"R$2.000 – R$20.000" },
-  { id:"enterprise",label:"Acima de R$20.000" },
+const TICKETS=[
+  {id:"baixo",label:"Até R$200"},
+  {id:"medio",label:"R$200 – R$2.000"},
+  {id:"alto",label:"R$2.000 – R$20.000"},
+  {id:"enterprise",label:"Acima de R$20.000"},
 ];
-const CHALLENGES = [
+const CHALLENGES=[
   "Gerar mais leads qualificados","Converter leads em clientes",
   "Superar objeções de preço","Reduzir o ciclo de vendas",
   "Aumentar o ticket médio","Reter e fidelizar clientes",
   "Montar / treinar equipe de vendas","Vender online / digital",
   "Reativar clientes inativos","Escalar as vendas",
 ];
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS=5;
 
-// ─── ESTADO ───────────────────────────────────────────────────────────────────
-let state = { sector:null, size:null, model:null, ticket:null, challenges:[], currentText:"", currentMeta:"" };
-let saved = JSON.parse(localStorage.getItem("vendamais_saved") || "[]");
+// ── ESTADO ─────────────────────────────────────────────────────────────────
+let state={sector:null,size:null,model:null,ticket:null,challenges:[],sectorCustom:null,currentText:"",currentMeta:""};
+let currentFilter="all";
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-(function init() {
+// ── AUTH (localStorage simulando nuvem) ────────────────────────────────────
+// Para produção real: substituir por Firebase Auth + Firestore
+let currentUser = JSON.parse(localStorage.getItem("vm_user")||"null");
+
+function getUsers(){return JSON.parse(localStorage.getItem("vm_users")||"{}")}
+function saveUsers(u){localStorage.setItem("vm_users",JSON.stringify(u))}
+
+function getUserSaved(){
+  if(!currentUser) return JSON.parse(localStorage.getItem("vendamais_saved")||"[]");
+  const users=getUsers();
+  return users[currentUser.email]?.saved||[];
+}
+function setUserSaved(arr){
+  if(!currentUser){localStorage.setItem("vendamais_saved",JSON.stringify(arr));return;}
+  const users=getUsers();
+  if(!users[currentUser.email]) users[currentUser.email]={saved:[]};
+  users[currentUser.email].saved=arr;
+  saveUsers(users);
+}
+
+function doLogin(){
+  const email=document.getElementById("login-email").value.trim();
+  const pass=document.getElementById("login-pass").value;
+  const users=getUsers();
+  if(!users[email]){showAuthError("E-mail não encontrado.");return;}
+  if(users[email].password!==btoa(pass)){showAuthError("Senha incorreta.");return;}
+  currentUser={email,name:users[email].name};
+  localStorage.setItem("vm_user",JSON.stringify(currentUser));
+  closeAuth();
+  updateUserUI();
+}
+function doRegister(){
+  const name=document.getElementById("reg-name").value.trim();
+  const email=document.getElementById("reg-email").value.trim();
+  const pass=document.getElementById("reg-pass").value;
+  if(!name||!email||!pass){showAuthError("Preencha todos os campos.");return;}
+  if(pass.length<6){showAuthError("Senha deve ter no mínimo 6 caracteres.");return;}
+  const users=getUsers();
+  if(users[email]){showAuthError("E-mail já cadastrado.");return;}
+  // migra dicas locais para nova conta
+  const localSaved=JSON.parse(localStorage.getItem("vendamais_saved")||"[]");
+  users[email]={password:btoa(pass),name,saved:localSaved};
+  saveUsers(users);
+  currentUser={email,name};
+  localStorage.setItem("vm_user",JSON.stringify(currentUser));
+  closeAuth();
+  updateUserUI();
+}
+function doLogout(){
+  if(!confirm("Sair da conta?")) return;
+  currentUser=null;
+  localStorage.removeItem("vm_user");
+  updateUserUI();
+}
+function openAuth(){
+  document.getElementById("auth-modal").classList.remove("hidden");
+  document.getElementById("auth-error").classList.add("hidden");
+}
+function closeAuth(){document.getElementById("auth-modal").classList.add("hidden")}
+function switchTab(t){
+  document.getElementById("tab-login").classList.toggle("active",t==="login");
+  document.getElementById("tab-register").classList.toggle("active",t==="register");
+  document.getElementById("form-login").classList.toggle("hidden",t!=="login");
+  document.getElementById("form-register").classList.toggle("hidden",t!=="register");
+  document.getElementById("auth-error").classList.add("hidden");
+}
+function showAuthError(msg){
+  const el=document.getElementById("auth-error");
+  el.textContent=msg; el.classList.remove("hidden");
+}
+function updateUserUI(){
+  const chip=document.getElementById("user-chip");
+  const loginBtn=document.getElementById("btn-login-nav");
+  if(currentUser){
+    chip.textContent="👤 "+currentUser.name.split(" ")[0]+" (sair)";
+    chip.classList.remove("hidden");
+    loginBtn.classList.add("hidden");
+  } else {
+    chip.classList.add("hidden");
+    loginBtn.classList.remove("hidden");
+  }
+  updateSavedBtn();
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+(function init(){
   // Sector grid
-  const sg = document.getElementById("sector-grid");
-  SECTORS.forEach(s => {
-    const btn = document.createElement("button");
-    btn.className = "sector-card";
-    btn.dataset.id = s.id;
-    btn.innerHTML = `<span class="sector-icon">${s.icon}</span><span class="sector-label">${s.label}</span>`;
-    btn.onclick = () => selectSector(s.id);
+  const sg=document.getElementById("sector-grid");
+  SECTORS.forEach(s=>{
+    const btn=document.createElement("button");
+    btn.className="sector-card"; btn.dataset.id=s.id;
+    btn.innerHTML=`<span class="sector-icon">${s.icon}</span><span class="sector-label">${s.label}</span>`;
+    btn.onclick=()=>selectSector(s.id);
     sg.appendChild(btn);
   });
-
-  // Input que aparece quando "Outro" é selecionado
-  const outroWrap = document.createElement("div");
-  outroWrap.id = "outro-wrap";
-  outroWrap.style.cssText = "grid-column:1/-1; display:none; margin-top:4px;";
-  outroWrap.innerHTML = `<input id="outro-input" type="text" placeholder="Digite o segmento da sua empresa..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,53,0.4);border-radius:10px;padding:12px 16px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none;" />`;
+  // Outro input
+  const outroWrap=document.createElement("div");
+  outroWrap.id="outro-wrap"; outroWrap.style.cssText="grid-column:1/-1;display:none;margin-top:4px";
+  outroWrap.innerHTML=`<input id="outro-input" type="text" placeholder="Digite o segmento da sua empresa..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,53,0.4);border-radius:10px;padding:12px 16px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none"/>`;
   sg.appendChild(outroWrap);
-
-  document.getElementById("outro-input").addEventListener("input", function() {
-    state.sectorCustom = this.value.trim();
-    document.getElementById("next-1").disabled = !state.sectorCustom;
+  document.getElementById("outro-input").addEventListener("input",function(){
+    state.sectorCustom=this.value.trim();
+    document.getElementById("next-1").disabled=!state.sectorCustom;
   });
 
   // Size chips
-  const sc = document.getElementById("size-chips");
-  SIZES.forEach(s => {
-    const btn = document.createElement("button");
-    btn.className = "chip"; btn.dataset.id = s.id; btn.textContent = s.label;
-    btn.onclick = () => selectChip("size", s.id, "size-chips", "next-2");
+  const sc=document.getElementById("size-chips");
+  SIZES.forEach(s=>{
+    const btn=document.createElement("button");
+    btn.className="chip"; btn.dataset.id=s.id; btn.textContent=s.label;
+    btn.onclick=()=>selectChip("size",s.id,"size-chips","next-2");
     sc.appendChild(btn);
   });
 
   // Model chips
-  const mc = document.getElementById("model-chips");
-  MODELS.forEach(m => {
-    const btn = document.createElement("button");
-    btn.className = "chip"; btn.dataset.id = m.id; btn.textContent = m.label;
-    btn.onclick = () => selectChip("model", m.id, "model-chips", "next-2");
+  const mc=document.getElementById("model-chips");
+  MODELS.forEach(m=>{
+    const btn=document.createElement("button");
+    btn.className="chip"; btn.dataset.id=m.id; btn.textContent=m.label;
+    btn.onclick=()=>selectChip("model",m.id,"model-chips","next-2");
     mc.appendChild(btn);
   });
 
   // Ticket grid
-  const tg = document.getElementById("ticket-grid");
-  TICKETS.forEach(t => {
-    const btn = document.createElement("button");
-    btn.className = "ticket-card"; btn.dataset.id = t.id; btn.textContent = t.label;
-    btn.onclick = () => { selectTicket(t.id); };
+  const tg=document.getElementById("ticket-grid");
+  TICKETS.forEach(t=>{
+    const btn=document.createElement("button");
+    btn.className="ticket-card"; btn.dataset.id=t.id; btn.textContent=t.label;
+    btn.onclick=()=>selectTicket(t.id);
     tg.appendChild(btn);
   });
 
   // Challenges
-  const cg = document.getElementById("challenge-grid");
-  CHALLENGES.forEach(c => {
-    const btn = document.createElement("button");
-    btn.className = "challenge-btn"; btn.dataset.val = c; btn.textContent = c;
-    btn.onclick = () => toggleChallenge(c);
+  const cg=document.getElementById("challenge-grid");
+  CHALLENGES.forEach(c=>{
+    const btn=document.createElement("button");
+    btn.className="challenge-btn"; btn.dataset.val=c; btn.textContent=c;
+    btn.onclick=()=>toggleChallenge(c);
     cg.appendChild(btn);
   });
 
-  updateSavedBtn();
+  updateUserUI();
+  // show login btn for guests
+  if(!currentUser) document.getElementById("btn-login-nav").classList.remove("hidden");
 })();
 
-// ─── NAVIGATION ───────────────────────────────────────────────────────────────
-function goStep(n) {
-  for (let i = 0; i <= 5; i++) {
-    const el = document.getElementById("step-"+i);
-    if (el) el.classList.toggle("hidden", i !== n);
-  }
-  if (n >= 1) renderBar(n);
-  if (n === 5) renderSummary();
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+function goStep(n){
+  for(let i=0;i<=5;i++){const el=document.getElementById("step-"+i);if(el)el.classList.toggle("hidden",i!==n)}
+  if(n>=1) renderBar(n);
+  if(n===5) renderSummary();
   window.scrollTo(0,0);
 }
-
-function renderBar(current) {
-  const barId = "bar-" + current;
-  const bar = document.getElementById(barId);
-  if (!bar) return;
-  bar.innerHTML = "";
-  for (let i = 0; i < TOTAL_STEPS; i++) {
-    const seg = document.createElement("div");
-    seg.className = "step-seg" + (i < current ? " active" : "");
+function renderBar(cur){
+  const bar=document.getElementById("bar-"+cur); if(!bar) return;
+  bar.innerHTML="";
+  for(let i=0;i<TOTAL_STEPS;i++){
+    const seg=document.createElement("div");
+    seg.className="step-seg"+(i<cur?" active":"");
     bar.appendChild(seg);
   }
 }
-
-function showView(name) {
-  ["onboard","result","saved"].forEach(v => {
-    document.getElementById("view-"+v).classList.toggle("hidden", v !== name);
+function showView(name){
+  ["onboard","result","saved","track"].forEach(v=>{
+    document.getElementById("view-"+v).classList.toggle("hidden",v!==name);
   });
-  const isResult = name === "result";
-  document.getElementById("btn-restart").classList.toggle("hidden", !isResult);
-  document.getElementById("btn-saved-nav").classList.toggle("active", name === "saved");
+  document.getElementById("btn-restart").classList.toggle("hidden",name!=="result");
+  document.getElementById("btn-saved-nav").classList.toggle("active",name==="saved");
+  document.getElementById("btn-track-nav").classList.toggle("active",name==="track");
+  if(name==="track") renderTrack();
   window.scrollTo(0,0);
 }
+function goHome(){
+  state={sector:null,size:null,model:null,ticket:null,challenges:[],sectorCustom:null,currentText:"",currentMeta:""};
+  document.querySelectorAll(".sector-card,.chip,.ticket-card,.challenge-btn").forEach(el=>el.classList.remove("selected","disabled"));
+  ["next-1","next-2","next-3","next-4"].forEach(id=>document.getElementById(id).disabled=true);
+  document.getElementById("extra-context").value="";
+  document.getElementById("outro-wrap").style.display="none";
+  goStep(0); showView("onboard");
+}
+function toggleSaved(){
+  const visible=!document.getElementById("view-saved").classList.contains("hidden");
+  if(visible){showView(state.currentText?"result":"onboard")}
+  else{renderSaved();showView("saved")}
+}
 
-function goHome() {
-  state = { sector:null, size:null, model:null, ticket:null, challenges:[], currentText:"", currentMeta:"" };
-  // reset selections
-  document.querySelectorAll(".sector-card, .chip, .ticket-card, .challenge-btn").forEach(el => {
-    el.classList.remove("selected","disabled");
+// ── SELECTIONS ─────────────────────────────────────────────────────────────
+function selectSector(id){
+  state.sector=id; state.sectorCustom=null;
+  document.querySelectorAll(".sector-card").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
+  const ow=document.getElementById("outro-wrap"); const oi=document.getElementById("outro-input");
+  if(id==="outro"){ow.style.display="block";oi.value="";oi.focus();document.getElementById("next-1").disabled=true;}
+  else{ow.style.display="none";document.getElementById("next-1").disabled=false;}
+}
+function selectChip(field,id,groupId,nextId){
+  state[field]=id;
+  document.querySelectorAll("#"+groupId+" .chip").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
+  if(state.size&&state.model) document.getElementById(nextId).disabled=false;
+}
+function selectTicket(id){
+  state.ticket=id;
+  document.querySelectorAll(".ticket-card").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
+  document.getElementById("next-3").disabled=false;
+}
+function toggleChallenge(val){
+  const idx=state.challenges.indexOf(val);
+  if(idx>=0) state.challenges.splice(idx,1);
+  else if(state.challenges.length<3) state.challenges.push(val);
+  document.querySelectorAll(".challenge-btn").forEach(el=>{
+    const v=el.dataset.val; const sel=state.challenges.includes(v);
+    const maxed=state.challenges.length===3&&!sel;
+    el.classList.toggle("selected",sel); el.classList.toggle("disabled",maxed);
   });
-  ["next-1","next-2","next-3","next-4"].forEach(id => {
-    document.getElementById(id).disabled = true;
-  });
-  document.getElementById("extra-context").value = "";
-  goStep(0);
-  showView("onboard");
+  document.getElementById("next-4").disabled=state.challenges.length===0;
 }
 
-function toggleSaved() {
-  const current = !document.getElementById("view-saved").classList.contains("hidden");
-  if (current) {
-    showView(state.currentText ? "result" : "onboard");
-  } else {
-    renderSaved();
-    showView("saved");
-  }
+// ── SUMMARY ────────────────────────────────────────────────────────────────
+function renderSummary(){
+  const s=state.sectorCustom?{icon:"🔷",label:state.sectorCustom}:SECTORS.find(x=>x.id===state.sector);
+  const sz=SIZES.find(x=>x.id===state.size); const mo=MODELS.find(x=>x.id===state.model); const ti=TICKETS.find(x=>x.id===state.ticket);
+  document.getElementById("summary-row").innerHTML=[s?.icon+" "+s?.label,sz?.label,mo?.label,"Ticket "+ti?.label]
+    .filter(Boolean).map(t=>`<span>${t}</span><span>·</span>`).join("").replace(/·<\/span>$/,"</span>");
+  document.getElementById("summary-des").innerHTML=state.challenges.map(c=>`<span class="des-badge">${c}</span>`).join("");
 }
 
-// ─── SELECTIONS ───────────────────────────────────────────────────────────────
-function selectSector(id) {
-  state.sector = id;
-  state.sectorCustom = null;
-  document.querySelectorAll(".sector-card").forEach(el => {
-    el.classList.toggle("selected", el.dataset.id === id);
-  });
-  const outroWrap = document.getElementById("outro-wrap");
-  const outroInput = document.getElementById("outro-input");
-  if (id === "outro") {
-    outroWrap.style.display = "block";
-    outroInput.value = "";
-    outroInput.focus();
-    document.getElementById("next-1").disabled = true;
-  } else {
-    outroWrap.style.display = "none";
-    document.getElementById("next-1").disabled = false;
-  }
-}
-
-function selectChip(field, id, groupId, nextId) {
-  state[field] = id;
-  document.querySelectorAll("#" + groupId + " .chip").forEach(el => {
-    el.classList.toggle("selected", el.dataset.id === id);
-  });
-  if (state.size && state.model) document.getElementById(nextId).disabled = false;
-}
-
-function selectTicket(id) {
-  state.ticket = id;
-  document.querySelectorAll(".ticket-card").forEach(el => {
-    el.classList.toggle("selected", el.dataset.id === id);
-  });
-  document.getElementById("next-3").disabled = false;
-}
-
-function toggleChallenge(val) {
-  const idx = state.challenges.indexOf(val);
-  if (idx >= 0) {
-    state.challenges.splice(idx, 1);
-  } else if (state.challenges.length < 3) {
-    state.challenges.push(val);
-  }
-  // update UI
-  document.querySelectorAll(".challenge-btn").forEach(el => {
-    const v = el.dataset.val;
-    const sel = state.challenges.includes(v);
-    const maxed = state.challenges.length === 3 && !sel;
-    el.classList.toggle("selected", sel);
-    el.classList.toggle("disabled", maxed);
-  });
-  document.getElementById("next-4").disabled = state.challenges.length === 0;
-}
-
-// ─── SUMMARY ─────────────────────────────────────────────────────────────────
-function renderSummary() {
-  const s = state.sectorCustom ? { icon:'🔷', label: state.sectorCustom } : SECTORS.find(x => x.id === state.sector);
-  const sz = SIZES.find(x => x.id === state.size);
-  const mo = MODELS.find(x => x.id === state.model);
-  const ti = TICKETS.find(x => x.id === state.ticket);
-
-  const row = document.getElementById("summary-row");
-  row.innerHTML = [s?.icon+" "+s?.label, sz?.label, mo?.label, "Ticket "+ti?.label]
-    .filter(Boolean).map(t => `<span>${t}</span><span>·</span>`).join("").replace(/·<\/span>$/, "</span>");
-
-  const des = document.getElementById("summary-des");
-  des.innerHTML = state.challenges.map(c => `<span class="des-badge">${c}</span>`).join("");
-}
-
-// ─── GENERATE ────────────────────────────────────────────────────────────────
-async function generateTips() {
+// ── GENERATE ───────────────────────────────────────────────────────────────
+async function generateTips(){
   showView("result");
   document.getElementById("loading-wrap").classList.remove("hidden");
   document.getElementById("result-content").classList.add("hidden");
-  document.getElementById("result-title").textContent = "Gerando suas dicas...";
-  document.getElementById("result-sub").textContent = "Analisando o perfil da sua empresa...";
+  document.getElementById("result-title").textContent="Gerando suas dicas...";
+  document.getElementById("result-sub").textContent="Analisando o perfil da sua empresa...";
 
-  const s = state.sectorCustom ? { icon:'🔷', label: state.sectorCustom } : SECTORS.find(x => x.id === state.sector);
-  const sz = SIZES.find(x => x.id === state.size);
-  const mo = MODELS.find(x => x.id === state.model);
-  const ti = TICKETS.find(x => x.id === state.ticket);
-  const extra = document.getElementById("extra-context").value.trim();
+  const s=state.sectorCustom?{icon:"🔷",label:state.sectorCustom}:SECTORS.find(x=>x.id===state.sector);
+  const sz=SIZES.find(x=>x.id===state.size); const mo=MODELS.find(x=>x.id===state.model); const ti=TICKETS.find(x=>x.id===state.ticket);
+  const extra=document.getElementById("extra-context").value.trim();
 
-  // badges
-  const badges = document.getElementById("result-badges");
-  badges.innerHTML = [s?.icon+" "+s?.label, sz?.label, mo?.label, ti?.label]
-    .filter(Boolean).map(t => `<span class="badge">${t}</span>`).join("");
+  document.getElementById("result-badges").innerHTML=[s?.icon+" "+s?.label,sz?.label,mo?.label,ti?.label]
+    .filter(Boolean).map(t=>`<span class="badge">${t}</span>`).join("");
+  document.getElementById("loading-text").textContent=`Consultando especialista em ${s?.label}...`;
 
-  document.getElementById("loading-text").textContent = `Consultando especialista em ${s?.label}...`;
-
-  const systemPrompt = `Você é um consultor sênior de vendas com 20+ anos de experiência real em campo, especializado em empresas brasileiras de todos os segmentos. Você é direto, prático e nunca dá conselhos genéricos.
+  const systemPrompt=`Você é um consultor sênior de vendas com 20+ anos de experiência real em campo, especializado em empresas brasileiras de todos os segmentos. Você é direto, prático e nunca dá conselhos genéricos.
 
 REGRAS OBRIGATÓRIAS:
 - Suas dicas devem ser ESPECÍFICAS para o segmento e contexto informado — jamais genéricas
@@ -669,99 +661,211 @@ REGRAS OBRIGATÓRIAS:
 - Linguagem direta, sem rodeios, sem "é importante que..." — vá direto ao ponto
 - Formato: 3 dicas numeradas. Cada uma com título em negrito + explicação + ação prática`;
 
-  const userPrompt = `PERFIL DA EMPRESA:
+  const userPrompt=`PERFIL DA EMPRESA:
 - Segmento: ${s?.label}
 - Porte: ${sz?.label}
 - Modelo de venda: ${mo?.label}
 - Ticket médio: ${ti?.label}
 - Principais desafios: ${state.challenges.join(", ")}
-${extra ? "- Contexto adicional: " + extra : ""}
+${extra?"- Contexto adicional: "+extra:""}
 
 Gere 3 dicas de vendas altamente específicas para esse perfil. Cada dica deve resolver um dos desafios listados, com exemplos reais do segmento "${s?.label}" e ações que podem ser executadas esta semana.`;
 
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }]
-      })
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:systemPrompt,messages:[{role:"user",content:userPrompt}]})
     });
-    const data = await res.json();
-    const text = data.content?.map(b => b.text || "").join("") || "Erro ao gerar dicas.";
-
-    state.currentText = text;
-    state.currentMeta = `${s?.icon} ${s?.label} · ${mo?.label}`;
-
+    const data=await res.json();
+    const text=data.content?.map(b=>b.text||"").join("")||"Erro ao gerar dicas.";
+    state.currentText=text;
+    state.currentMeta=`${s?.icon} ${s?.label} · ${mo?.label}`;
     document.getElementById("loading-wrap").classList.add("hidden");
     document.getElementById("result-content").classList.remove("hidden");
-    document.getElementById("result-title").textContent = "Suas Dicas Personalizadas";
-    document.getElementById("result-sub").textContent = "Específicas para o seu segmento e desafios.";
-
-    typewrite(text, document.getElementById("result-text"));
-  } catch(e) {
+    document.getElementById("result-title").textContent="Suas Dicas Personalizadas";
+    document.getElementById("result-sub").textContent="Específicas para o seu segmento e desafios.";
+    typewrite(text,document.getElementById("result-text"));
+  } catch(e){
     document.getElementById("loading-wrap").classList.add("hidden");
     document.getElementById("result-content").classList.remove("hidden");
-    document.getElementById("result-text").textContent = "Erro de conexão. Verifique sua internet e tente novamente.";
+    document.getElementById("result-text").textContent="Erro de conexão. Verifique sua internet e tente novamente.";
   }
 }
 
-// ─── TYPEWRITER ───────────────────────────────────────────────────────────────
-function typewrite(text, el, speed = 12) {
-  el.innerHTML = "";
-  let i = 0;
-  const cursor = document.createElement("span");
-  cursor.className = "cursor-blink"; cursor.textContent = "▍";
-  el.appendChild(cursor);
-  const iv = setInterval(() => {
-    if (i < text.length) {
-      el.insertBefore(document.createTextNode(text[i++]), cursor);
-    } else {
-      clearInterval(iv); cursor.remove();
-    }
-  }, speed);
+// ── TYPEWRITER ─────────────────────────────────────────────────────────────
+function typewrite(text,el,speed=12){
+  el.innerHTML=""; let i=0;
+  const cursor=document.createElement("span");
+  cursor.className="cursor-blink"; cursor.textContent="▍"; el.appendChild(cursor);
+  const iv=setInterval(()=>{
+    if(i<text.length){el.insertBefore(document.createTextNode(text[i++]),cursor)}
+    else{clearInterval(iv);cursor.remove()}
+  },speed);
 }
 
-// ─── SAVE ────────────────────────────────────────────────────────────────────
-function saveCurrent() {
-  if (!state.currentText) return;
-  if (!saved.find(s => s.text === state.currentText)) {
-    saved.push({ text: state.currentText, meta: state.currentMeta });
-    localStorage.setItem("vendamais_saved", JSON.stringify(saved));
-    updateSavedBtn();
-  }
-}
-
-function updateSavedBtn() {
-  const btn = document.getElementById("btn-saved-nav");
-  btn.textContent = saved.length > 0 ? `🔖 Salvos (${saved.length})` : "🔖 Salvos";
-}
-
-function renderSaved() {
-  const container = document.getElementById("saved-container");
-  if (saved.length === 0) {
-    container.innerHTML = '<div class="empty">Nenhuma dica salva ainda.</div>';
-    return;
-  }
-  container.innerHTML = '<div class="saved-list">' +
-    saved.map((item, i) => `
-      <div class="saved-card">
-        <div class="saved-meta">${item.meta}</div>
-        <p class="saved-text">${item.text}</p>
-        <button class="btn-remove" onclick="removeSaved(${i})">Remover</button>
-      </div>
-    `).join("") + '</div>';
-}
-
-function removeSaved(i) {
-  saved.splice(i, 1);
-  localStorage.setItem("vendamais_saved", JSON.stringify(saved));
+// ── SAVE ───────────────────────────────────────────────────────────────────
+function saveCurrent(){
+  if(!state.currentText) return;
+  const arr=getUserSaved();
+  if(arr.find(s=>s.text===state.currentText)) return;
+  arr.push({
+    text:state.currentText,meta:state.currentMeta,
+    status:"todo",date:new Date().toLocaleDateString("pt-BR"),id:Date.now()
+  });
+  setUserSaved(arr);
   updateSavedBtn();
-  renderSaved();
+  // feedback visual
+  const btn=document.querySelector(".btn-save");
+  btn.textContent="✅ Salvo!"; setTimeout(()=>btn.textContent="🔖 Salvar",2000);
 }
+function updateSavedBtn(){
+  const arr=getUserSaved();
+  document.getElementById("btn-saved-nav").textContent=arr.length>0?`🔖 Salvos (${arr.length})`:"🔖 Salvos";
+}
+
+// ── SAVED VIEW ─────────────────────────────────────────────────────────────
+function renderSaved(){
+  const arr=getUserSaved();
+  const container=document.getElementById("saved-container");
+  let html=!currentUser?`<div class="cloud-banner"><div class="cloud-banner-text"><strong>☁ Salve na nuvem</strong><br>Crie uma conta para acessar suas dicas em qualquer dispositivo.</div><button class="btn-cloud-login" onclick="openAuth()">Criar conta grátis</button></div>`:"";
+  if(arr.length===0){container.innerHTML=html+'<div class="empty">Nenhuma dica salva ainda.</div>';return;}
+  html+='<div class="saved-list">'+arr.map((item,i)=>{
+    const statusLabel={todo:"⚪ Pendente",doing:"🟡 Em andamento",done:"🟢 Concluída"}[item.status||"todo"];
+    return`<div class="saved-card">
+      <div class="saved-meta">${item.meta}</div>
+      <div class="saved-date">Salvo em ${item.date||"–"}</div>
+      <p class="saved-text">${item.text}</p>
+      <div class="saved-footer">
+        <div class="track-btns">
+          <button class="track-btn ${item.status==='todo'?'todo':''}" onclick="setStatus(${i},'todo')">⚪ Pendente</button>
+          <button class="track-btn ${item.status==='doing'?'doing':''}" onclick="setStatus(${i},'doing')">🟡 Em andamento</button>
+          <button class="track-btn ${item.status==='done'?'done':''}" onclick="setStatus(${i},'done')">🟢 Concluída</button>
+        </div>
+        <div class="saved-actions">
+          <button class="btn-export-sm" onclick="exportSinglePDF(${i})">⬇ PDF</button>
+          <button class="btn-remove" onclick="removeSaved(${i})">Remover</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("")+'</div>';
+  container.innerHTML=html;
+}
+function setStatus(i,status){
+  const arr=getUserSaved(); arr[i].status=status; setUserSaved(arr); renderSaved();
+}
+function removeSaved(i){
+  const arr=getUserSaved(); arr.splice(i,1); setUserSaved(arr); updateSavedBtn(); renderSaved();
+}
+
+// ── TRACKING VIEW ──────────────────────────────────────────────────────────
+function setFilter(f){
+  currentFilter=f;
+  ["all","todo","doing","done"].forEach(x=>document.getElementById("filter-"+x).classList.toggle("active",x===f));
+  renderTrack();
+}
+function renderTrack(){
+  const arr=getUserSaved();
+  const container=document.getElementById("track-container");
+  const filtered=currentFilter==="all"?arr:arr.filter(x=>(x.status||"todo")===currentFilter);
+
+  // stats
+  const total=arr.length, done=arr.filter(x=>x.status==="done").length, doing=arr.filter(x=>x.status==="doing").length;
+  let statsHtml=`<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px">
+    ${[["Total",total,"#777"],["Em andamento",doing,"#F9C74F"],["Concluídas",done,"#00C9A7"]].map(([l,n,c])=>`
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px 20px;flex:1;min-width:100px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:${c};margin-bottom:4px">${n}</div>
+      <div style="font-size:12px;color:#555;font-family:sans-serif">${l}</div>
+    </div>`).join("")}
+  </div>`;
+
+  if(arr.length===0){container.innerHTML=statsHtml+'<div class="empty">Nenhuma dica salva. Gere dicas e salve-as para acompanhar aqui.</div>';return;}
+  if(filtered.length===0){container.innerHTML=statsHtml+'<div class="empty">Nenhuma dica com este status.</div>';return;}
+
+  const cards=filtered.map((item,i)=>{
+    const realIdx=arr.indexOf(item);
+    const statusClass=item.status||"todo";
+    const statusLabel={todo:"⚪ Pendente",doing:"🟡 Em andamento",done:"🟢 Concluída"}[statusClass];
+    const preview=item.text.substring(0,120)+(item.text.length>120?"…":"");
+    return`<div class="saved-card" style="border-left:3px solid ${{todo:"#444",doing:"#F9C74F",done:"#00C9A7"}[statusClass]}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div class="saved-meta" style="margin:0">${item.meta}</div>
+        <span class="track-badge ${statusClass}">${statusLabel}</span>
+      </div>
+      <p style="font-size:13px;color:#777;font-family:sans-serif;line-height:1.6;margin-bottom:14px">${preview}</p>
+      <div class="track-btns">
+        <button class="track-btn ${statusClass==='todo'?'todo':''}" onclick="setStatusTrack(${realIdx},'todo')">⚪ Pendente</button>
+        <button class="track-btn ${statusClass==='doing'?'doing':''}" onclick="setStatusTrack(${realIdx},'doing')">🟡 Em andamento</button>
+        <button class="track-btn ${statusClass==='done'?'done':''}" onclick="setStatusTrack(${realIdx},'done')">🟢 Concluída</button>
+      </div>
+    </div>`;
+  }).join("");
+  container.innerHTML=statsHtml+'<div class="saved-list">'+cards+'</div>';
+}
+function setStatusTrack(i,status){
+  const arr=getUserSaved(); arr[i].status=status; setUserSaved(arr); renderTrack(); updateSavedBtn();
+}
+
+// ── EXPORT PDF ─────────────────────────────────────────────────────────────
+function exportPDF(){
+  if(!state.currentText){alert("Nenhuma dica para exportar.");return;}
+  generatePDF(state.currentText,state.currentMeta);
+}
+function exportSinglePDF(i){
+  const arr=getUserSaved(); const item=arr[i]; if(!item) return;
+  generatePDF(item.text,item.meta);
+}
+function generatePDF(text,meta){
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:"mm",format:"a4"});
+    const W=doc.internal.pageSize.getWidth();
+    const margin=20; const maxW=W-margin*2;
+
+    // Header
+    doc.setFillColor(255,107,53); doc.rect(0,0,W,18,"F");
+    doc.setTextColor(0,0,0); doc.setFontSize(13); doc.setFont("helvetica","bold");
+    doc.text("⚡ VendaMais — Dicas Personalizadas de Vendas",margin,12);
+
+    // Meta
+    doc.setFillColor(20,20,28); doc.rect(0,18,W,14,"F");
+    doc.setTextColor(150,150,150); doc.setFontSize(9); doc.setFont("helvetica","normal");
+    doc.text(meta||"",margin,27);
+    doc.setTextColor(100,100,100);
+    doc.text("Gerado em "+new Date().toLocaleDateString("pt-BR"),W-margin,27,{align:"right"});
+
+    // Body
+    doc.setTextColor(220,220,210); doc.setFontSize(11); doc.setFont("helvetica","normal");
+    const lines=doc.splitTextToSize(text,maxW);
+    let y=44;
+    lines.forEach(line=>{
+      if(y>270){doc.addPage();doc.setFillColor(20,20,28);doc.rect(0,0,W,297,"F");y=20;}
+      doc.text(line,margin,y); y+=6.5;
+    });
+
+    // Footer
+    const pages=doc.internal.getNumberOfPages();
+    for(let p=1;p<=pages;p++){
+      doc.setPage(p); doc.setTextColor(60,60,60); doc.setFontSize(8);
+      doc.text("VendaMais · vendamais.app · Página "+p+" de "+pages,margin,288);
+    }
+    doc.save("VendaMais-Dicas.pdf");
+  } catch(e){
+    // fallback texto puro
+    const blob=new Blob([`VENDAMAIS — DICAS PERSONALIZADAS\n${meta}\nGerado em ${new Date().toLocaleDateString("pt-BR")}\n\n${text}`],{type:"text/plain"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+    a.download="VendaMais-Dicas.txt"; a.click();
+  }
+}
+
+// ── WHATSAPP ───────────────────────────────────────────────────────────────
+function shareWhatsApp(){
+  if(!state.currentText){alert("Nenhuma dica para compartilhar.");return;}
+  const msg=`*⚡ VendaMais — Dicas de Vendas*\n_${state.currentMeta}_\n\n${state.currentText}\n\n_Gerado com VendaMais IA_`;
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+// close modal clicking outside
+document.getElementById("auth-modal").addEventListener("click",function(e){if(e.target===this)closeAuth()});
 </script>
 </body>
 </html>
