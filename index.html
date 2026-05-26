@@ -3,470 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>VendaMais · IA de Vendas para Empresas</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>VendaMais - IA de Vendas para Empresas</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fraunces:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#09090E;
-  --text:#EDEBE6;
-  --accent:#FF6B35;
-  --accent-l:rgba(255,107,53,.12);
-  --accent-b:rgba(255,107,53,.35);
-  --dim:#666;
-  --dimmer:#444;
-  --card:rgba(255,255,255,.03);
-  --border:rgba(255,255,255,.08);
-  --border2:rgba(255,255,255,.1);
-  --F:'DM Sans',sans-serif;
-  --H:'Playfair Display',serif;
-}
-body{background:var(--bg);color:var(--text);font-family:var(--F);font-size:14px;min-height:100vh;}
-
-/* Header */
-.header{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,9,14,.96);position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);}
-.logo{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none;}
-.logo-icon{font-size:20px;}
-.logo-text{font-size:18px;font-weight:700;color:var(--accent);letter-spacing:-.4px;font-family:var(--H);}
-.header-right{display:flex;gap:8px;align-items:center;}
-.nav-btn{background:rgba(255,255,255,.05);border:1px solid var(--border2);color:#999;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:var(--F);transition:all .15s;}
-.nav-btn:hover{border-color:var(--accent-b);color:var(--accent);}
-.nav-btn.on{color:var(--accent);border-color:var(--accent-b);}
-
-/* Main */
-.main{flex:1;max-width:780px;margin:0 auto;width:100%;padding:0 20px;}
-.page{padding:52px 0 60px;}
-
-/* Step bar */
-.step-bar{display:flex;gap:6px;margin-bottom:32px;}
-.step-seg{flex:1;height:3px;border-radius:4px;transition:background .3s;background:rgba(255,255,255,.1);}
-.step-seg.on{background:var(--accent);}
-
-/* Hero */
-.hero{text-align:center;padding-top:20px;}
-.hero-badge{display:inline-block;border:1px solid var(--accent-b);color:var(--accent);background:var(--accent-l);border-radius:24px;padding:5px 16px;font-size:13px;margin-bottom:28px;}
-.hero-title{font-family:var(--H);font-size:clamp(34px,5vw,58px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin:0 0 22px;}
-.hero-em{color:var(--accent);font-style:italic;}
-.hero-sub{font-size:17px;color:#777;max-width:480px;margin:0 auto 36px;line-height:1.7;}
-.hero-cta{background:var(--accent);color:#000;border:none;border-radius:12px;padding:15px 32px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--F);letter-spacing:.3px;transition:transform .15s;}
-.hero-cta:hover{transform:translateY(-2px);}
-.hero-note{color:var(--dimmer);font-size:13px;margin-top:14px;}
-
-/* Step titles */
-.step-title{font-family:var(--H);font-size:clamp(20px,3vw,28px);font-weight:700;margin-bottom:8px;letter-spacing:-.5px;}
-.step-sub{color:var(--dim);font-size:15px;margin-bottom:28px;}
-.step-nav{display:flex;gap:12px;margin-top:36px;justify-content:flex-end;}
-
-/* Sector grid */
-.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:8px;}
-.sector-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .18s;color:#ccc;font-family:var(--F);}
-.sector-card:hover,.sector-card.on{background:var(--accent-l);border-color:rgba(255,107,53,.5);color:var(--accent);}
-.sector-icon{font-size:22px;}
-.sector-label{font-size:12px;text-align:center;line-height:1.3;}
-
-/* Chips */
-.field-label{font-size:13px;color:var(--dim);margin-bottom:12px;}
-.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:10px 16px;font-size:13px;color:#bbb;cursor:pointer;font-family:var(--F);transition:all .15s;}
-.chip:hover,.chip.on{background:var(--accent-l);border-color:rgba(255,107,53,.5);color:var(--accent);}
-
-/* Ticket grid */
-.ticket-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:460px;}
-.ticket-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;font-size:15px;color:#ccc;transition:all .18s;text-align:center;}
-.ticket-card:hover,.ticket-card.on{background:var(--accent-l);border-color:rgba(255,107,53,.5);color:var(--accent);font-weight:700;}
-
-/* Challenges */
-.challenge-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;}
-.challenge-btn{background:var(--card);border:1px solid var(--border2);border-radius:24px;padding:10px 18px;font-size:13px;color:#bbb;cursor:pointer;font-family:var(--F);transition:all .15s;}
-.challenge-btn:hover{border-color:rgba(255,107,53,.3);}
-.challenge-btn.on{background:rgba(255,107,53,.15);border-color:rgba(255,107,53,.5);color:var(--accent);}
-.challenge-btn.disabled{opacity:.35;cursor:default;}
-
-/* Profile summary */
-.profile-summary{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:20px;}
-.summary-title{font-size:11px;color:#555;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase;}
-.summary-row{display:flex;gap:10px;flex-wrap:wrap;font-size:14px;color:#aaa;margin-bottom:12px;}
-.summary-desafios{display:flex;gap:8px;flex-wrap:wrap;}
-.des-badge{background:var(--accent-l);border:1px solid rgba(255,107,53,.25);color:var(--accent);border-radius:6px;padding:3px 10px;font-size:12px;}
-
-/* Textarea */
-.extra-ta{width:100%;background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:14px;color:var(--text);font-size:14px;font-family:var(--F);line-height:1.6;resize:vertical;outline:none;}
-.extra-ta:focus{border-color:rgba(255,107,53,.4);box-shadow:0 0 0 3px rgba(255,107,53,.06);}
-
-/* Buttons */
-.btn-back{background:transparent;border:1px solid var(--border2);color:var(--dim);border-radius:10px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:var(--F);}
-.btn-next{background:var(--accent);color:#000;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--F);transition:opacity .2s;}
-.btn-next:disabled{opacity:.4;cursor:default;}
-.btn-generate{background:var(--accent);color:#000;border:none;border-radius:10px;padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--F);}
-
-/* Result */
-.profile-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
-.badge{background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-size:12px;color:#888;}
-.page-title{font-family:var(--H);font-size:clamp(22px,3vw,32px);font-weight:700;margin-bottom:8px;letter-spacing:-.5px;}
-.page-sub{color:#555;font-size:15px;margin-bottom:28px;}
-.result-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;min-height:200px;}
-.result-text{font-size:15px;line-height:1.85;color:#DEDBD5;white-space:pre-line;margin:0 0 24px;}
-.result-actions{display:flex;gap:10px;flex-wrap:wrap;}
-.btn-save{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#ccc;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:var(--F);}
-.btn-new{background:transparent;border:1px solid var(--accent-b);color:var(--accent);border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:var(--F);}
-
-/* Loading */
-.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:18px;padding:40px 0;}
-.spinner{width:40px;height:40px;border:3px solid rgba(255,107,53,.15);border-top:3px solid var(--accent);border-radius:50%;animation:spin .9s linear infinite;}
+:root{--bg:#07080D;--s1:#0E1018;--s2:#151722;--s3:#1C1F2E;--accent:#FF6B35;--accent2:#FF8F65;--accentL:rgba(255,107,53,.10);--accentB:rgba(255,107,53,.30);--t1:#F0EDE8;--t2:#8B8D9A;--t3:#555770;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.12);--F:'Outfit',sans-serif;--H:'Fraunces',serif;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:var(--F);font-size:14px;}
+#LOGIN{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 30% 20%,rgba(255,107,53,.06),transparent 50%),var(--bg);}
+.lbox{width:100%;max-width:400px;background:var(--s1);border:1px solid var(--bd2);border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;}
+.lbox::before{content:'';position:absolute;top:-60%;right:-30%;width:80%;height:140%;background:radial-gradient(circle,rgba(255,107,53,.06),transparent 70%);pointer-events:none;}
+.llogo{text-align:center;margin-bottom:24px;position:relative;}
+.llogo span{font-size:36px;display:block;margin-bottom:6px;}
+.llogo h1{font-family:var(--H);font-size:26px;font-weight:800;color:var(--accent);}
+.llogo p{color:var(--t3);font-size:13px;margin-top:4px;}
+.ltabs{display:flex;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:22px;}
+.ltab{flex:1;padding:9px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--F);background:transparent;color:var(--t3);transition:all .2s;}
+.ltab.on{background:var(--accent);color:#000;}
+.lf{margin-bottom:13px;}
+.lf label{display:block;font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:5px;}
+.lin{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;color:var(--t1);font-size:14px;font-family:var(--F);outline:none;transition:all .2s;}
+.lin:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentL);}
+.lin::placeholder{color:var(--t3);}
+.lbtn{width:100%;background:var(--accent);color:#000;border:none;border-radius:11px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--F);}
+.lerr{color:#ff4560;font-size:12px;text-align:center;margin-top:10px;min-height:16px;}
+.lf2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bd);background:rgba(7,8,13,.95);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.logo-tx{font-size:17px;font-weight:800;color:var(--accent);font-family:var(--H);}
+.hdr-r{display:flex;gap:7px;align-items:center;}
+.hbtn{background:var(--s2);border:1px solid var(--bd);color:var(--t2);border-radius:8px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:var(--F);font-weight:600;transition:all .15s;}
+.hbtn:hover{border-color:var(--accentB);color:var(--accent);}
+.main{max-width:720px;margin:0 auto;width:100%;padding:0 20px;}
+.page{padding:44px 0 70px;}
+.hidden{display:none!important;}
+.sbar{display:flex;gap:5px;margin-bottom:28px;}
+.sseg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.08);transition:background .3s;}
+.sseg.on{background:var(--accent);}
+.hero{text-align:center;padding-top:10px;}
+.hero-badge{display:inline-block;border:1px solid var(--accentB);color:var(--accent);background:var(--accentL);border-radius:24px;padding:5px 18px;font-size:12px;font-weight:600;margin-bottom:24px;}
+.hero h1{font-family:var(--H);font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-1.2px;line-height:1.08;margin-bottom:18px;}
+.hero em{color:var(--accent);font-style:italic;}
+.hero p{font-size:16px;color:var(--t2);max-width:440px;margin:0 auto 32px;line-height:1.7;}
+.hero-cta{background:var(--accent);color:#000;border:none;border-radius:12px;padding:16px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--F);box-shadow:0 8px 30px rgba(255,107,53,.25);}
+.hero-note{color:var(--t3);font-size:12px;margin-top:14px;}
+.stitle{font-family:var(--H);font-size:clamp(20px,3vw,26px);font-weight:700;margin-bottom:6px;}
+.ssub{color:var(--t2);font-size:14px;margin-bottom:24px;}
+.snav{display:flex;gap:10px;margin-top:32px;justify-content:flex-end;}
+.btn-back{background:transparent;border:1px solid var(--bd2);color:var(--t2);border-radius:10px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:var(--F);}
+.btn-next{background:var(--accent);color:#000;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--F);}
+.btn-next:disabled{opacity:.35;cursor:default;}
+.nin{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;color:var(--t1);font-size:16px;font-family:var(--F);outline:none;transition:all .25s;}
+.nin:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentL);}
+.nin::placeholder{color:var(--t3);}
+.nhint{font-size:12px;color:var(--t3);margin-top:8px;line-height:1.5;}
+.qpicks{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
+.qp{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:12px;color:var(--t2);cursor:pointer;font-family:var(--F);transition:all .15s;}
+.qp:hover{border-color:var(--accentB);color:var(--accent);}
+.fl{font-size:12px;color:var(--t2);margin-bottom:10px;font-weight:600;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:11px 16px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--F);transition:all .18s;}
+.chip:hover,.chip.on{background:var(--accentL);border-color:rgba(255,107,53,.5);color:var(--accent);}
+.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:420px;}
+.tc{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:18px;cursor:pointer;font-size:14px;color:var(--t2);transition:all .18s;text-align:center;font-weight:500;}
+.tc:hover,.tc.on{background:var(--accentL);border-color:rgba(255,107,53,.5);color:var(--accent);font-weight:700;}
+.cgrid{display:flex;flex-wrap:wrap;gap:8px;}
+.cb{background:var(--s2);border:1px solid var(--bd);border-radius:22px;padding:9px 16px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--F);transition:all .15s;}
+.cb.on{background:var(--accentL);border-color:rgba(255,107,53,.5);color:var(--accent);}
+.cb.dis{opacity:.3;cursor:default;}
+.sumbox{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:18px;}
+.extra-ta{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;color:var(--t1);font-size:14px;font-family:var(--F);line-height:1.6;resize:vertical;outline:none;}
+.extra-ta:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentL);}
+.btn-gen{background:linear-gradient(135deg,var(--accent),#e85d2a);color:#000;border:none;border-radius:11px;padding:15px 30px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--F);box-shadow:0 6px 24px rgba(255,107,53,.3);}
+.rbox{background:var(--s1);border:1px solid var(--bd2);border-radius:16px;overflow:hidden;}
+.rbox-h{background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(77,168,255,.06));padding:20px 24px;border-bottom:1px solid var(--bd);}
+.rbox-h h3{font-family:var(--H);font-size:18px;font-weight:700;}
+.rbox-h p{font-size:13px;color:var(--t2);margin-top:4px;}
+.rbox-b{padding:24px;}
+.rtext{font-size:15px;line-height:1.9;color:#DAD8D2;white-space:pre-line;margin-bottom:20px;}
+.racts{display:flex;gap:8px;flex-wrap:wrap;}
+.rb{border-radius:8px;padding:9px 15px;font-size:12px;cursor:pointer;font-family:var(--F);font-weight:600;}
+.rb-s{background:var(--s2);border:1px solid var(--bd2);color:var(--t2);}
+.rb-n{background:transparent;border:1px solid var(--accentB);color:var(--accent);}
+.rbadges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.rbdg{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 11px;font-size:11px;color:var(--t2);}
+.ldw{display:flex;flex-direction:column;align-items:center;gap:16px;padding:50px 0;}
+.spinner{width:36px;height:36px;border:3px solid rgba(255,107,53,.12);border-top:3px solid var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{color:#555;font-size:14px;}
-
-/* Saved */
-.saved-list{display:flex;flex-direction:column;gap:16px;}
-.saved-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:22px;}
-.saved-meta{font-size:12px;color:#555;margin-bottom:12px;}
-.saved-text{font-size:14px;line-height:1.8;color:#ccc;white-space:pre-line;margin:0 0 16px;}
-.remove-btn{background:transparent;border:1px solid rgba(255,60,60,.25);color:#c66;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:var(--F);}
-.empty{color:var(--dimmer);text-align:center;padding:60px 0;}
-
-/* Footer */
-.footer{text-align:center;padding:20px;color:#222;font-size:12px;border-top:1px solid rgba(255,255,255,.04);}
-
-/* Cursor blink */
+.scard{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:14px;}
+.empty{color:var(--t3);text-align:center;padding:50px 0;font-size:14px;}
+.footer{text-align:center;padding:18px;color:#222;font-size:11px;border-top:1px solid var(--bd);}
 .cursor{display:inline-block;color:var(--accent);animation:blink .7s step-end infinite;}
 @keyframes blink{50%{opacity:0}}
-
-/* Fade in */
-.fade-in{animation:fadeIn .35s ease both;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-/* Hide */
-.hidden{display:none!important;}
-
-button:hover{filter:brightness(1.1);}
-
-@media(max-width:600px){
-  .header{padding:12px 16px;}
-  .main{padding:0 14px;}
-  .page{padding:32px 0 80px;}
-  .sector-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
-  .ticket-grid{grid-template-columns:1fr 1fr;max-width:100%;}
-  .step-nav{flex-direction:column;}
-  .btn-next,.btn-back,.btn-generate{width:100%;text-align:center;}
-}
+.fade-in{animation:fadeIn .3s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.header{padding:12px 16px;}.main{padding:0 14px;}.page{padding:28px 0 70px;}.tgrid{max-width:100%;}.snav{flex-direction:column;}.btn-next,.btn-back,.btn-gen{width:100%;text-align:center;}.lf2{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
+<div id="LOGIN">
+<div class="lbox">
+<div class="llogo"><span>⚡</span><h1>VendaMais</h1><p>IA de vendas para o seu negócio</p></div>
+<div class="ltabs"><button class="ltab on" id="lt-e" onclick="showLT('e')">Entrar</button><button class="ltab" id="lt-c" onclick="showLT('c')">Criar Conta</button></div>
+<div id="tab-e">
+<div class="lf"><label>E-mail</label><input class="lin" id="l-email" type="email" placeholder="seu@email.com"></div>
+<div class="lf"><label>Senha</label><input class="lin" id="l-senha" type="password" placeholder="********"></div>
+<button class="lbtn" onclick="doLogin()">Entrar</button>
+<div class="lerr" id="l-err"></div>
+</div>
+<div id="tab-c" style="display:none">
+<div class="lf"><label>Nome completo</label><input class="lin" id="c-nome" placeholder="Seu nome"></div>
+<div class="lf"><label>E-mail</label><input class="lin" id="c-email" type="email" placeholder="seu@email.com"></div>
+<div class="lf"><label>Senha</label><input class="lin" id="c-senha" type="password" placeholder="Minimo 6 caracteres"></div>
+<div class="lf"><label>Empresa / Negócio</label><input class="lin" id="c-empresa" placeholder="Nome da sua empresa"></div>
+<div class="lf2">
+<div class="lf"><label>Cidade</label><input class="lin" id="c-cidade" placeholder="Ex: Recife, PE"></div>
+<div class="lf"><label>WhatsApp</label><input class="lin" id="c-tel" type="tel" placeholder="(81) 99999-0000"></div>
+</div>
+<button class="lbtn" onclick="doReg()">Criar Conta Grátis</button>
+<div class="lerr" id="c-err"></div>
+</div>
+</div>
+</div>
 
-<!-- HEADER -->
+<div id="APP" style="display:none">
 <header class="header">
-  <a class="logo" onclick="reset()">
-    <span class="logo-icon">⚡</span>
-    <span class="logo-text">VendaMais</span>
-  </a>
-  <div class="header-right">
-    <button class="nav-btn hidden" id="btn-restart" onclick="reset()">← Recomeçar</button>
-    <button class="nav-btn" id="btn-saved" onclick="toggleSaved()">🔖 Salvos <span id="saved-count"></span></button>
-  </div>
+<a class="logo" onclick="doReset()"><span style="font-size:18px">⚡</span><span class="logo-tx">VendaMais</span></a>
+<div class="hdr-r">
+<button class="hbtn hidden" id="btn-re" onclick="doReset()">← Novo</button>
+<button class="hbtn" onclick="toggleSv()">🔖 Salvos <span id="sv-c"></span></button>
+<button class="hbtn" onclick="doLogout()">⏻</button>
+</div>
 </header>
-
-<main class="main">
-
-  <!-- ════════ VIEW: SAVED ════════ -->
-  <div class="page hidden" id="view-saved">
-    <h2 class="page-title">Dicas Salvas</h2>
-    <div id="saved-list-container"></div>
-  </div>
-
-  <!-- ════════ VIEW: RESULT ════════ -->
-  <div class="page hidden" id="view-result">
-    <div class="profile-badges" id="result-badges"></div>
-    <h2 class="page-title" id="result-title">Gerando suas dicas...</h2>
-    <p class="page-sub" id="result-sub">Analisando o perfil da sua empresa...</p>
-    <div class="result-box" id="result-box">
-      <div class="loading-wrap" id="result-loading">
-        <div class="spinner"></div>
-        <p class="loading-text" id="loading-label">Consultando especialista...</p>
-      </div>
-      <div class="hidden" id="result-content">
-        <p class="result-text" id="result-text"></p>
-        <div class="result-actions">
-          <button class="btn-save" onclick="saveCurrent()">🔖 Salvar estas dicas</button>
-          <button class="btn-new" onclick="reset()">↺ Nova consulta</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════ VIEW: ONBOARDING ════════ -->
-  <div class="page" id="view-onboard">
-
-    <!-- STEP 0: HERO -->
-    <div id="step-0" class="fade-in">
-      <div class="hero">
-        <div class="hero-badge">✦ Para qualquer tipo de empresa</div>
-        <h1 class="hero-title">Dicas de vendas<br><em class="hero-em">feitas para o seu negócio</em></h1>
-        <p class="hero-sub">Responda 4 perguntas rápidas. A IA gera recomendações cirúrgicas para o seu segmento — sem papo genérico.</p>
-        <button class="hero-cta" onclick="goStep(1)">Começar agora →</button>
-        <div class="hero-note">Leva menos de 2 minutos · Gratuito</div>
-      </div>
-    </div>
-
-    <!-- STEP 1: SETOR -->
-    <div id="step-1" class="hidden fade-in">
-      <div class="step-bar" id="bar-1"></div>
-      <h2 class="step-title">Qual é o segmento da sua empresa?</h2>
-      <p class="step-sub">Escolha o que melhor descreve seu negócio.</p>
-      <div class="sector-grid" id="sector-grid"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(0)">← Voltar</button>
-        <button class="btn-next" id="btn1" disabled onclick="goStep(2)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: PORTE + MODELO -->
-    <div id="step-2" class="hidden fade-in">
-      <div class="step-bar" id="bar-2"></div>
-      <h2 class="step-title">Porte e modelo de vendas</h2>
-      <p class="step-sub">Isso muda completamente a estratégia recomendada.</p>
-      <div class="field-label">Quantos colaboradores?</div>
-      <div class="chip-row" id="size-chips"></div>
-      <div class="field-label" style="margin-top:28px">Modelo de venda <span style="color:#555;font-size:11px">(pode marcar mais de um)</span></div>
-      <div class="chip-row" id="model-chips"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(1)">← Voltar</button>
-        <button class="btn-next" id="btn2" disabled onclick="goStep(3)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3: TICKET -->
-    <div id="step-3" class="hidden fade-in">
-      <div class="step-bar" id="bar-3"></div>
-      <h2 class="step-title">Qual é o ticket médio das suas vendas?</h2>
-      <p class="step-sub">O valor muda a abordagem, o canal e o processo de venda.</p>
-      <div class="ticket-grid" id="ticket-grid"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(2)">← Voltar</button>
-        <button class="btn-next" id="btn3" disabled onclick="goStep(4)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: DESAFIOS -->
-    <div id="step-4" class="hidden fade-in">
-      <div class="step-bar" id="bar-4"></div>
-      <h2 class="step-title">Quais são seus maiores desafios de vendas?</h2>
-      <p class="step-sub">Escolha até 3. As dicas serão focadas nisso.</p>
-      <div class="challenge-grid" id="challenge-grid"></div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(3)">← Voltar</button>
-        <button class="btn-next" id="btn4" disabled onclick="goStep(5)">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- STEP 5: CONTEXTO + GERAR -->
-    <div id="step-5" class="hidden fade-in">
-      <div class="step-bar" id="bar-5"></div>
-      <h2 class="step-title">Quer adicionar mais contexto?</h2>
-      <p class="step-sub">Opcional — mas quanto mais específico, melhor a resposta.</p>
-      <div class="profile-summary" id="summary-box"></div>
-      <textarea class="extra-ta" id="extra-ctx" rows="4" placeholder='Ex: "Tenho 3 vendedores, trabalhamos com indicações e nosso maior concorrente baixou o preço 15% este mês..."'></textarea>
-      <div class="step-nav">
-        <button class="btn-back" onclick="goStep(4)">← Voltar</button>
-        <button class="btn-generate" onclick="generate()">✨ Gerar minhas dicas</button>
-      </div>
-    </div>
-
-  </div>
-</main>
-
-<footer class="footer">VendaMais · IA de vendas para empresas de todos os segmentos</footer>
-
+<div class="main">
+<div class="page hidden" id="Vs"><h2 class="stitle">Dicas Salvas</h2><div style="margin-top:20px" id="sv-box"></div></div>
+<div class="page hidden" id="Vr">
+<div class="rbadges" id="rb"></div>
+<div class="rbox"><div class="rbox-h"><h3 id="rt">Gerando...</h3><p id="rs">Analisando...</p></div>
+<div class="rbox-b">
+<div id="rl" class="ldw"><div class="spinner"></div><p style="color:var(--t3);font-size:13px" id="rlt">Consultando...</p></div>
+<div id="rd" class="hidden"><p class="rtext" id="rtx"></p><div class="racts"><button class="rb rb-s" onclick="doSave()">🔖 Salvar</button><button class="rb rb-n" onclick="doReset()">↺ Nova consulta</button></div></div>
+</div></div></div>
+<div class="page" id="Vo">
+<div id="S0" class="fade-in"><div class="hero"><div class="hero-badge">✦ Dicas específicas para o seu segmento</div><h1>Dicas de vendas<br><em>feitas para o seu negócio</em></h1><p>Responda 4 perguntas rápidas. A IA gera recomendações sob medida.</p><button class="hero-cta" onclick="goS(1)">Começar agora →</button><div class="hero-note">Menos de 2 min · Gratuito</div></div></div>
+<div id="S1" class="hidden fade-in"><div class="sbar" id="B1"></div><h2 class="stitle">Qual é o nicho da sua empresa?</h2><p class="ssub">Digite seu segmento ou escolha abaixo.</p><div style="margin-bottom:16px"><input class="nin" id="ni" placeholder="Ex: Barbearia, Delivery de açaí, Loja de celulares..." oninput="onNi()"><div class="nhint">Quanto mais específico, melhores as dicas.</div></div><div class="fl">Ou escolha rápido:</div><div class="qpicks" id="qp"></div><div class="snav"><button class="btn-back" onclick="goS(0)">← Voltar</button><button class="btn-next" id="b1" disabled onclick="goS(2)">Continuar →</button></div></div>
+<div id="S2" class="hidden fade-in"><div class="sbar" id="B2"></div><h2 class="stitle">Equipe e modelo de vendas</h2><p class="ssub">Isso muda totalmente a estratégia.</p><div class="fl">Quantos colaboradores?</div><div class="chips" id="sc"></div><div class="fl" style="margin-top:24px">Modelo de venda <span style="color:var(--t3);font-size:11px">(marque todos que se aplicam)</span></div><div class="chips" id="mc"></div><div class="snav"><button class="btn-back" onclick="goS(1)">← Voltar</button><button class="btn-next" id="b2" disabled onclick="goS(3)">Continuar →</button></div></div>
+<div id="S3" class="hidden fade-in"><div class="sbar" id="B3"></div><h2 class="stitle">Ticket médio das suas vendas?</h2><p class="ssub">O valor muda a abordagem e o canal.</p><div class="tgrid" id="tg"></div><div class="snav"><button class="btn-back" onclick="goS(2)">← Voltar</button><button class="btn-next" id="b3" disabled onclick="goS(4)">Continuar →</button></div></div>
+<div id="S4" class="hidden fade-in"><div class="sbar" id="B4"></div><h2 class="stitle">Maiores desafios de vendas?</h2><p class="ssub">Escolha até 3.</p><div class="cgrid" id="cg"></div><div class="snav"><button class="btn-back" onclick="goS(3)">← Voltar</button><button class="btn-next" id="b4" disabled onclick="goS(5)">Continuar →</button></div></div>
+<div id="S5" class="hidden fade-in"><div class="sbar" id="B5"></div><h2 class="stitle">Quer detalhar mais?</h2><p class="ssub">Opcional.</p><div class="sumbox" id="sb"></div><textarea class="extra-ta" id="ext" rows="3" placeholder='Ex: "Meu concorrente baixou preço, tenho 2 vendedores..."'></textarea><div class="snav"><button class="btn-back" onclick="goS(4)">← Voltar</button><button class="btn-gen" onclick="doGen()">✨ Gerar minhas dicas</button></div></div>
+</div>
+</div>
+</div>
+<footer class="footer">VendaMais · IA de vendas para empresas</footer>
 <script>
 'use strict';
-
-// ── DATA ──────────────────────────────────────────────
-const SECTORS=[
-  {id:"varejo",label:"Varejo / Loja Física",icon:"🏪"},{id:"ecommerce",label:"E-commerce",icon:"🛒"},
-  {id:"saas",label:"SaaS / Software",icon:"💻"},{id:"alimentacao",label:"Alimentação / Food Service",icon:"🍽️"},
-  {id:"saude",label:"Saúde / Clínicas",icon:"🏥"},{id:"educacao",label:"Educação / Cursos",icon:"🎓"},
-  {id:"imobiliario",label:"Imobiliário",icon:"🏢"},{id:"industria",label:"Indústria / Manufatura",icon:"🏭"},
-  {id:"financeiro",label:"Financeiro / Seguros",icon:"💰"},{id:"servicos",label:"Serviços Profissionais",icon:"💼"},
-  {id:"agencia",label:"Agência / Marketing",icon:"📣"},{id:"logistica",label:"Logística / Transporte",icon:"🚚"},
-  {id:"construcao",label:"Construção / Reforma",icon:"🔨"},{id:"beleza",label:"Beleza / Estética",icon:"✨"},
-  {id:"outro",label:"Outro segmento",icon:"🔷"},
-];
-const SIZES=[{id:"solo",label:"0 a 3 colaboradores"},{id:"pequena",label:"4 a 6 colaboradores"},{id:"media",label:"7 ou mais colaboradores"}];
-const MODELS=[{id:"b2c",label:"B2C — vendo para pessoas físicas"},{id:"b2b",label:"B2B — vendo para empresas"},{id:"b2g",label:"B2G — vendo para governo"},{id:"marketplace",label:"Marketplace / Plataformas"}];
-const TICKETS=[{id:"baixo",label:"Até R$200"},{id:"medio",label:"R$200 – R$2.000"},{id:"alto",label:"R$2.000 – R$20.000"},{id:"enterprise",label:"Acima de R$20.000"}];
-const CHALLENGES=["Gerar mais leads qualificados","Converter leads em clientes","Superar objeções de preço","Reduzir o ciclo de vendas","Aumentar o ticket médio","Reter e fidelizar clientes","Montar / treinar equipe de vendas","Vender online / digital","Reativar clientes inativos","Escalar as vendas"];
-
-// ── STATE ─────────────────────────────────────────────
-let curStep=0, sector=null, size=null, models=[], ticket=null;
-let challenges=[], aiText='', savedItems=[];
-
 const $=id=>document.getElementById(id);
-
-// ── RENDER GRIDS ──────────────────────────────────────
-function renderSectors(){
-  $('sector-grid').innerHTML=SECTORS.map(s=>`<button class="sector-card${sector===s.id?' on':''}" onclick="pickSector('${s.id}')"><span class="sector-icon">${s.icon}</span><span class="sector-label">${s.label}</span></button>`).join('');
-}
-function renderSizes(){
-  $('size-chips').innerHTML=SIZES.map(s=>`<button class="chip${size===s.id?' on':''}" onclick="pickSize('${s.id}')">${s.label}</button>`).join('');
-}
-function renderModels(){
-  $('model-chips').innerHTML=MODELS.map(m=>`<button class="chip${models.includes(m.id)?' on':''}" onclick="toggleModel('${m.id}')">${models.includes(m.id)?'✓ ':''}${m.label}</button>`).join('');
-}
-function renderTickets(){
-  $('ticket-grid').innerHTML=TICKETS.map(t=>`<button class="ticket-card${ticket===t.id?' on':''}" onclick="pickTicket('${t.id}')">${t.label}</button>`).join('');
-}
-function renderChallenges(){
-  $('challenge-grid').innerHTML=CHALLENGES.map(c=>{
-    const on=challenges.includes(c);
-    const dis=challenges.length>=3&&!on;
-    return `<button class="challenge-btn${on?' on':''}${dis?' disabled':''}" onclick="toggleChallenge('${c.replace(/'/g,"\\'")}')">${on?'✓ ':''}${c}</button>`;
-  }).join('');
-}
-function renderStepBar(id,current){
-  const el=$(id); if(!el)return;
-  el.innerHTML=Array.from({length:5}).map((_,i)=>`<div class="step-seg${i<current?' on':''}"></div>`).join('');
-}
-function renderSummary(){
-  const s=SECTORS.find(x=>x.id===sector)||{};
-  const sz=SIZES.find(x=>x.id===size)||{};
-  const mdLabels=models.map(id=>MODELS.find(x=>x.id===id)).filter(Boolean).map(x=>x.label).join(', ');const md={label:mdLabels};
-  const tk=TICKETS.find(x=>x.id===ticket)||{};
-  $('summary-box').innerHTML=`
-    <div class="summary-title">Seu perfil:</div>
-    <div class="summary-row"><span>${s.icon||''} ${s.label||''}</span><span>·</span><span>${sz.label||''}</span><span>·</span><span>${md.label||''}</span><span>·</span><span>Ticket ${tk.label||''}</span></div>
-    <div class="summary-desafios">${challenges.map(c=>`<span class="des-badge">${c}</span>`).join('')}</div>`;
-}
-
-// ── PICK HANDLERS ─────────────────────────────────────
-function pickSector(id){sector=id;renderSectors();$('btn1').disabled=false;}
-function pickSize(id){size=id;renderSizes();$('btn2').disabled=!(size&&models.length>0);}
-function toggleModel(id){if(models.includes(id))models=models.filter(x=>x!==id);else models.push(id);renderModels();$('btn2').disabled=!(size&&models.length>0);}
-function pickTicket(id){ticket=id;renderTickets();$('btn3').disabled=false;}
-function toggleChallenge(c){
-  if(challenges.includes(c))challenges=challenges.filter(x=>x!==c);
-  else if(challenges.length<3)challenges.push(c);
-  renderChallenges();
-  $('btn4').disabled=challenges.length===0;
-}
-
-// ── NAVIGATION ────────────────────────────────────────
-function goStep(n){
-  for(let i=0;i<=5;i++){const el=$('step-'+i);if(el){el.classList.add('hidden');el.classList.remove('fade-in');}}
-  const target=$('step-'+n);
-  if(target){target.classList.remove('hidden');void target.offsetWidth;target.classList.add('fade-in');}
-  curStep=n;
-  // Render
-  if(n===1){renderSectors();renderStepBar('bar-1',1);}
-  if(n===2){renderSizes();renderModels();renderStepBar('bar-2',2);}
-  if(n===3){renderTickets();renderStepBar('bar-3',3);}
-  if(n===4){renderChallenges();renderStepBar('bar-4',4);}
-  if(n===5){renderSummary();renderStepBar('bar-5',5);}
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function showView(v){
-  ['view-onboard','view-result','view-saved'].forEach(id=>{$(id).classList.add('hidden');});
-  $(v).classList.remove('hidden');
-  $('btn-restart').classList.toggle('hidden',v!=='view-result');
-}
-
-function toggleSaved(){
-  const showing=!$('view-saved').classList.contains('hidden');
-  if(showing){showView(aiText?'view-result':'view-onboard');}
-  else{renderSavedList();showView('view-saved');}
-}
-
-function reset(){
-  curStep=0;sector=null;size=null;models=[];ticket=null;
-  challenges=[];aiText='';$('extra-ctx').value='';
-  showView('view-onboard');goStep(0);
-}
-
-// ── SAVED ─────────────────────────────────────────────
-function updateSavedCount(){
-  $('saved-count').textContent=savedItems.length>0?`(${savedItems.length})`:'';
-}
-function renderSavedList(){
-  const c=$('saved-list-container');
-  if(!savedItems.length){c.innerHTML='<div class="empty">Nenhuma dica salva ainda.</div>';return;}
-  c.innerHTML=savedItems.map((item,i)=>`<div class="saved-card"><div class="saved-meta">${item.meta}</div><p class="saved-text">${item.text}</p><button class="remove-btn" onclick="removeSaved(${i})">Remover</button></div>`).join('');
-}
-function saveCurrent(){
-  const s=SECTORS.find(x=>x.id===sector)||{};
-  const mdLabels=models.map(id=>MODELS.find(x=>x.id===id)).filter(Boolean).map(x=>x.label).join(', ');const md={label:mdLabels};
-  const meta=`${s.icon||''} ${s.label||''} · ${md.label||''}`;
-  if(!savedItems.find(x=>x.text===aiText)){savedItems.push({text:aiText,meta});updateSavedCount();}
-}
-function removeSaved(i){savedItems.splice(i,1);updateSavedCount();renderSavedList();}
-
-// ── TYPEWRITER ────────────────────────────────────────
-function typewrite(el,text,speed=12){
-  el.innerHTML='';let i=0;
-  const iv=setInterval(()=>{
-    if(i<text.length){el.textContent=text.slice(0,++i);el.innerHTML+=`<span class="cursor">▍</span>`;}
-    else{el.textContent=text;clearInterval(iv);}
-  },speed);
-}
-
-// ── GENERATE ──────────────────────────────────────────
-async function generate(){
-  showView('view-result');
-  $('result-loading').classList.remove('hidden');
-  $('result-content').classList.add('hidden');
-  $('result-title').textContent='Gerando suas dicas...';
-  $('result-sub').textContent='Analisando o perfil da sua empresa...';
-
-  const s=SECTORS.find(x=>x.id===sector)||{};
-  const sz=SIZES.find(x=>x.id===size)||{};
-  const mdLabels=models.map(id=>MODELS.find(x=>x.id===id)).filter(Boolean).map(x=>x.label).join(', ');const md={label:mdLabels};
-  const tk=TICKETS.find(x=>x.id===ticket)||{};
-  const extra=$('extra-ctx').value.trim();
-
-  $('loading-label').textContent=`Consultando especialista em ${s.label||'vendas'}...`;
-  $('result-badges').innerHTML=[`${s.icon} ${s.label}`,sz.label,md.label,tk.label].filter(Boolean).map(b=>`<span class="badge">${b}</span>`).join('');
-
-  const systemPrompt=`Você é um consultor sênior de vendas com 20+ anos de experiência real em campo, especializado em empresas brasileiras de todos os segmentos. Você é direto, prático e nunca dá conselhos genéricos.
-
-REGRAS OBRIGATÓRIAS:
-- Suas dicas devem ser ESPECÍFICAS para o segmento e contexto informado — jamais genéricas
-- Use exemplos concretos do próprio setor da empresa (mencione situações reais daquele mercado)
-- Considere o modelo de venda (B2B/B2C/etc), o porte da empresa e o ticket médio ao montar cada dica
-- Cada dica deve ter uma AÇÃO IMEDIATA que o empresário pode executar hoje ou amanhã
-- Linguagem direta, sem rodeios, sem "é importante que..." — vá direto ao ponto
-- Formato: 3 dicas numeradas. Cada uma com título em negrito + explicação + ação prática`;
-
-  const userPrompt=`PERFIL DA EMPRESA:
-- Segmento: ${s.label}
-- Porte: ${sz.label}
-- Modelo de venda: ${md.label}
-- Ticket médio: ${tk.label}
-- Principais desafios: ${challenges.join(', ')}
-${extra?`- Contexto adicional: ${extra}`:''}
-
-Gere 3 dicas de vendas altamente específicas para esse perfil. Cada dica deve resolver um dos desafios listados, com exemplos reais do segmento "${s.label}" e ações que podem ser executadas esta semana.`;
-
-  try{
-    const r=await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:systemPrompt,messages:[{role:'user',content:userPrompt}]})
-    });
-    const data=await r.json();
-    let text='';
-    if(data.content) data.content.forEach(b=>{if(b.type==='text')text+=b.text;});
-    aiText=text||'Erro ao gerar dicas.';
-  }catch(e){
-    aiText='Erro de conexão. Tente novamente.';
-  }
-
-  $('result-loading').classList.add('hidden');
-  $('result-content').classList.remove('hidden');
-  $('result-title').textContent='Suas Dicas Personalizadas';
-  $('result-sub').textContent='Específicas para o seu segmento e desafios.';
-  typewrite($('result-text'),aiText);
-}
-
-// ── INIT ──────────────────────────────────────────────
-goStep(0);
+const NICHOS=["Barbearia","Padaria","Restaurante","Delivery","Loja de roupas","E-commerce","Pet shop","Clinica estetica","Academia","Imobiliaria","Advocacia","Contabilidade","Oficina mecanica","Loja de celulares","Confeitaria","Salao de beleza","Consultoria","Farmacia","Mercadinho","Construcao"];
+const SZ=[{id:"0-3",l:"0 a 3 colaboradores"},{id:"4-6",l:"4 a 6 colaboradores"},{id:"7+",l:"7 ou mais colaboradores"}];
+const MD=[{id:"b2c",l:"Pessoas fisicas (B2C)"},{id:"b2b",l:"Empresas (B2B)"},{id:"b2g",l:"Governo (B2G)"},{id:"mkt",l:"Marketplace / Online"}];
+const TK=[{id:"baixo",l:"Ate R$200"},{id:"medio",l:"R$200 - R$2.000"},{id:"alto",l:"R$2.000 - R$20.000"},{id:"top",l:"Acima de R$20.000"}];
+const CH=["Gerar mais leads","Converter leads em clientes","Superar objecoes de preco","Reduzir ciclo de vendas","Aumentar ticket medio","Fidelizar clientes","Montar equipe de vendas","Vender mais online","Reativar clientes inativos","Escalar vendas"];
+let token=localStorage.getItem('vm_t')||'',usr=null,nicho='',sz=null,mds=[],tk=null,chs=[],aiT='',svd=[];
+function showLT(t){$('tab-e').style.display=t==='e'?'block':'none';$('tab-c').style.display=t==='c'?'block':'none';$('lt-e').className='ltab'+(t==='e'?' on':'');$('lt-c').className='ltab'+(t==='c'?' on':'');}
+async function doLogin(){const e=$('l-email').value.trim(),p=$('l-senha').value;if(!e||!p){$('l-err').textContent='Preencha email e senha.';return;}try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});const d=await r.json();if(!r.ok){$('l-err').textContent=d.error||'Erro.';return;}token=d.token;usr=d.user;localStorage.setItem('vm_t',token);enter();}catch(x){$('l-err').textContent='Erro de conexao.';}}
+async function doReg(){const n=$('c-nome').value.trim(),e=$('c-email').value.trim(),p=$('c-senha').value,emp=$('c-empresa').value.trim(),c=$('c-cidade').value.trim(),t=$('c-tel').value.trim();if(!n||!e||!p){$('c-err').textContent='Preencha nome, email e senha.';return;}if(p.length<6){$('c-err').textContent='Senha: minimo 6.';return;}try{const r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,password:p,segmento:emp,cidade:c,faturamento:0,tel:t})});const d=await r.json();if(!r.ok){$('c-err').textContent=d.error||'Erro.';return;}token=d.token;usr=d.user;localStorage.setItem('vm_t',token);enter();}catch(x){$('c-err').textContent='Erro de conexao.';}}
+function enter(){$('LOGIN').style.display='none';$('APP').style.display='block';}
+function doLogout(){fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+token}}).catch(()=>{});token='';usr=null;localStorage.removeItem('vm_t');$('APP').style.display='none';$('LOGIN').style.display='flex';}
+async function chkAuth(){if(!token)return;try{const r=await fetch('/api/auth/me',{headers:{'Authorization':'Bearer '+token}});if(!r.ok){token='';localStorage.removeItem('vm_t');return;}usr=await r.json();enter();}catch(x){token='';localStorage.removeItem('vm_t');}}
+function showV(v){['Vo','Vr','Vs'].forEach(x=>$(x).classList.add('hidden'));$(v).classList.remove('hidden');$('btn-re').classList.toggle('hidden',v!=='Vr');}
+function toggleSv(){const s=!$('Vs').classList.contains('hidden');if(s)showV(aiT?'Vr':'Vo');else{renderSv();showV('Vs');}}
+function doReset(){nicho='';sz=null;mds=[];tk=null;chs=[];aiT='';$('ext').value='';$('ni').value='';showV('Vo');goS(0);}
+function renderBar(id,n){const e=$(id);if(!e)return;e.innerHTML=Array.from({length:5}).map((_,i)=>'<div class="sseg'+(i<n?' on':'')+'"></div>').join('');}
+function renderQP(){$('qp').innerHTML=NICHOS.map(n=>'<button class="qp" onclick="pNi(\''+n+'\')">'+n+'</button>').join('');}
+function pNi(n){nicho=n;$('ni').value=n;$('b1').disabled=false;}
+function onNi(){nicho=$('ni').value.trim();$('b1').disabled=!nicho;}
+function renderSZ(){$('sc').innerHTML=SZ.map(s=>'<button class="chip'+(sz===s.id?' on':'')+'" onclick="pSZ(\''+s.id+'\')">'+s.l+'</button>').join('');}
+function pSZ(id){sz=id;renderSZ();$('b2').disabled=!(sz&&mds.length);}
+function renderMD(){$('mc').innerHTML=MD.map(m=>'<button class="chip'+(mds.includes(m.id)?' on':'')+'" onclick="tMD(\''+m.id+'\')">'+(mds.includes(m.id)?'✓ ':'')+m.l+'</button>').join('');}
+function tMD(id){if(mds.includes(id))mds=mds.filter(x=>x!==id);else mds.push(id);renderMD();$('b2').disabled=!(sz&&mds.length);}
+function renderTK(){$('tg').innerHTML=TK.map(t=>'<button class="tc'+(tk===t.id?' on':'')+'" onclick="pTK(\''+t.id+'\')">'+t.l+'</button>').join('');}
+function pTK(id){tk=id;renderTK();$('b3').disabled=false;}
+function renderCH(){$('cg').innerHTML=CH.map(c=>{const on=chs.includes(c),dis=chs.length>=3&&!on;return'<button class="cb'+(on?' on':'')+(dis?' dis':'')+'" onclick="tCH(\''+c.replace(/'/g,"\\'")+'\')">'+(on?'✓ ':'')+c+'</button>';}).join('');}
+function tCH(c){if(chs.includes(c))chs=chs.filter(x=>x!==c);else if(chs.length<3)chs.push(c);renderCH();$('b4').disabled=!chs.length;}
+function renderSum(){const s=SZ.find(x=>x.id===sz)||{},m=mds.map(id=>(MD.find(x=>x.id===id)||{}).l).filter(Boolean).join(', '),t=(TK.find(x=>x.id===tk)||{}).l||'';$('sb').innerHTML='<div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-weight:700">Seu perfil:</div><div style="display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--t2);margin-bottom:10px"><span>📌 '+nicho+'</span><span>·</span><span>'+(s.l||'')+'</span><span>·</span><span>'+m+'</span><span>·</span><span>Ticket '+t+'</span></div><div style="display:flex;gap:6px;flex-wrap:wrap">'+chs.map(c=>'<span style="background:var(--accentL);border:1px solid rgba(255,107,53,.2);color:var(--accent);border-radius:6px;padding:3px 9px;font-size:11px">'+c+'</span>').join('')+'</div>';}
+function goS(n){for(let i=0;i<=5;i++){const e=$('S'+i);if(e){e.classList.add('hidden');e.classList.remove('fade-in');}}const t=$('S'+n);if(t){t.classList.remove('hidden');void t.offsetWidth;t.classList.add('fade-in');}if(n===1){renderQP();renderBar('B1',1);}if(n===2){renderSZ();renderMD();renderBar('B2',2);}if(n===3){renderTK();renderBar('B3',3);}if(n===4){renderCH();renderBar('B4',4);}if(n===5){renderSum();renderBar('B5',5);}window.scrollTo({top:0,behavior:'smooth'});}
+function updSvC(){$('sv-c').textContent=svd.length?'('+svd.length+')':'';}
+function renderSv(){const c=$('sv-box');if(!svd.length){c.innerHTML='<div class="empty">Nenhuma dica salva.</div>';return;}c.innerHTML=svd.map((s,i)=>'<div class="scard"><div style="font-size:11px;color:var(--t3);margin-bottom:10px">'+s.meta+'</div><p style="font-size:14px;line-height:1.8;color:var(--t2);white-space:pre-line;margin-bottom:14px">'+s.text+'</p><button style="background:transparent;border:1px solid rgba(255,60,60,.2);color:#c66;border-radius:6px;padding:5px 11px;font-size:11px;cursor:pointer" onclick="rmSv('+i+')">Remover</button></div>').join('');}
+function doSave(){if(!svd.find(s=>s.text===aiT)){svd.push({text:aiT,meta:'📌 '+nicho});updSvC();}}
+function rmSv(i){svd.splice(i,1);updSvC();renderSv();}
+function tw(el,text,spd){spd=spd||10;el.innerHTML='';let i=0;const iv=setInterval(()=>{if(i<text.length){el.textContent=text.slice(0,++i);el.innerHTML+='<span class="cursor">▍</span>';}else{el.textContent=text;clearInterval(iv);}},spd);}
+async function doGen(){showV('Vr');$('rl').classList.remove('hidden');$('rd').classList.add('hidden');$('rt').textContent='Gerando suas dicas...';$('rs').textContent='Analisando '+nicho+'...';$('rlt').textContent='Consultando especialista em '+nicho+'...';const s=(SZ.find(x=>x.id===sz)||{}).l||'',m=mds.map(id=>(MD.find(x=>x.id===id)||{}).l).filter(Boolean).join(', '),t=(TK.find(x=>x.id===tk)||{}).l||'',ext=$('ext').value.trim(),nm=(usr&&usr.name)||'',ct=(usr&&usr.cidade)||'';$('rb').innerHTML=['📌 '+nicho,s,m,'Ticket '+t].filter(Boolean).map(b=>'<span class="rbdg">'+b+'</span>').join('');const sys='Voce e um consultor de vendas SENIOR com 20+ anos em campo. Especialista em empresas brasileiras. DIRETO, PROVOCADOR e PRATICO.\n\nREGRAS:\n- Dicas 100% ESPECIFICAS para "'+nicho+'" - NUNCA genericas\n- Use exemplos REAIS do setor "'+nicho+'"'+(ct?' na regiao de '+ct:'')+'\n- Considere: '+s+', modelo '+m+', ticket '+t+'\n- Cada dica tem ACAO IMEDIATA executavel hoje\n- Tom: direto, sem rodeios, como mentor que cobra resultado\n- Use numeros, prazos e metas concretas\n\nFORMATO (3 dicas):\n🔥 [NUMERO]. [TITULO PROVOCADOR]\n[Explicacao direta com exemplo real do setor]\n👉 Acao imediata: [o que fazer HOJE]\n📊 Meta: [resultado esperado em X dias]';const msg='PERFIL:\n- Nome: '+nm+'\n- Nicho: '+nicho+'\n- Colaboradores: '+s+'\n- Modelo: '+m+'\n- Ticket: '+t+'\n- Desafios: '+chs.join(', ')+'\n'+(ext?'- Contexto: '+ext+'\n':'')+(ct?'- Cidade: '+ct+'\n':'')+'\nGere 3 dicas de vendas MATADORAS para "'+nicho+'". Cada uma resolve um desafio. Sem enrolacao.';try{const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({system:sys,messages:[{role:'user',content:msg}]})});const data=await r.json();let txt='';if(data.content)data.content.forEach(b=>{if(b.type==='text')txt+=b.text;});aiT=txt||'Erro ao gerar. Tente novamente.';}catch(e){aiT='Erro de conexao. Tente novamente.';}$('rl').classList.add('hidden');$('rd').classList.remove('hidden');$('rt').textContent='🔥 Suas Dicas Personalizadas';$('rs').textContent='Especificas para '+nicho;tw($('rtx'),aiT);}
+goS(0);chkAuth();
 </script>
 </body>
 </html>
