@@ -1,199 +1,744 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>VendaMais - IA de Vendas para Empresas</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fraunces:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-:root{--bg:#07080D;--s1:#0E1018;--s2:#151722;--s3:#1C1F2E;--accent:#FF6B35;--accent2:#FF8F65;--accentL:rgba(255,107,53,.10);--accentB:rgba(255,107,53,.30);--t1:#F0EDE8;--t2:#8B8D9A;--t3:#555770;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.12);--F:'Outfit',sans-serif;--H:'Fraunces',serif;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--t1);font-family:var(--F);font-size:14px;}
-#LOGIN{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 30% 20%,rgba(255,107,53,.06),transparent 50%),var(--bg);}
-.lbox{width:100%;max-width:400px;background:var(--s1);border:1px solid var(--bd2);border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;}
-.lbox::before{content:'';position:absolute;top:-60%;right:-30%;width:80%;height:140%;background:radial-gradient(circle,rgba(255,107,53,.06),transparent 70%);pointer-events:none;}
-.llogo{text-align:center;margin-bottom:24px;position:relative;}
-.llogo span{font-size:36px;display:block;margin-bottom:6px;}
-.llogo h1{font-family:var(--H);font-size:26px;font-weight:800;color:var(--accent);}
-.llogo p{color:var(--t3);font-size:13px;margin-top:4px;}
-.ltabs{display:flex;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:22px;}
-.ltab{flex:1;padding:9px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--F);background:transparent;color:var(--t3);transition:all .2s;}
-.ltab.on{background:var(--accent);color:#000;}
-.lf{margin-bottom:13px;}
-.lf label{display:block;font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:5px;}
-.lin{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;color:var(--t1);font-size:14px;font-family:var(--F);outline:none;transition:all .2s;}
-.lin:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentL);}
-.lin::placeholder{color:var(--t3);}
-.lbtn{width:100%;background:var(--accent);color:#000;border:none;border-radius:11px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--F);}
-.lerr{color:#ff4560;font-size:12px;text-align:center;margin-top:10px;min-height:16px;}
-.lf2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bd);background:rgba(7,8,13,.95);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);}
-.logo{display:flex;align-items:center;gap:8px;cursor:pointer;}
-.logo-tx{font-size:17px;font-weight:800;color:var(--accent);font-family:var(--H);}
-.hdr-r{display:flex;gap:7px;align-items:center;}
-.hbtn{background:var(--s2);border:1px solid var(--bd);color:var(--t2);border-radius:8px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:var(--F);font-weight:600;transition:all .15s;}
-.hbtn:hover{border-color:var(--accentB);color:var(--accent);}
-.main{max-width:720px;margin:0 auto;width:100%;padding:0 20px;}
-.page{padding:44px 0 70px;}
-.hidden{display:none!important;}
-.sbar{display:flex;gap:5px;margin-bottom:28px;}
-.sseg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.08);transition:background .3s;}
-.sseg.on{background:var(--accent);}
-.hero{text-align:center;padding-top:10px;}
-.hero-badge{display:inline-block;border:1px solid var(--accentB);color:var(--accent);background:var(--accentL);border-radius:24px;padding:5px 18px;font-size:12px;font-weight:600;margin-bottom:24px;}
-.hero h1{font-family:var(--H);font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-1.2px;line-height:1.08;margin-bottom:18px;}
-.hero em{color:var(--accent);font-style:italic;}
-.hero p{font-size:16px;color:var(--t2);max-width:440px;margin:0 auto 32px;line-height:1.7;}
-.hero-cta{background:var(--accent);color:#000;border:none;border-radius:12px;padding:16px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--F);box-shadow:0 8px 30px rgba(255,107,53,.25);}
-.hero-note{color:var(--t3);font-size:12px;margin-top:14px;}
-.stitle{font-family:var(--H);font-size:clamp(20px,3vw,26px);font-weight:700;margin-bottom:6px;}
-.ssub{color:var(--t2);font-size:14px;margin-bottom:24px;}
-.snav{display:flex;gap:10px;margin-top:32px;justify-content:flex-end;}
-.btn-back{background:transparent;border:1px solid var(--bd2);color:var(--t2);border-radius:10px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:var(--F);}
-.btn-next{background:var(--accent);color:#000;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--F);}
-.btn-next:disabled{opacity:.35;cursor:default;}
-.nin{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;color:var(--t1);font-size:16px;font-family:var(--F);outline:none;transition:all .25s;}
-.nin:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentL);}
-.nin::placeholder{color:var(--t3);}
-.nhint{font-size:12px;color:var(--t3);margin-top:8px;line-height:1.5;}
-.qpicks{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
-.qp{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:12px;color:var(--t2);cursor:pointer;font-family:var(--F);transition:all .15s;}
-.qp:hover{border-color:var(--accentB);color:var(--accent);}
-.fl{font-size:12px;color:var(--t2);margin-bottom:10px;font-weight:600;}
-.chips{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:11px 16px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--F);transition:all .18s;}
-.chip:hover,.chip.on{background:var(--accentL);border-color:rgba(255,107,53,.5);color:var(--accent);}
-.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:420px;}
-.tc{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:18px;cursor:pointer;font-size:14px;color:var(--t2);transition:all .18s;text-align:center;font-weight:500;}
-.tc:hover,.tc.on{background:var(--accentL);border-color:rgba(255,107,53,.5);color:var(--accent);font-weight:700;}
-.cgrid{display:flex;flex-wrap:wrap;gap:8px;}
-.cb{background:var(--s2);border:1px solid var(--bd);border-radius:22px;padding:9px 16px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--F);transition:all .15s;}
-.cb.on{background:var(--accentL);border-color:rgba(255,107,53,.5);color:var(--accent);}
-.cb.dis{opacity:.3;cursor:default;}
-.sumbox{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:18px;}
-.extra-ta{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;color:var(--t1);font-size:14px;font-family:var(--F);line-height:1.6;resize:vertical;outline:none;}
-.extra-ta:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentL);}
-.btn-gen{background:linear-gradient(135deg,var(--accent),#e85d2a);color:#000;border:none;border-radius:11px;padding:15px 30px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--F);box-shadow:0 6px 24px rgba(255,107,53,.3);}
-.rbox{background:var(--s1);border:1px solid var(--bd2);border-radius:16px;overflow:hidden;}
-.rbox-h{background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(77,168,255,.06));padding:20px 24px;border-bottom:1px solid var(--bd);}
-.rbox-h h3{font-family:var(--H);font-size:18px;font-weight:700;}
-.rbox-h p{font-size:13px;color:var(--t2);margin-top:4px;}
-.rbox-b{padding:24px;}
-.rtext{font-size:15px;line-height:1.9;color:#DAD8D2;white-space:pre-line;margin-bottom:20px;}
-.racts{display:flex;gap:8px;flex-wrap:wrap;}
-.rb{border-radius:8px;padding:9px 15px;font-size:12px;cursor:pointer;font-family:var(--F);font-weight:600;}
-.rb-s{background:var(--s2);border:1px solid var(--bd2);color:var(--t2);}
-.rb-n{background:transparent;border:1px solid var(--accentB);color:var(--accent);}
-.rbadges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
-.rbdg{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 11px;font-size:11px;color:var(--t2);}
-.ldw{display:flex;flex-direction:column;align-items:center;gap:16px;padding:50px 0;}
-.spinner{width:36px;height:36px;border:3px solid rgba(255,107,53,.12);border-top:3px solid var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.scard{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:14px;}
-.empty{color:var(--t3);text-align:center;padding:50px 0;font-size:14px;}
-.footer{text-align:center;padding:18px;color:#222;font-size:11px;border-top:1px solid var(--bd);}
-.cursor{display:inline-block;color:var(--accent);animation:blink .7s step-end infinite;}
-@keyframes blink{50%{opacity:0}}
-.fade-in{animation:fadeIn .3s ease both;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:600px){.header{padding:12px 16px;}.main{padding:0 14px;}.page{padding:28px 0 70px;}.tgrid{max-width:100%;}.snav{flex-direction:column;}.btn-next,.btn-back,.btn-gen{width:100%;text-align:center;}.lf2{grid-template-columns:1fr;}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VendaMais — Dicas de Vendas com IA</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      background: #09090E;
+      color: #EDEBE6;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(9,9,14,0.96);
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+    .logo { display: flex; align-items: center; gap: 9px; cursor: pointer; text-decoration: none; }
+    .logo-icon { font-size: 20px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: #FF6B35; letter-spacing: -0.4px; }
+    .header-right { display: flex; gap: 8px; align-items: center; }
+    .nav-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #999; border-radius: 8px;
+      padding: 7px 14px; font-size: 13px; cursor: pointer;
+      font-family: sans-serif; transition: all 0.2s;
+    }
+    .nav-btn.active { color: #FF6B35; border-color: rgba(255,107,53,0.4); }
+    .nav-btn:hover { filter: brightness(1.2); }
+
+    /* MAIN */
+    main { flex: 1; max-width: 780px; margin: 0 auto; width: 100%; padding: 0 20px; }
+    .page { padding: 52px 0 60px; animation: fadeIn 0.35s ease both; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* STEP BAR */
+    .step-bar { display: flex; gap: 6px; margin-bottom: 32px; }
+    .step-seg { flex: 1; height: 3px; border-radius: 4px; background: rgba(255,255,255,0.1); transition: background 0.3s; }
+    .step-seg.active { background: #FF6B35; }
+
+    /* HERO */
+    .hero { text-align: center; padding-top: 20px; }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid rgba(255,107,53,0.35); color: #FF6B35;
+      background: rgba(255,107,53,0.08); border-radius: 24px;
+      padding: 5px 16px; font-size: 13px; margin-bottom: 28px; font-family: sans-serif;
+    }
+    .hero-title {
+      font-size: clamp(34px, 5vw, 58px); font-weight: 700;
+      letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 22px;
+    }
+    .hero-em { color: #FF6B35; font-style: italic; }
+    .hero-sub {
+      font-size: 17px; color: #777; max-width: 480px;
+      margin: 0 auto 36px; line-height: 1.7; font-family: sans-serif;
+    }
+    .hero-cta {
+      background: #FF6B35; color: #000; border: none;
+      border-radius: 12px; padding: 15px 32px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      font-family: sans-serif; letter-spacing: 0.3px;
+    }
+    .hero-note { color: #444; font-size: 13px; margin-top: 14px; font-family: sans-serif; }
+
+    /* STEP TITLES */
+    .step-title { font-size: clamp(20px,3vw,28px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .step-sub { color: #666; font-size: 15px; margin-bottom: 28px; font-family: sans-serif; }
+
+    /* SECTOR GRID */
+    .sector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px; margin-bottom: 8px;
+    }
+    .sector-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 14px 12px;
+      cursor: pointer; display: flex; flex-direction: column;
+      align-items: center; gap: 8px; transition: all 0.18s;
+      font-family: sans-serif; color: #ccc;
+    }
+    .sector-card:hover { background: rgba(255,255,255,0.06); }
+    .sector-card.selected { background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.5); color: #FF6B35; }
+    .sector-icon { font-size: 22px; }
+    .sector-label { font-size: 12px; text-align: center; line-height: 1.3; }
+
+    /* CHIPS */
+    .field-label { font-size: 13px; color: #666; margin-bottom: 12px; font-family: sans-serif; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 10px 16px;
+      font-size: 13px; color: #bbb; cursor: pointer;
+      font-family: sans-serif; transition: all 0.15s;
+    }
+    .chip:hover { background: rgba(255,255,255,0.07); }
+    .chip.selected { background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.5); color: #FF6B35; }
+
+    /* TICKET */
+    .ticket-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; max-width: 460px; }
+    .ticket-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 20px;
+      cursor: pointer; font-size: 15px; color: #ccc;
+      font-family: sans-serif; transition: all 0.18s; text-align: center;
+    }
+    .ticket-card:hover { background: rgba(255,255,255,0.06); }
+    .ticket-card.selected { background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.5); color: #FF6B35; font-weight: 700; }
+
+    /* CHALLENGES */
+    .challenge-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+    .challenge-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px; padding: 10px 18px;
+      font-size: 13px; color: #bbb; cursor: pointer;
+      font-family: sans-serif; transition: all 0.15s;
+    }
+    .challenge-btn:hover { background: rgba(255,255,255,0.06); }
+    .challenge-btn.selected { background: rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.5); color: #FF6B35; }
+    .challenge-btn.disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+
+    /* PROFILE SUMMARY */
+    .profile-summary {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;
+    }
+    .summary-title { font-size: 11px; color: #555; font-family: sans-serif; margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .summary-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 14px; color: #aaa; font-family: sans-serif; margin-bottom: 12px; }
+    .summary-desafios { display: flex; gap: 8px; flex-wrap: wrap; }
+    .des-badge {
+      background: rgba(255,107,53,0.1);
+      border: 1px solid rgba(255,107,53,0.25);
+      color: #FF6B35; border-radius: 6px;
+      padding: 3px 10px; font-size: 12px; font-family: sans-serif;
+    }
+
+    /* TEXTAREA */
+    textarea {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 14px;
+      color: #EDEBE6; font-size: 14px;
+      font-family: sans-serif; line-height: 1.6;
+      resize: vertical; outline: none;
+    }
+    textarea:focus { border-color: rgba(255,107,53,0.4); box-shadow: 0 0 0 3px rgba(255,107,53,0.06); }
+
+    /* NAVIGATION */
+    .step-nav { display: flex; gap: 12px; margin-top: 36px; justify-content: flex-end; }
+    .btn-back {
+      background: transparent; border: 1px solid rgba(255,255,255,0.1);
+      color: #666; border-radius: 10px; padding: 12px 20px;
+      font-size: 14px; cursor: pointer; font-family: sans-serif;
+    }
+    .btn-next {
+      background: #FF6B35; color: #000; border: none;
+      border-radius: 10px; padding: 12px 24px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: sans-serif; transition: opacity 0.2s;
+    }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-generate {
+      background: #FF6B35; color: #000; border: none;
+      border-radius: 10px; padding: 14px 28px;
+      font-size: 15px; font-weight: 700; cursor: pointer; font-family: sans-serif;
+    }
+    button:hover:not(:disabled) { filter: brightness(1.1); }
+
+    /* RESULT */
+    .profile-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; padding: 4px 12px;
+      font-size: 12px; color: #888; font-family: sans-serif;
+    }
+    .page-title { font-size: clamp(22px,3vw,32px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .page-sub { color: #555; font-size: 15px; margin-bottom: 28px; font-family: sans-serif; }
+    .result-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 28px; min-height: 200px;
+    }
+    .loading-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 40px 0; }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,107,53,0.15);
+      border-top: 3px solid #FF6B35;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    .loading-text { color: #555; font-size: 14px; font-family: sans-serif; }
+    .result-text {
+      font-size: 15px; line-height: 1.85; color: #DEDBD5;
+      white-space: pre-line; margin-bottom: 24px; font-family: sans-serif;
+    }
+    .result-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-save {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #ccc; border-radius: 8px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: sans-serif;
+    }
+    .btn-new {
+      background: transparent;
+      border: 1px solid rgba(255,107,53,0.35);
+      color: #FF6B35; border-radius: 8px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: sans-serif;
+    }
+    .cursor-blink {
+      display: inline-block; color: #FF6B35;
+      animation: blink 0.7s step-end infinite;
+    }
+
+    /* SAVED */
+    .empty { color: #444; text-align: center; padding: 60px 0; font-family: sans-serif; }
+    .saved-list { display: flex; flex-direction: column; gap: 16px; }
+    .saved-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 22px;
+    }
+    .saved-meta { font-size: 12px; color: #555; font-family: sans-serif; margin-bottom: 12px; }
+    .saved-text { font-size: 14px; line-height: 1.8; color: #ccc; white-space: pre-line; margin-bottom: 16px; font-family: sans-serif; }
+    .btn-remove {
+      background: transparent;
+      border: 1px solid rgba(255,60,60,0.25);
+      color: #c66; border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: sans-serif;
+    }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 20px;
+      color: #222; font-size: 12px; font-family: sans-serif;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 12px 16px; }
+      .sector-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); }
+      .ticket-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-<div id="LOGIN">
-<div class="lbox">
-<div class="llogo"><span>⚡</span><h1>VendaMais</h1><p>IA de vendas para o seu negócio</p></div>
-<div class="ltabs"><button class="ltab on" id="lt-e" onclick="showLT('e')">Entrar</button><button class="ltab" id="lt-c" onclick="showLT('c')">Criar Conta</button></div>
-<div id="tab-e">
-<div class="lf"><label>E-mail</label><input class="lin" id="l-email" type="email" placeholder="seu@email.com"></div>
-<div class="lf"><label>Senha</label><input class="lin" id="l-senha" type="password" placeholder="********"></div>
-<button class="lbtn" onclick="doLogin()">Entrar</button>
-<div class="lerr" id="l-err"></div>
-</div>
-<div id="tab-c" style="display:none">
-<div class="lf"><label>Nome completo</label><input class="lin" id="c-nome" placeholder="Seu nome"></div>
-<div class="lf"><label>E-mail</label><input class="lin" id="c-email" type="email" placeholder="seu@email.com"></div>
-<div class="lf"><label>Senha</label><input class="lin" id="c-senha" type="password" placeholder="Minimo 6 caracteres"></div>
-<div class="lf"><label>Empresa / Negócio</label><input class="lin" id="c-empresa" placeholder="Nome da sua empresa"></div>
-<div class="lf2">
-<div class="lf"><label>Cidade</label><input class="lin" id="c-cidade" placeholder="Ex: Recife, PE"></div>
-<div class="lf"><label>WhatsApp</label><input class="lin" id="c-tel" type="tel" placeholder="(81) 99999-0000"></div>
-</div>
-<button class="lbtn" onclick="doReg()">Criar Conta Grátis</button>
-<div class="lerr" id="c-err"></div>
-</div>
-</div>
-</div>
 
-<div id="APP" style="display:none">
-<header class="header">
-<a class="logo" onclick="doReset()"><span style="font-size:18px">⚡</span><span class="logo-tx">VendaMais</span></a>
-<div class="hdr-r">
-<button class="hbtn hidden" id="btn-re" onclick="doReset()">← Novo</button>
-<button class="hbtn" onclick="toggleSv()">🔖 Salvos <span id="sv-c"></span></button>
-<button class="hbtn" onclick="doLogout()">⏻</button>
-</div>
+<!-- HEADER -->
+<header>
+  <a class="logo" onclick="goHome()">
+    <span class="logo-icon">⚡</span>
+    <span class="logo-text">VendaMais</span>
+  </a>
+  <div class="header-right">
+    <button class="nav-btn hidden" id="btn-restart" onclick="goHome()">← Recomeçar</button>
+    <button class="nav-btn" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
+  </div>
 </header>
-<div class="main">
-<div class="page hidden" id="Vs"><h2 class="stitle">Dicas Salvas</h2><div style="margin-top:20px" id="sv-box"></div></div>
-<div class="page hidden" id="Vr">
-<div class="rbadges" id="rb"></div>
-<div class="rbox"><div class="rbox-h"><h3 id="rt">Gerando...</h3><p id="rs">Analisando...</p></div>
-<div class="rbox-b">
-<div id="rl" class="ldw"><div class="spinner"></div><p style="color:var(--t3);font-size:13px" id="rlt">Consultando...</p></div>
-<div id="rd" class="hidden"><p class="rtext" id="rtx"></p><div class="racts"><button class="rb rb-s" onclick="doSave()">🔖 Salvar</button><button class="rb rb-n" onclick="doReset()">↺ Nova consulta</button></div></div>
-</div></div></div>
-<div class="page" id="Vo">
-<div id="S0" class="fade-in"><div class="hero"><div class="hero-badge">✦ Dicas específicas para o seu segmento</div><h1>Dicas de vendas<br><em>feitas para o seu negócio</em></h1><p>Responda 4 perguntas rápidas. A IA gera recomendações sob medida.</p><button class="hero-cta" onclick="goS(1)">Começar agora →</button><div class="hero-note">Menos de 2 min · Gratuito</div></div></div>
-<div id="S1" class="hidden fade-in"><div class="sbar" id="B1"></div><h2 class="stitle">Qual é o nicho da sua empresa?</h2><p class="ssub">Digite seu segmento ou escolha abaixo.</p><div style="margin-bottom:16px"><input class="nin" id="ni" placeholder="Ex: Barbearia, Delivery de açaí, Loja de celulares..." oninput="onNi()"><div class="nhint">Quanto mais específico, melhores as dicas.</div></div><div class="fl">Ou escolha rápido:</div><div class="qpicks" id="qp"></div><div class="snav"><button class="btn-back" onclick="goS(0)">← Voltar</button><button class="btn-next" id="b1" disabled onclick="goS(2)">Continuar →</button></div></div>
-<div id="S2" class="hidden fade-in"><div class="sbar" id="B2"></div><h2 class="stitle">Equipe e modelo de vendas</h2><p class="ssub">Isso muda totalmente a estratégia.</p><div class="fl">Quantos colaboradores?</div><div class="chips" id="sc"></div><div class="fl" style="margin-top:24px">Modelo de venda <span style="color:var(--t3);font-size:11px">(marque todos que se aplicam)</span></div><div class="chips" id="mc"></div><div class="snav"><button class="btn-back" onclick="goS(1)">← Voltar</button><button class="btn-next" id="b2" disabled onclick="goS(3)">Continuar →</button></div></div>
-<div id="S3" class="hidden fade-in"><div class="sbar" id="B3"></div><h2 class="stitle">Ticket médio das suas vendas?</h2><p class="ssub">O valor muda a abordagem e o canal.</p><div class="tgrid" id="tg"></div><div class="snav"><button class="btn-back" onclick="goS(2)">← Voltar</button><button class="btn-next" id="b3" disabled onclick="goS(4)">Continuar →</button></div></div>
-<div id="S4" class="hidden fade-in"><div class="sbar" id="B4"></div><h2 class="stitle">Maiores desafios de vendas?</h2><p class="ssub">Escolha até 3.</p><div class="cgrid" id="cg"></div><div class="snav"><button class="btn-back" onclick="goS(3)">← Voltar</button><button class="btn-next" id="b4" disabled onclick="goS(5)">Continuar →</button></div></div>
-<div id="S5" class="hidden fade-in"><div class="sbar" id="B5"></div><h2 class="stitle">Quer detalhar mais?</h2><p class="ssub">Opcional.</p><div class="sumbox" id="sb"></div><textarea class="extra-ta" id="ext" rows="3" placeholder='Ex: "Meu concorrente baixou preço, tenho 2 vendedores..."'></textarea><div class="snav"><button class="btn-back" onclick="goS(4)">← Voltar</button><button class="btn-gen" onclick="doGen()">✨ Gerar minhas dicas</button></div></div>
-</div>
-</div>
-</div>
-<footer class="footer">VendaMais · IA de vendas para empresas</footer>
+
+<main>
+
+  <!-- ── VIEW: ONBOARD ──────────────────────────────────────────────── -->
+  <div id="view-onboard" class="page">
+
+    <!-- STEP 0: HERO -->
+    <div id="step-0" class="hero">
+      <div class="hero-badge">✦ Para qualquer tipo de empresa</div>
+      <h1 class="hero-title">Dicas de vendas<br><em class="hero-em">feitas para o seu negócio</em></h1>
+      <p class="hero-sub">Responda 4 perguntas rápidas. A IA gera recomendações cirúrgicas para o seu segmento — sem papo genérico.</p>
+      <button class="hero-cta" onclick="goStep(1)">Começar agora →</button>
+      <p class="hero-note">Leva menos de 2 minutos · Gratuito</p>
+    </div>
+
+    <!-- STEP 1: SETOR -->
+    <div id="step-1" class="hidden">
+      <div class="step-bar" id="bar-1"></div>
+      <h2 class="step-title">Qual é o segmento da sua empresa?</h2>
+      <p class="step-sub">Escolha o que melhor descreve seu negócio.</p>
+      <div class="sector-grid" id="sector-grid"></div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(0)">← Voltar</button>
+        <button class="btn-next" id="next-1" disabled onclick="goStep(2)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: PORTE + MODELO -->
+    <div id="step-2" class="hidden">
+      <div class="step-bar" id="bar-2"></div>
+      <h2 class="step-title">Porte e modelo de vendas</h2>
+      <p class="step-sub">Isso muda completamente a estratégia recomendada.</p>
+      <div class="field-label">Tamanho da empresa</div>
+      <div class="chip-row" id="size-chips"></div>
+      <div class="field-label" style="margin-top:28px">Modelo de venda</div>
+      <div class="chip-row" id="model-chips"></div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(1)">← Voltar</button>
+        <button class="btn-next" id="next-2" disabled onclick="goStep(3)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: TICKET -->
+    <div id="step-3" class="hidden">
+      <div class="step-bar" id="bar-3"></div>
+      <h2 class="step-title">Qual é o ticket médio das suas vendas?</h2>
+      <p class="step-sub">O valor muda a abordagem, o canal e o processo de venda.</p>
+      <div class="ticket-grid" id="ticket-grid"></div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(2)">← Voltar</button>
+        <button class="btn-next" id="next-3" disabled onclick="goStep(4)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: DESAFIOS -->
+    <div id="step-4" class="hidden">
+      <div class="step-bar" id="bar-4"></div>
+      <h2 class="step-title">Quais são seus maiores desafios de vendas?</h2>
+      <p class="step-sub">Escolha até 3. As dicas serão focadas nisso.</p>
+      <div class="challenge-grid" id="challenge-grid"></div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(3)">← Voltar</button>
+        <button class="btn-next" id="next-4" disabled onclick="goStep(5)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: CONTEXTO + GERAR -->
+    <div id="step-5" class="hidden">
+      <div class="step-bar" id="bar-5"></div>
+      <h2 class="step-title">Quer adicionar mais contexto?</h2>
+      <p class="step-sub">Opcional — mas quanto mais específico, melhor a resposta.</p>
+      <div class="profile-summary">
+        <div class="summary-title">Seu perfil:</div>
+        <div class="summary-row" id="summary-row"></div>
+        <div class="summary-desafios" id="summary-des"></div>
+      </div>
+      <textarea id="extra-context" rows="4" placeholder='Ex: "Tenho 3 vendedores, trabalhamos com indicações e nosso maior concorrente baixou o preço 15% este mês..."'></textarea>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(4)">← Voltar</button>
+        <button class="btn-generate" onclick="generateTips()">✨ Gerar minhas dicas</button>
+      </div>
+    </div>
+
+  </div><!-- /view-onboard -->
+
+  <!-- ── VIEW: RESULT ───────────────────────────────────────────────── -->
+  <div id="view-result" class="page hidden">
+    <div class="profile-badges" id="result-badges"></div>
+    <h2 class="page-title" id="result-title">Suas Dicas Personalizadas</h2>
+    <p class="page-sub" id="result-sub">Específicas para o seu segmento e desafios.</p>
+    <div class="result-box" id="result-box">
+      <div class="loading-wrap" id="loading-wrap">
+        <div class="spinner"></div>
+        <p class="loading-text" id="loading-text">Consultando especialista...</p>
+      </div>
+      <div id="result-content" class="hidden">
+        <p class="result-text" id="result-text"></p>
+        <div class="result-actions">
+          <button class="btn-save" onclick="saveCurrent()">🔖 Salvar estas dicas</button>
+          <button class="btn-new" onclick="goHome()">↺ Nova consulta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VIEW: SAVED ────────────────────────────────────────────────── -->
+  <div id="view-saved" class="page hidden">
+    <h2 class="page-title">Dicas Salvas</h2>
+    <div id="saved-container"></div>
+  </div>
+
+</main>
+
+<footer>VendaMais · IA de vendas para empresas de todos os segmentos</footer>
+
 <script>
-'use strict';
-const $=id=>document.getElementById(id);
-const NICHOS=["Barbearia","Padaria","Restaurante","Delivery","Loja de roupas","E-commerce","Pet shop","Clinica estetica","Academia","Imobiliaria","Advocacia","Contabilidade","Oficina mecanica","Loja de celulares","Confeitaria","Salao de beleza","Consultoria","Farmacia","Mercadinho","Construcao"];
-const SZ=[{id:"0-3",l:"0 a 3 colaboradores"},{id:"4-6",l:"4 a 6 colaboradores"},{id:"7+",l:"7 ou mais colaboradores"}];
-const MD=[{id:"b2c",l:"Pessoas fisicas (B2C)"},{id:"b2b",l:"Empresas (B2B)"},{id:"b2g",l:"Governo (B2G)"},{id:"mkt",l:"Marketplace / Online"}];
-const TK=[{id:"baixo",l:"Ate R$200"},{id:"medio",l:"R$200 - R$2.000"},{id:"alto",l:"R$2.000 - R$20.000"},{id:"top",l:"Acima de R$20.000"}];
-const CH=["Gerar mais leads","Converter leads em clientes","Superar objecoes de preco","Reduzir ciclo de vendas","Aumentar ticket medio","Fidelizar clientes","Montar equipe de vendas","Vender mais online","Reativar clientes inativos","Escalar vendas"];
-let token=localStorage.getItem('vm_t')||'',usr=null,nicho='',sz=null,mds=[],tk=null,chs=[],aiT='',svd=[];
-function showLT(t){$('tab-e').style.display=t==='e'?'block':'none';$('tab-c').style.display=t==='c'?'block':'none';$('lt-e').className='ltab'+(t==='e'?' on':'');$('lt-c').className='ltab'+(t==='c'?' on':'');}
-async function doLogin(){const e=$('l-email').value.trim(),p=$('l-senha').value;if(!e||!p){$('l-err').textContent='Preencha email e senha.';return;}try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});const d=await r.json();if(!r.ok){$('l-err').textContent=d.error||'Erro.';return;}token=d.token;usr=d.user;localStorage.setItem('vm_t',token);enter();}catch(x){$('l-err').textContent='Erro de conexao.';}}
-async function doReg(){const n=$('c-nome').value.trim(),e=$('c-email').value.trim(),p=$('c-senha').value,emp=$('c-empresa').value.trim(),c=$('c-cidade').value.trim(),t=$('c-tel').value.trim();if(!n||!e||!p){$('c-err').textContent='Preencha nome, email e senha.';return;}if(p.length<6){$('c-err').textContent='Senha: minimo 6.';return;}try{const r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,password:p,segmento:emp,cidade:c,faturamento:0,tel:t})});const d=await r.json();if(!r.ok){$('c-err').textContent=d.error||'Erro.';return;}token=d.token;usr=d.user;localStorage.setItem('vm_t',token);enter();}catch(x){$('c-err').textContent='Erro de conexao.';}}
-function enter(){$('LOGIN').style.display='none';$('APP').style.display='block';}
-function doLogout(){fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+token}}).catch(()=>{});token='';usr=null;localStorage.removeItem('vm_t');$('APP').style.display='none';$('LOGIN').style.display='flex';}
-async function chkAuth(){if(!token)return;try{const r=await fetch('/api/auth/me',{headers:{'Authorization':'Bearer '+token}});if(!r.ok){token='';localStorage.removeItem('vm_t');return;}usr=await r.json();enter();}catch(x){token='';localStorage.removeItem('vm_t');}}
-function showV(v){['Vo','Vr','Vs'].forEach(x=>$(x).classList.add('hidden'));$(v).classList.remove('hidden');$('btn-re').classList.toggle('hidden',v!=='Vr');}
-function toggleSv(){const s=!$('Vs').classList.contains('hidden');if(s)showV(aiT?'Vr':'Vo');else{renderSv();showV('Vs');}}
-function doReset(){nicho='';sz=null;mds=[];tk=null;chs=[];aiT='';$('ext').value='';$('ni').value='';showV('Vo');goS(0);}
-function renderBar(id,n){const e=$(id);if(!e)return;e.innerHTML=Array.from({length:5}).map((_,i)=>'<div class="sseg'+(i<n?' on':'')+'"></div>').join('');}
-function renderQP(){$('qp').innerHTML=NICHOS.map(n=>'<button class="qp" onclick="pNi(\''+n+'\')">'+n+'</button>').join('');}
-function pNi(n){nicho=n;$('ni').value=n;$('b1').disabled=false;}
-function onNi(){nicho=$('ni').value.trim();$('b1').disabled=!nicho;}
-function renderSZ(){$('sc').innerHTML=SZ.map(s=>'<button class="chip'+(sz===s.id?' on':'')+'" onclick="pSZ(\''+s.id+'\')">'+s.l+'</button>').join('');}
-function pSZ(id){sz=id;renderSZ();$('b2').disabled=!(sz&&mds.length);}
-function renderMD(){$('mc').innerHTML=MD.map(m=>'<button class="chip'+(mds.includes(m.id)?' on':'')+'" onclick="tMD(\''+m.id+'\')">'+(mds.includes(m.id)?'✓ ':'')+m.l+'</button>').join('');}
-function tMD(id){if(mds.includes(id))mds=mds.filter(x=>x!==id);else mds.push(id);renderMD();$('b2').disabled=!(sz&&mds.length);}
-function renderTK(){$('tg').innerHTML=TK.map(t=>'<button class="tc'+(tk===t.id?' on':'')+'" onclick="pTK(\''+t.id+'\')">'+t.l+'</button>').join('');}
-function pTK(id){tk=id;renderTK();$('b3').disabled=false;}
-function renderCH(){$('cg').innerHTML=CH.map(c=>{const on=chs.includes(c),dis=chs.length>=3&&!on;return'<button class="cb'+(on?' on':'')+(dis?' dis':'')+'" onclick="tCH(\''+c.replace(/'/g,"\\'")+'\')">'+(on?'✓ ':'')+c+'</button>';}).join('');}
-function tCH(c){if(chs.includes(c))chs=chs.filter(x=>x!==c);else if(chs.length<3)chs.push(c);renderCH();$('b4').disabled=!chs.length;}
-function renderSum(){const s=SZ.find(x=>x.id===sz)||{},m=mds.map(id=>(MD.find(x=>x.id===id)||{}).l).filter(Boolean).join(', '),t=(TK.find(x=>x.id===tk)||{}).l||'';$('sb').innerHTML='<div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-weight:700">Seu perfil:</div><div style="display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--t2);margin-bottom:10px"><span>📌 '+nicho+'</span><span>·</span><span>'+(s.l||'')+'</span><span>·</span><span>'+m+'</span><span>·</span><span>Ticket '+t+'</span></div><div style="display:flex;gap:6px;flex-wrap:wrap">'+chs.map(c=>'<span style="background:var(--accentL);border:1px solid rgba(255,107,53,.2);color:var(--accent);border-radius:6px;padding:3px 9px;font-size:11px">'+c+'</span>').join('')+'</div>';}
-function goS(n){for(let i=0;i<=5;i++){const e=$('S'+i);if(e){e.classList.add('hidden');e.classList.remove('fade-in');}}const t=$('S'+n);if(t){t.classList.remove('hidden');void t.offsetWidth;t.classList.add('fade-in');}if(n===1){renderQP();renderBar('B1',1);}if(n===2){renderSZ();renderMD();renderBar('B2',2);}if(n===3){renderTK();renderBar('B3',3);}if(n===4){renderCH();renderBar('B4',4);}if(n===5){renderSum();renderBar('B5',5);}window.scrollTo({top:0,behavior:'smooth'});}
-function updSvC(){$('sv-c').textContent=svd.length?'('+svd.length+')':'';}
-function renderSv(){const c=$('sv-box');if(!svd.length){c.innerHTML='<div class="empty">Nenhuma dica salva.</div>';return;}c.innerHTML=svd.map((s,i)=>'<div class="scard"><div style="font-size:11px;color:var(--t3);margin-bottom:10px">'+s.meta+'</div><p style="font-size:14px;line-height:1.8;color:var(--t2);white-space:pre-line;margin-bottom:14px">'+s.text+'</p><button style="background:transparent;border:1px solid rgba(255,60,60,.2);color:#c66;border-radius:6px;padding:5px 11px;font-size:11px;cursor:pointer" onclick="rmSv('+i+')">Remover</button></div>').join('');}
-function doSave(){if(!svd.find(s=>s.text===aiT)){svd.push({text:aiT,meta:'📌 '+nicho});updSvC();}}
-function rmSv(i){svd.splice(i,1);updSvC();renderSv();}
-function tw(el,text,spd){spd=spd||10;el.innerHTML='';let i=0;const iv=setInterval(()=>{if(i<text.length){el.textContent=text.slice(0,++i);el.innerHTML+='<span class="cursor">▍</span>';}else{el.textContent=text;clearInterval(iv);}},spd);}
-async function doGen(){showV('Vr');$('rl').classList.remove('hidden');$('rd').classList.add('hidden');$('rt').textContent='Gerando suas dicas...';$('rs').textContent='Analisando '+nicho+'...';$('rlt').textContent='Consultando especialista em '+nicho+'...';const s=(SZ.find(x=>x.id===sz)||{}).l||'',m=mds.map(id=>(MD.find(x=>x.id===id)||{}).l).filter(Boolean).join(', '),t=(TK.find(x=>x.id===tk)||{}).l||'',ext=$('ext').value.trim(),nm=(usr&&usr.name)||'',ct=(usr&&usr.cidade)||'';$('rb').innerHTML=['📌 '+nicho,s,m,'Ticket '+t].filter(Boolean).map(b=>'<span class="rbdg">'+b+'</span>').join('');const sys='Voce e um consultor de vendas SENIOR com 20+ anos em campo. Especialista em empresas brasileiras. DIRETO, PROVOCADOR e PRATICO.\n\nREGRAS:\n- Dicas 100% ESPECIFICAS para "'+nicho+'" - NUNCA genericas\n- Use exemplos REAIS do setor "'+nicho+'"'+(ct?' na regiao de '+ct:'')+'\n- Considere: '+s+', modelo '+m+', ticket '+t+'\n- Cada dica tem ACAO IMEDIATA executavel hoje\n- Tom: direto, sem rodeios, como mentor que cobra resultado\n- Use numeros, prazos e metas concretas\n\nFORMATO (3 dicas):\n🔥 [NUMERO]. [TITULO PROVOCADOR]\n[Explicacao direta com exemplo real do setor]\n👉 Acao imediata: [o que fazer HOJE]\n📊 Meta: [resultado esperado em X dias]';const msg='PERFIL:\n- Nome: '+nm+'\n- Nicho: '+nicho+'\n- Colaboradores: '+s+'\n- Modelo: '+m+'\n- Ticket: '+t+'\n- Desafios: '+chs.join(', ')+'\n'+(ext?'- Contexto: '+ext+'\n':'')+(ct?'- Cidade: '+ct+'\n':'')+'\nGere 3 dicas de vendas MATADORAS para "'+nicho+'". Cada uma resolve um desafio. Sem enrolacao.';try{const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({system:sys,messages:[{role:'user',content:msg}]})});const data=await r.json();let txt='';if(data.content)data.content.forEach(b=>{if(b.type==='text')txt+=b.text;});aiT=txt||'Erro ao gerar. Tente novamente.';}catch(e){aiT='Erro de conexao. Tente novamente.';}$('rl').classList.add('hidden');$('rd').classList.remove('hidden');$('rt').textContent='🔥 Suas Dicas Personalizadas';$('rs').textContent='Especificas para '+nicho;tw($('rtx'),aiT);}
-goS(0);chkAuth();
+// ─── DADOS ────────────────────────────────────────────────────────────────────
+const SECTORS = [
+  { id:"varejo",      label:"Varejo / Loja Física",       icon:"🏪" },
+  { id:"ecommerce",   label:"E-commerce",                 icon:"🛒" },
+  { id:"saas",        label:"SaaS / Software",            icon:"💻" },
+  { id:"alimentacao", label:"Alimentação / Food Service", icon:"🍽️" },
+  { id:"saude",       label:"Saúde / Clínicas",           icon:"🏥" },
+  { id:"educacao",    label:"Educação / Cursos",          icon:"🎓" },
+  { id:"imobiliario", label:"Imobiliário",                icon:"🏢" },
+  { id:"industria",   label:"Indústria / Manufatura",     icon:"🏭" },
+  { id:"financeiro",  label:"Financeiro / Seguros",       icon:"💰" },
+  { id:"servicos",    label:"Serviços Profissionais",     icon:"💼" },
+  { id:"agencia",     label:"Agência / Marketing",        icon:"📣" },
+  { id:"logistica",   label:"Logística / Transporte",     icon:"🚚" },
+  { id:"construcao",  label:"Construção / Reforma",       icon:"🔨" },
+  { id:"beleza",      label:"Beleza / Estética",          icon:"✨" },
+  { id:"outro",       label:"Outro segmento",             icon:"🔷" },
+];
+const SIZES = [
+  { id:"mei",     label:"MEI / Autônomo" },
+  { id:"micro",   label:"Micro (até 9 func.)" },
+  { id:"pequena", label:"Pequena (10–49)" },
+  { id:"media",   label:"Média (50–249)" },
+  { id:"grande",  label:"Grande (250+)" },
+];
+const MODELS = [
+  { id:"b2c",   label:"B2C — vendo para pessoas físicas" },
+  { id:"b2b",   label:"B2B — vendo para empresas" },
+  { id:"ambos", label:"Ambos (B2C + B2B)" },
+  { id:"b2g",   label:"B2G — vendo para governo" },
+];
+const TICKETS = [
+  { id:"baixo",     label:"Até R$200" },
+  { id:"medio",     label:"R$200 – R$2.000" },
+  { id:"alto",      label:"R$2.000 – R$20.000" },
+  { id:"enterprise",label:"Acima de R$20.000" },
+];
+const CHALLENGES = [
+  "Gerar mais leads qualificados","Converter leads em clientes",
+  "Superar objeções de preço","Reduzir o ciclo de vendas",
+  "Aumentar o ticket médio","Reter e fidelizar clientes",
+  "Montar / treinar equipe de vendas","Vender online / digital",
+  "Reativar clientes inativos","Escalar as vendas",
+];
+const TOTAL_STEPS = 5;
+
+// ─── ESTADO ───────────────────────────────────────────────────────────────────
+let state = { sector:null, size:null, model:null, ticket:null, challenges:[], currentText:"", currentMeta:"" };
+let saved = JSON.parse(localStorage.getItem("vendamais_saved") || "[]");
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+(function init() {
+  // Sector grid
+  const sg = document.getElementById("sector-grid");
+  SECTORS.forEach(s => {
+    const btn = document.createElement("button");
+    btn.className = "sector-card";
+    btn.dataset.id = s.id;
+    btn.innerHTML = `<span class="sector-icon">${s.icon}</span><span class="sector-label">${s.label}</span>`;
+    btn.onclick = () => selectSector(s.id);
+    sg.appendChild(btn);
+  });
+
+  // Size chips
+  const sc = document.getElementById("size-chips");
+  SIZES.forEach(s => {
+    const btn = document.createElement("button");
+    btn.className = "chip"; btn.dataset.id = s.id; btn.textContent = s.label;
+    btn.onclick = () => selectChip("size", s.id, "size-chips", "next-2");
+    sc.appendChild(btn);
+  });
+
+  // Model chips
+  const mc = document.getElementById("model-chips");
+  MODELS.forEach(m => {
+    const btn = document.createElement("button");
+    btn.className = "chip"; btn.dataset.id = m.id; btn.textContent = m.label;
+    btn.onclick = () => selectChip("model", m.id, "model-chips", "next-2");
+    mc.appendChild(btn);
+  });
+
+  // Ticket grid
+  const tg = document.getElementById("ticket-grid");
+  TICKETS.forEach(t => {
+    const btn = document.createElement("button");
+    btn.className = "ticket-card"; btn.dataset.id = t.id; btn.textContent = t.label;
+    btn.onclick = () => { selectTicket(t.id); };
+    tg.appendChild(btn);
+  });
+
+  // Challenges
+  const cg = document.getElementById("challenge-grid");
+  CHALLENGES.forEach(c => {
+    const btn = document.createElement("button");
+    btn.className = "challenge-btn"; btn.dataset.val = c; btn.textContent = c;
+    btn.onclick = () => toggleChallenge(c);
+    cg.appendChild(btn);
+  });
+
+  updateSavedBtn();
+})();
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+function goStep(n) {
+  for (let i = 0; i <= 5; i++) {
+    const el = document.getElementById("step-"+i);
+    if (el) el.classList.toggle("hidden", i !== n);
+  }
+  if (n >= 1) renderBar(n);
+  if (n === 5) renderSummary();
+  window.scrollTo(0,0);
+}
+
+function renderBar(current) {
+  const barId = "bar-" + current;
+  const bar = document.getElementById(barId);
+  if (!bar) return;
+  bar.innerHTML = "";
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const seg = document.createElement("div");
+    seg.className = "step-seg" + (i < current ? " active" : "");
+    bar.appendChild(seg);
+  }
+}
+
+function showView(name) {
+  ["onboard","result","saved"].forEach(v => {
+    document.getElementById("view-"+v).classList.toggle("hidden", v !== name);
+  });
+  const isResult = name === "result";
+  document.getElementById("btn-restart").classList.toggle("hidden", !isResult);
+  document.getElementById("btn-saved-nav").classList.toggle("active", name === "saved");
+  window.scrollTo(0,0);
+}
+
+function goHome() {
+  state = { sector:null, size:null, model:null, ticket:null, challenges:[], currentText:"", currentMeta:"" };
+  // reset selections
+  document.querySelectorAll(".sector-card, .chip, .ticket-card, .challenge-btn").forEach(el => {
+    el.classList.remove("selected","disabled");
+  });
+  ["next-1","next-2","next-3","next-4"].forEach(id => {
+    document.getElementById(id).disabled = true;
+  });
+  document.getElementById("extra-context").value = "";
+  goStep(0);
+  showView("onboard");
+}
+
+function toggleSaved() {
+  const current = !document.getElementById("view-saved").classList.contains("hidden");
+  if (current) {
+    showView(state.currentText ? "result" : "onboard");
+  } else {
+    renderSaved();
+    showView("saved");
+  }
+}
+
+// ─── SELECTIONS ───────────────────────────────────────────────────────────────
+function selectSector(id) {
+  state.sector = id;
+  document.querySelectorAll(".sector-card").forEach(el => {
+    el.classList.toggle("selected", el.dataset.id === id);
+  });
+  document.getElementById("next-1").disabled = false;
+}
+
+function selectChip(field, id, groupId, nextId) {
+  state[field] = id;
+  document.querySelectorAll("#" + groupId + " .chip").forEach(el => {
+    el.classList.toggle("selected", el.dataset.id === id);
+  });
+  if (state.size && state.model) document.getElementById(nextId).disabled = false;
+}
+
+function selectTicket(id) {
+  state.ticket = id;
+  document.querySelectorAll(".ticket-card").forEach(el => {
+    el.classList.toggle("selected", el.dataset.id === id);
+  });
+  document.getElementById("next-3").disabled = false;
+}
+
+function toggleChallenge(val) {
+  const idx = state.challenges.indexOf(val);
+  if (idx >= 0) {
+    state.challenges.splice(idx, 1);
+  } else if (state.challenges.length < 3) {
+    state.challenges.push(val);
+  }
+  // update UI
+  document.querySelectorAll(".challenge-btn").forEach(el => {
+    const v = el.dataset.val;
+    const sel = state.challenges.includes(v);
+    const maxed = state.challenges.length === 3 && !sel;
+    el.classList.toggle("selected", sel);
+    el.classList.toggle("disabled", maxed);
+  });
+  document.getElementById("next-4").disabled = state.challenges.length === 0;
+}
+
+// ─── SUMMARY ─────────────────────────────────────────────────────────────────
+function renderSummary() {
+  const s = SECTORS.find(x => x.id === state.sector);
+  const sz = SIZES.find(x => x.id === state.size);
+  const mo = MODELS.find(x => x.id === state.model);
+  const ti = TICKETS.find(x => x.id === state.ticket);
+
+  const row = document.getElementById("summary-row");
+  row.innerHTML = [s?.icon+" "+s?.label, sz?.label, mo?.label, "Ticket "+ti?.label]
+    .filter(Boolean).map(t => `<span>${t}</span><span>·</span>`).join("").replace(/·<\/span>$/, "</span>");
+
+  const des = document.getElementById("summary-des");
+  des.innerHTML = state.challenges.map(c => `<span class="des-badge">${c}</span>`).join("");
+}
+
+// ─── GENERATE ────────────────────────────────────────────────────────────────
+async function generateTips() {
+  showView("result");
+  document.getElementById("loading-wrap").classList.remove("hidden");
+  document.getElementById("result-content").classList.add("hidden");
+  document.getElementById("result-title").textContent = "Gerando suas dicas...";
+  document.getElementById("result-sub").textContent = "Analisando o perfil da sua empresa...";
+
+  const s = SECTORS.find(x => x.id === state.sector);
+  const sz = SIZES.find(x => x.id === state.size);
+  const mo = MODELS.find(x => x.id === state.model);
+  const ti = TICKETS.find(x => x.id === state.ticket);
+  const extra = document.getElementById("extra-context").value.trim();
+
+  // badges
+  const badges = document.getElementById("result-badges");
+  badges.innerHTML = [s?.icon+" "+s?.label, sz?.label, mo?.label, ti?.label]
+    .filter(Boolean).map(t => `<span class="badge">${t}</span>`).join("");
+
+  document.getElementById("loading-text").textContent = `Consultando especialista em ${s?.label}...`;
+
+  const systemPrompt = `Você é um consultor sênior de vendas com 20+ anos de experiência real em campo, especializado em empresas brasileiras de todos os segmentos. Você é direto, prático e nunca dá conselhos genéricos.
+
+REGRAS OBRIGATÓRIAS:
+- Suas dicas devem ser ESPECÍFICAS para o segmento e contexto informado — jamais genéricas
+- Use exemplos concretos do próprio setor da empresa (mencione situações reais daquele mercado)
+- Considere o modelo de venda (B2B/B2C/etc), o porte da empresa e o ticket médio ao montar cada dica
+- Cada dica deve ter uma AÇÃO IMEDIATA que o empresário pode executar hoje ou amanhã
+- Linguagem direta, sem rodeios, sem "é importante que..." — vá direto ao ponto
+- Formato: 3 dicas numeradas. Cada uma com título em negrito + explicação + ação prática`;
+
+  const userPrompt = `PERFIL DA EMPRESA:
+- Segmento: ${s?.label}
+- Porte: ${sz?.label}
+- Modelo de venda: ${mo?.label}
+- Ticket médio: ${ti?.label}
+- Principais desafios: ${state.challenges.join(", ")}
+${extra ? "- Contexto adicional: " + extra : ""}
+
+Gere 3 dicas de vendas altamente específicas para esse perfil. Cada dica deve resolver um dos desafios listados, com exemplos reais do segmento "${s?.label}" e ações que podem ser executadas esta semana.`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userPrompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(b => b.text || "").join("") || "Erro ao gerar dicas.";
+
+    state.currentText = text;
+    state.currentMeta = `${s?.icon} ${s?.label} · ${mo?.label}`;
+
+    document.getElementById("loading-wrap").classList.add("hidden");
+    document.getElementById("result-content").classList.remove("hidden");
+    document.getElementById("result-title").textContent = "Suas Dicas Personalizadas";
+    document.getElementById("result-sub").textContent = "Específicas para o seu segmento e desafios.";
+
+    typewrite(text, document.getElementById("result-text"));
+  } catch(e) {
+    document.getElementById("loading-wrap").classList.add("hidden");
+    document.getElementById("result-content").classList.remove("hidden");
+    document.getElementById("result-text").textContent = "Erro de conexão. Verifique sua internet e tente novamente.";
+  }
+}
+
+// ─── TYPEWRITER ───────────────────────────────────────────────────────────────
+function typewrite(text, el, speed = 12) {
+  el.innerHTML = "";
+  let i = 0;
+  const cursor = document.createElement("span");
+  cursor.className = "cursor-blink"; cursor.textContent = "▍";
+  el.appendChild(cursor);
+  const iv = setInterval(() => {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i++]), cursor);
+    } else {
+      clearInterval(iv); cursor.remove();
+    }
+  }, speed);
+}
+
+// ─── SAVE ────────────────────────────────────────────────────────────────────
+function saveCurrent() {
+  if (!state.currentText) return;
+  if (!saved.find(s => s.text === state.currentText)) {
+    saved.push({ text: state.currentText, meta: state.currentMeta });
+    localStorage.setItem("vendamais_saved", JSON.stringify(saved));
+    updateSavedBtn();
+  }
+}
+
+function updateSavedBtn() {
+  const btn = document.getElementById("btn-saved-nav");
+  btn.textContent = saved.length > 0 ? `🔖 Salvos (${saved.length})` : "🔖 Salvos";
+}
+
+function renderSaved() {
+  const container = document.getElementById("saved-container");
+  if (saved.length === 0) {
+    container.innerHTML = '<div class="empty">Nenhuma dica salva ainda.</div>';
+    return;
+  }
+  container.innerHTML = '<div class="saved-list">' +
+    saved.map((item, i) => `
+      <div class="saved-card">
+        <div class="saved-meta">${item.meta}</div>
+        <p class="saved-text">${item.text}</p>
+        <button class="btn-remove" onclick="removeSaved(${i})">Remover</button>
+      </div>
+    `).join("") + '</div>';
+}
+
+function removeSaved(i) {
+  saved.splice(i, 1);
+  localStorage.setItem("vendamais_saved", JSON.stringify(saved));
+  updateSavedBtn();
+  renderSaved();
+}
 </script>
 </body>
 </html>
