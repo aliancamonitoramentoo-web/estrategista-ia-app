@@ -755,8 +755,8 @@ ${extra?"- Contexto adicional: "+extra:""}
 Gere 3 dicas de vendas altamente específicas para esse perfil. Cada dica deve resolver um dos desafios listados, com exemplos reais do segmento "${s?.label}" e ações que podem ser executadas esta semana.`;
 
   try{
-    const res=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json","x-api-key":RUNTIME_API_KEY,"anthropic-version":"2023-06-01"},
+    const res=await fetch("/api/chat",{
+      method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:systemPrompt,messages:[{role:"user",content:userPrompt}]})
     });
     const data=await res.json();
