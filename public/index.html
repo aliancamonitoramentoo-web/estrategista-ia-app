@@ -765,11 +765,7 @@ function renderTrack(){
     const statusClass=item.status||"todo";
     const statusLabel={todo:"⚪ Pendente",doing:"🟡 Em andamento",done:"🟢 Concluída"}[statusClass];
     const barColor={todo:"#555",doing:"#F9C74F",done:"#00C9A7"}[statusClass];
-    const checklistHtml=checks.map((c,ci)=>`
-      <div class="check-item" onclick="toggleCheck(${realIdx},${ci})">
-        <div class="check-box ${c.done?'checked'}">${c.done?'✓':''}</div>
-        <span class="check-label ${c.done?'done'}">${c.label}</span>
-      </div>`).join("");
+    const checklistHtml=checks.map((c,ci)=>'<div class="check-item" onclick="toggleCheck('+realIdx+','+ci+')">'+'<div class="check-box '+(c.done?'checked':'')+'>'+(c.done?'&#10003;':'')+'</div>'+'<span class="check-label '+(c.done?'done':'')+'">'+c.label+'</span></div>').join("");
     return`<div class="progress-card">
       <div class="progress-header">
         <div><div class="saved-meta" style="margin:0">${item.meta}</div><div class="saved-date">${item.date||""}</div></div>
