@@ -24,10 +24,19 @@ async function getGoogleToken() {
     iat: now,
   })).toString("base64url");
 
-  const { createSign } = await import("node:crypto");
+  const { createSign, createPrivateKey } = await import("node:crypto");
+
+  // Normaliza a chave — suporta \n literal ou quebras reais
+  const rawKey = SA_KEY.replace(/\\n/g, "\n").replace(/\n/g, "\n");
+  const privateKey = createPrivateKey({
+    key: rawKey,
+    format: "pem",
+    type: "pkcs8",
+  });
+
   const sign = createSign("RSA-SHA256");
   sign.update(`${header}.${claim}`);
-  const sig = sign.sign(SA_KEY.replace(/\\n/g, "\n"), "base64url");
+  const sig = sign.sign(privateKey, "base64url");
   const jwt = `${header}.${claim}.${sig}`;
 
   const res = await fetch("https://oauth2.googleapis.com/token", {
@@ -36,6 +45,7 @@ async function getGoogleToken() {
     body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
   });
   const data = await res.json();
+  if (!data.access_token) throw new Error("Token inválido: " + JSON.stringify(data));
   return data.access_token;
 }
 
