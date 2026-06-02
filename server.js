@@ -7,136 +7,100 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const KEY = process.env.ANTHROPIC_API_KEY;
 
-// ── Verifica se um vídeo do YouTube existe de verdade ─────────────────────
-async function videoExists(id) {
-  try {
-    const url = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
-    const res = await fetch(url, { method: "HEAD" });
-    if (!res.ok) return false;
-    // YouTube retorna imagem 120x90 para vídeos inválidos (thumbnail padrão)
-    // Vídeos válidos têm thumbnail mqdefault (320x180)
-    const contentLength = res.headers.get("content-length");
-    // Thumbnail inválida tem ~1-2kb, válida tem >5kb
-    if (contentLength && parseInt(contentLength) < 3000) return false;
-    return true;
-  } catch {
-    return false;
-  }
+async function callAI(messages, system, maxTokens = 1200) {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
+    body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: maxTokens, system, messages }),
+  });
+  return r.json();
 }
 
-// ── Proxy principal (gerar dicas) ─────────────────────────────────────────
+async function videoExists(id) {
+  try {
+    const r = await fetch(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, { method: "HEAD" });
+    if (!r.ok) return false;
+    const len = r.headers.get("content-length");
+    return !len || parseInt(len) > 3000;
+  } catch { return false; }
+}
+
+// ── GERAR DICAS ───────────────────────────────────────────────────────────
 app.post("/api/chat", async (req, res) => {
   if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
   try {
-    const r = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify(req.body),
-    });
-    res.status(r.status).json(await r.json());
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    const data = await callAI(req.body.messages, req.body.system, req.body.max_tokens || 1400);
+    res.json(data);
+  } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ── Busca e valida vídeos por nicho ──────────────────────────────────────
+// ── BUSCAR E VALIDAR VÍDEOS POR DICA ─────────────────────────────────────
 app.post("/api/videos", async (req, res) => {
   if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
 
-  const { sectorLabel } = req.body;
+  const { sectorLabel, city, dicas } = req.body;
 
-  // Vídeos âncora garantidos (verificados manualmente)
-  const ANCHOR = {
-    marketing: [
-      { id: "3466p8uVwEQ", title: "Marketing Digital para Iniciantes e Avançados", channel: "Natanael Oliveira", type: "aula" },
-      { id: "38gX3WT5mqk", title: "Marketing Digital 2026: Tendências", channel: "Natanael Oliveira", type: "conteudo" },
-    ],
-    vendas: [
-      { id: "aZG9j4eqG3E", title: "Quando o Cliente Diz 'Tá Caro' — O Maior Vídeo de Vendas do Brasil", channel: "Thiago Concer", type: "aula" },
-      { id: "dQOXsn7kKyo", title: "O Que Todo Vendedor Precisa Saber", channel: "Thiago Concer", type: "conteudo" },
-    ],
-    network: [
-      { id: "irTe2XF4s8k", title: "Como Fazer Network — Pablo Marçal", channel: "Empreender é Mais", type: "aula" },
-      { id: "s4tU92xq5Os", title: "Joel Jota, Caio Carneiro e Flávio Augusto sobre Negócios", channel: "Inteligência Ltda", type: "conteudo" },
-    ],
-  };
+  const FALLBACK = [
+    { id: "aZG9j4eqG3E", title: "Quando o Cliente Diz 'Tá Caro'", channel: "Thiago Concer", role: "principal" },
+    { id: "RAOppNOpNUI", title: "5 Técnicas de Persuasão para Fechar Vendas", channel: "Thiago Concer", role: "complementar" },
+    { id: "irTe2XF4s8k", title: "Como Fazer Network", channel: "Pablo Marçal", role: "complementar" },
+  ];
 
-  // Pede à IA IDs de vídeos específicos do nicho
   const prompt = `Você conhece vídeos reais do YouTube em português brasileiro.
 
-Para o nicho "${sectorLabel}", liste IDs reais do YouTube que você conhece com CERTEZA ABSOLUTA que existem.
+Para uma empresa do nicho "${sectorLabel}" na cidade "${city || "Brasil"}", preciso de vídeos para aprofundar cada uma das 3 dicas abaixo.
 
-Retorne APENAS JSON válido, sem markdown:
+DICAS GERADAS:
+${dicas.map((d, i) => `${i + 1}. Tema: ${d.tema} — ${d.resumo}`).join("\n")}
+
+Para cada dica, sugira 3 vídeos reais do YouTube:
+- "principal": vídeo diretamente sobre o tema da dica
+- "complementar1": aprofunda a técnica ou psicologia por trás
+- "complementar2": mentalidade ou hábito que sustenta a prática
+
+Retorne APENAS JSON válido sem markdown:
 {
-  "marketing": [
-    {"id": "XXXXXXXXXX", "title": "título exato do vídeo", "channel": "canal exato", "type": "aula"},
-    {"id": "XXXXXXXXXX", "title": "título exato do vídeo", "channel": "canal exato", "type": "conteudo"}
+  "dica1": [
+    {"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"principal"},
+    {"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar1"},
+    {"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar2"}
   ],
-  "vendas": [
-    {"id": "XXXXXXXXXX", "title": "título exato do vídeo", "channel": "canal exato", "type": "aula"},
-    {"id": "XXXXXXXXXX", "title": "título exato do vídeo", "channel": "canal exato", "type": "conteudo"}
-  ],
-  "network": [
-    {"id": "XXXXXXXXXX", "title": "título exato do vídeo", "channel": "canal exato", "type": "aula"},
-    {"id": "XXXXXXXXXX", "title": "título exato do vídeo", "channel": "canal exato", "type": "conteudo"}
-  ]
+  "dica2": [...],
+  "dica3": [...]
 }
 
-REGRAS:
-- IDs de 11 caracteres exatos
-- Apenas vídeos que você tem CERTEZA que existem
-- Em português brasileiro
-- Relevantes para "${sectorLabel}": marketing desse setor, vendas desse setor, networking desse setor
-- type "aula" = videoaula/tutorial, type "conteudo" = palestra/motivacional
-- Se não tiver certeza de um ID específico para o nicho, use IDs de canais de referência como Thiago Concer, G4 Educação, Sebrae, Natanael Oliveira que sejam sobre o tema`;
+REGRAS ABSOLUTAS:
+- IDs de exatamente 11 caracteres
+- Apenas vídeos que você tem CERTEZA que existem no YouTube
+- Todos em português brasileiro
+- Canais de referência: Thiago Concer, G4 Educação, Natanael Oliveira, Joel Jota, Flávio Augusto, Sebrae, Pablo Marçal, Leandro Ladeira, Conquer, Me Poupe
+- Se não tiver certeza do ID, use um desses IDs garantidos: aZG9j4eqG3E, RAOppNOpNUI, dQOXsn7kKyo, irTe2XF4s8k, 3466p8uVwEQ, s4tU92xq5Os`;
 
   try {
-    const r = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 800, messages: [{ role: "user", content: prompt }] }),
-    });
-    const data = await r.json();
+    const data = await callAI([{ role: "user", content: prompt }], "", 1000);
     const text = data.content?.map(b => b.text || "").join("") || "{}";
-    const clean = text.replace(/```json|```/g, "").trim();
-    const suggested = JSON.parse(clean);
+    const suggested = JSON.parse(text.replace(/```json|```/g, "").trim());
 
-    // Valida cada vídeo sugerido pela IA
-    const result = { marketing: [], vendas: [], network: [] };
+    const result = { dica1: [], dica2: [], dica3: [] };
 
-    for (const category of ["marketing", "vendas", "network"]) {
-      const candidates = suggested[category] || [];
-      
-      for (const video of candidates) {
-        if (!video.id || video.id.length !== 11) continue;
-        
-        console.log(`Verificando ${category}: ${video.id} — ${video.title}`);
-        const exists = await videoExists(video.id);
-        
-        if (exists) {
-          console.log(`✅ Válido: ${video.id}`);
-          result[category].push(video);
-        } else {
-          console.log(`❌ Inválido/inexistente: ${video.id}`);
-        }
-
-        // Máximo 2 vídeos por categoria
-        if (result[category].length >= 2) break;
+    for (const key of ["dica1", "dica2", "dica3"]) {
+      const candidates = suggested[key] || [];
+      for (const v of candidates) {
+        if (!v.id || v.id.length !== 11) continue;
+        const ok = await videoExists(v.id);
+        console.log(`${ok ? "✅" : "❌"} ${key} ${v.id} — ${v.title}`);
+        if (ok) result[key].push(v);
       }
-
-      // Se não validou nenhum para esse nicho, usa âncora garantida
-      if (result[category].length === 0) {
-        console.log(`Usando âncora para ${category}`);
-        result[category] = ANCHOR[category];
+      if (result[key].length < 3) {
+        const missing = 3 - result[key].length;
+        result[key].push(...FALLBACK.slice(0, missing));
       }
     }
 
-    console.log("Resultado final:", JSON.stringify(result, null, 2));
     res.json(result);
-
   } catch (err) {
-    console.error("Erro:", err.message);
-    res.json(ANCHOR);
+    console.error("Erro vídeos:", err.message);
+    res.json({ dica1: FALLBACK, dica2: FALLBACK, dica3: FALLBACK });
   }
 });
 
