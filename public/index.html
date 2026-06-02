@@ -471,12 +471,12 @@ function submitGate(){
   if(!phone || phone.replace(/\D/g,"").length < 10){errEl.textContent="Informe um WhatsApp válido.";errEl.style.display="block";return;}
   if(!email || !email.includes("@")){errEl.textContent="Informe um e-mail válido.";errEl.style.display="block";return;}
 
-  // Salva lead
+  // Salva lead localmente
   const leads = JSON.parse(localStorage.getItem("vm_leads")||"[]");
   leads.push({name, phone, email, date: new Date().toISOString()});
   localStorage.setItem("vm_leads", JSON.stringify(leads));
 
-  // Registra usuário automaticamente se não existir
+  // Registra usuário automaticamente
   const users = JSON.parse(localStorage.getItem("vm_users")||"{}");
   if(!users[email]){
     users[email] = {name, phone, saved:[]};
@@ -484,6 +484,15 @@ function submitGate(){
   }
   currentUser = {email, name};
   localStorage.setItem("vm_user", JSON.stringify(currentUser));
+
+  // Envia para Google Sheets via backend
+  const nicho = state?.nicho || "";
+  const city = state?.city || "";
+  fetch("/api/lead", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({name, phone, email, nicho, city})
+  }).catch(()=>{});
 
   passGate();
 }
