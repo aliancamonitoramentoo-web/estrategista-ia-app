@@ -18,7 +18,6 @@ main{flex:1;max-width:820px;margin:0 auto;width:100%;padding:0 20px}
 @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 @keyframes igFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
-/* HEADER */
 header{display:flex;align-items:center;justify-content:space-between;padding:13px 22px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(9,9,14,0.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
 .logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none}
 .logo-icon{font-size:19px}.logo-text{font-size:17px;font-weight:700;color:#FF6B35;letter-spacing:-.4px}
@@ -27,7 +26,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .nav-btn.active,.nav-btn:hover{color:#FF6B35;border-color:rgba(255,107,53,0.4)}
 .user-chip{background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3);color:#FF6B35;border-radius:20px;padding:5px 11px;font-size:11px;font-family:sans-serif;cursor:pointer}
 
-/* AUTH MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .modal{background:#13131A;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;width:100%;max-width:390px;position:relative;animation:slideDown .3s ease}
 .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#555;font-size:20px;cursor:pointer}
@@ -43,12 +41,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .btn-auth{width:100%;background:#FF6B35;color:#000;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:4px}
 .auth-error{background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.25);border-radius:8px;padding:9px 13px;font-size:13px;color:#e88;font-family:sans-serif;margin-bottom:12px}
 
-/* STEP BAR */
 .step-bar{display:flex;gap:6px;margin-bottom:28px}
 .step-seg{flex:1;height:3px;border-radius:4px;background:rgba(255,255,255,0.1);transition:background .3s}
 .step-seg.active{background:#FF6B35}
 
-/* HERO */
 .hero{text-align:center;padding-top:16px}
 .hero-badge{display:inline-block;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;background:rgba(255,107,53,0.08);border-radius:24px;padding:5px 15px;font-size:13px;margin-bottom:24px;font-family:sans-serif}
 .hero-title{font-size:clamp(32px,5vw,54px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:18px}
@@ -57,14 +53,29 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .hero-cta{background:#FF6B35;color:#000;border:none;border-radius:12px;padding:14px 30px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif}
 .hero-note{color:#444;font-size:13px;margin-top:12px;font-family:sans-serif}
 
-/* STEPS */
 .step-title{font-size:clamp(19px,3vw,26px);font-weight:700;margin-bottom:7px;letter-spacing:-.5px}
 .step-sub{color:#666;font-size:14px;margin-bottom:24px;font-family:sans-serif}
-.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:9px;margin-bottom:8px}
-.sector-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:13px 11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .18s;font-family:sans-serif;color:#ccc}
-.sector-card:hover{background:rgba(255,255,255,0.06)}.sector-card.selected{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.5);color:#FF6B35}
-.sector-icon{font-size:21px}.sector-label{font-size:11px;text-align:center;line-height:1.3}
-.field-label{font-size:13px;color:#666;margin-bottom:11px;font-family:sans-serif}
+
+/* NICHO COM SUGESTÕES */
+.nicho-wrap{position:relative;margin-bottom:8px}
+.nicho-input-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px}
+.nicho-input-row:focus-within{border-color:rgba(255,107,53,0.5)}
+.nicho-search-icon{font-size:18px;flex-shrink:0}
+.nicho-input{background:transparent;border:none;outline:none;color:#EDEBE6;font-size:15px;font-family:sans-serif;width:100%}
+.nicho-input::placeholder{color:#444}
+.nicho-suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#13131A;border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;z-index:50;max-height:280px;overflow-y:auto}
+.nicho-item{padding:11px 16px;font-size:14px;font-family:sans-serif;color:#bbb;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .15s}
+.nicho-item:hover,.nicho-item.active{background:rgba(255,107,53,0.1);color:#FF6B35}
+.nicho-item-icon{font-size:18px;width:24px;text-align:center}
+.nicho-selected{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.4);border-radius:24px;padding:6px 14px;font-size:14px;font-family:sans-serif;color:#FF6B35;margin-top:8px}
+.nicho-clear{background:none;border:none;color:rgba(255,107,53,0.6);font-size:16px;cursor:pointer;padding:0;line-height:1}
+
+/* CIDADE */
+.city-input-wrap{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px;margin-bottom:8px}
+.city-input-wrap:focus-within{border-color:rgba(255,107,53,0.5)}
+.city-input{background:transparent;border:none;outline:none;color:#EDEBE6;font-size:15px;font-family:sans-serif;width:100%}
+.city-input::placeholder{color:#444}
+
 .chip-row{display:flex;flex-wrap:wrap;gap:8px}
 .chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:9px 15px;font-size:13px;color:#bbb;cursor:pointer;font-family:sans-serif;transition:all .15s}
 .chip:hover{background:rgba(255,255,255,0.07)}.chip.selected{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.5);color:#FF6B35}
@@ -80,6 +91,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .summary-row{display:flex;gap:9px;flex-wrap:wrap;font-size:13px;color:#aaa;font-family:sans-serif;margin-bottom:10px}
 .summary-desafios{display:flex;gap:7px;flex-wrap:wrap}
 .des-badge{background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);color:#FF6B35;border-radius:6px;padding:3px 9px;font-size:11px;font-family:sans-serif}
+.field-label{font-size:13px;color:#666;margin-bottom:11px;font-family:sans-serif}
 textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:13px;color:#EDEBE6;font-size:14px;font-family:sans-serif;line-height:1.6;resize:vertical;outline:none}
 textarea:focus{border-color:rgba(255,107,53,0.4)}
 .step-nav{display:flex;gap:11px;margin-top:32px;justify-content:flex-end}
@@ -89,7 +101,6 @@ textarea:focus{border-color:rgba(255,107,53,0.4)}
 .btn-generate{background:#FF6B35;color:#000;border:none;border-radius:10px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif}
 button:hover:not(:disabled){filter:brightness(1.1)}
 
-/* INSTAGRAM TRANSITION */
 #ig-transition{position:fixed;inset:0;background:#09090E;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
 .ig-avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;font-size:42px;animation:igFloat 2s ease-in-out infinite}
 .ig-handle{font-size:22px;font-weight:700;color:#FF6B35;font-family:sans-serif}
@@ -104,26 +115,47 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .badge{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 11px;font-size:11px;color:#888;font-family:sans-serif}
 .page-title{font-size:clamp(20px,3vw,30px);font-weight:700;margin-bottom:7px;letter-spacing:-.5px}
 .page-sub{color:#555;font-size:14px;margin-bottom:24px;font-family:sans-serif}
-.result-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:26px;min-height:180px}
-.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:36px 0}
-.spinner{width:38px;height:38px;border:3px solid rgba(255,107,53,0.15);border-top:3px solid #FF6B35;border-radius:50%;animation:spin .9s linear infinite}
-.loading-text{color:#555;font-size:14px;font-family:sans-serif;animation:pulse 2s ease infinite}
-.result-text{font-size:15px;line-height:1.85;color:#DEDBD5;white-space:pre-line;margin-bottom:20px;font-family:sans-serif}
-.result-actions{display:flex;gap:7px;flex-wrap:wrap}
+.result-actions-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px}
 .btn-save{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#ccc;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .btn-new{background:transparent;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .btn-export{background:rgba(76,201,240,0.1);border:1px solid rgba(76,201,240,0.3);color:#4CC9F0;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .btn-whatsapp{background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25D366;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .cursor-blink{display:inline-block;color:#FF6B35;animation:blink .7s step-end infinite}
-.ig-result-banner{background:linear-gradient(135deg,rgba(240,148,51,0.1),rgba(188,24,136,0.1));border:1px solid rgba(220,39,67,0.25);border-radius:12px;padding:14px 18px;margin-top:20px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none}
+.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:36px 0}
+.spinner{width:38px;height:38px;border:3px solid rgba(255,107,53,0.15);border-top:3px solid #FF6B35;border-radius:50%;animation:spin .9s linear infinite}
+.loading-text{color:#555;font-size:14px;font-family:sans-serif;animation:pulse 2s ease infinite}
+
+/* DICA CARD */
+.dica-card{border:1px solid rgba(255,255,255,0.08);border-left:3px solid #FF6B35;border-radius:0 12px 12px 0;background:rgba(255,255,255,0.03);padding:22px 24px;margin-bottom:16px}
+.dica-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:20px;padding:3px 11px;font-size:11px;font-family:sans-serif;color:#FF6B35;margin-bottom:12px}
+.dica-titulo{font-size:16px;font-weight:700;color:#EDEBE6;margin-bottom:8px;letter-spacing:-.3px}
+.dica-texto{font-size:14px;line-height:1.8;color:#aaa;font-family:sans-serif;margin-bottom:16px}
+
+/* VIDEO CARDS POR DICA */
+.videos-section{border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;margin-top:4px}
+.videos-label{font-size:11px;color:#555;font-family:sans-serif;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.video-pill{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;text-decoration:none;transition:all .2s;margin-bottom:7px;cursor:pointer}
+.video-pill:hover{border-color:rgba(255,107,53,0.4);background:rgba(255,107,53,0.05)}
+.video-pill-thumb{width:56px;height:38px;border-radius:6px;overflow:hidden;flex-shrink:0;position:relative;background:#111}
+.video-pill-thumb img{width:100%;height:100%;object-fit:cover}
+.video-pill-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35)}
+.video-pill-play span{width:22px;height:22px;background:#FF6B35;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px}
+.video-pill-info{flex:1;min-width:0}
+.video-pill-role{font-size:10px;font-family:sans-serif;margin-bottom:2px}
+.video-pill-role.principal{color:#FF6B35}
+.video-pill-role.complementar{color:#888}
+.video-pill-title{font-size:12px;color:#ccc;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.video-pill-channel{font-size:11px;color:#555;font-family:sans-serif}
+.video-pill-arrow{font-size:14px;color:#444;flex-shrink:0}
+.videos-loading-inline{font-size:12px;color:#444;font-family:sans-serif;padding:10px 0;display:flex;align-items:center;gap:8px}
+.spinner-sm{width:14px;height:14px;border:2px solid rgba(255,107,53,0.15);border-top:2px solid #FF6B35;border-radius:50%;animation:spin .9s linear infinite;flex-shrink:0}
+
+.ig-result-banner{background:rgba(255,107,53,0.05);border:1px solid rgba(255,107,53,0.2);border-radius:12px;padding:14px 18px;margin-top:20px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none}
 .ig-result-banner span{font-size:13px;color:#ccc;font-family:sans-serif}
 .ig-result-banner strong{color:#FF6B35}
 
 /* TRACKING */
 .progress-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px;margin-bottom:16px}
-.progress-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.progress-meta{font-size:12px;color:#555;font-family:sans-serif}
-.progress-pct{font-size:22px;font-weight:700;color:#FF6B35}
 .progress-bar-wrap{background:rgba(255,255,255,0.06);border-radius:6px;height:8px;margin-bottom:14px;overflow:hidden}
 .progress-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#FF6B35,#F9C74F);transition:width .5s ease}
 .checklist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
@@ -136,44 +168,13 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .track-badge{border-radius:20px;padding:4px 10px;font-size:11px;font-family:sans-serif;font-weight:600}
 .track-badge.todo{background:rgba(255,255,255,0.05);color:#555}
 .track-badge.doing{background:rgba(249,199,79,0.15);color:#F9C74F}
-.track-badge.done{background:rgba(0,201,167,0.15);color:#00C9A7}
+.track-badge.done-b{background:rgba(0,201,167,0.15);color:#00C9A7}
 .track-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.track-btn{border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;border:1px solid;transition:all .2s}
-.track-btn.todo{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:#666}
-.track-btn.doing{background:rgba(249,199,79,0.1);border-color:rgba(249,199,79,0.4);color:#F9C74F}
-.track-btn.done-btn{background:rgba(0,201,167,0.1);border-color:rgba(0,201,167,0.4);color:#00C9A7}
+.track-btn{border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#666;transition:all .2s}
 .filter-row{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap}
 .filter-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#777;border-radius:20px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .filter-btn.active{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35}
 
-/* CONTENT TABS */
-.content-tabs{display:flex;gap:0;margin-bottom:28px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden}
-.content-tab{flex:1;padding:12px;background:transparent;border:none;color:#666;font-size:13px;cursor:pointer;font-family:sans-serif;transition:all .2s;border-right:1px solid rgba(255,255,255,0.06)}
-.content-tab:last-child{border-right:none}
-.content-tab.active{background:rgba(255,107,53,0.12);color:#FF6B35;font-weight:700}
-.content-section{display:none}.content-section.active{display:block}
-.tip-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
-.tip-card-c{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-left:3px solid #FF6B35;border-radius:10px;padding:16px 18px}
-.tip-card-c h4{font-size:14px;font-weight:700;margin-bottom:6px;color:#EDEBE6}
-.tip-card-c p{font-size:13px;color:#888;line-height:1.6;font-family:sans-serif}
-.videos-title{font-size:15px;font-weight:700;margin-bottom:14px;color:#EDEBE6}
-.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.video-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;text-decoration:none;display:block}
-.video-card:hover{border-color:rgba(255,107,53,0.4);transform:translateY(-2px)}
-.video-thumb{position:relative;padding-bottom:56.25%;background:#111;overflow:hidden}
-.video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.video-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3)}
-.video-play span{width:40px;height:40px;background:#FF6B35;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
-.video-info{padding:10px 12px}
-.video-title{font-size:12px;color:#ccc;font-family:sans-serif;line-height:1.4}
-.video-channel{font-size:11px;color:#555;font-family:sans-serif;margin-top:4px}
-.video-type{font-size:10px;font-family:sans-serif;margin-top:3px}
-.video-type.aula{color:#4CC9F0}
-.video-type.conteudo{color:#F9C74F}
-.videos-loading{text-align:center;padding:30px;color:#444;font-family:sans-serif;font-size:13px}
-.nicho-badge{display:inline-block;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);color:#FF6B35;border-radius:20px;padding:4px 12px;font-size:12px;font-family:sans-serif;margin-bottom:20px}
-
-/* SAVED */
 .empty{color:#444;text-align:center;padding:50px 0;font-family:sans-serif}
 .saved-list{display:flex;flex-direction:column;gap:14px}
 .saved-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px}
@@ -190,12 +191,11 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .btn-cloud-login{background:#FF6B35;color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:sans-serif}
 
 footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans-serif;border-top:1px solid rgba(255,255,255,0.04)}
-@media(max-width:480px){header{padding:9px 13px}.header-right{gap:4px}.nav-btn{padding:6px 9px;font-size:11px}.sector-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))}.ticket-grid{grid-template-columns:1fr 1fr}.content-tabs{flex-wrap:wrap}.content-tab{flex:none;width:50%}}
+@media(max-width:480px){header{padding:9px 13px}.header-right{gap:4px}.nav-btn{padding:6px 9px;font-size:11px}.ticket-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
-<!-- INSTAGRAM TRANSITION -->
 <div id="ig-transition" class="hidden">
   <div class="ig-avatar">📸</div>
   <div class="ig-handle">@grupoalianca_monitoramento</div>
@@ -203,7 +203,6 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   <div class="ig-progress"><div class="ig-progress-bar" id="ig-prog-bar"></div></div>
 </div>
 
-<!-- AUTH MODAL -->
 <div class="modal-overlay hidden" id="auth-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeAuth()">×</button>
@@ -228,12 +227,10 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   </div>
 </div>
 
-<!-- HEADER -->
 <header>
   <a class="logo" onclick="goHome()"><span class="logo-icon">⚡</span><span class="logo-text">VendaMais</span></a>
   <div class="header-right">
     <button class="nav-btn hidden" id="btn-restart" onclick="goHome()">← Recomeçar</button>
-    <button class="nav-btn" id="btn-content-nav" onclick="showView('content')">📚 Conteúdo</button>
     <button class="nav-btn" id="btn-track-nav" onclick="showView('track')">📊 Progresso</button>
     <button class="nav-btn" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
     <span class="user-chip hidden" id="user-chip" onclick="doLogout()"></span>
@@ -246,81 +243,120 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
 </a>
 
 <main>
+
 <!-- ONBOARD -->
 <div id="view-onboard" class="page">
+
   <div id="step-0" class="hero">
     <div class="hero-badge">✦ Para qualquer tipo de empresa</div>
     <h1 class="hero-title">Dicas de vendas<br><em class="hero-em">feitas para o seu negócio</em></h1>
-    <p class="hero-sub">Responda 4 perguntas rápidas. A IA gera recomendações profundas para o seu segmento com dados reais do mercado.</p>
+    <p class="hero-sub">Responda 5 perguntas rápidas. A IA gera estratégias com dados reais do seu setor e cidade.</p>
     <button class="hero-cta" onclick="goStep(1)">Começar agora →</button>
     <p class="hero-note">Leva menos de 2 minutos · Gratuito</p>
   </div>
+
+  <!-- STEP 1: NICHO -->
   <div id="step-1" class="hidden">
     <div class="step-bar" id="bar-1"></div>
     <h2 class="step-title">Qual é o segmento da sua empresa?</h2>
-    <p class="step-sub">Escolha o que melhor descreve seu negócio.</p>
-    <div class="sector-grid" id="sector-grid"></div>
+    <p class="step-sub">Digite ou escolha o seu nicho — quanto mais específico, melhor a dica.</p>
+    <div class="nicho-wrap" id="nicho-wrap">
+      <div class="nicho-input-row">
+        <span class="nicho-search-icon">🔍</span>
+        <input class="nicho-input" id="nicho-input" type="text" placeholder="Ex: Odontologia, Varejo de roupas, Consultoria jurídica..." autocomplete="off"/>
+      </div>
+      <div class="nicho-suggestions hidden" id="nicho-suggestions"></div>
+    </div>
+    <div id="nicho-selected-wrap" class="hidden">
+      <div class="nicho-selected" id="nicho-selected-label">
+        <span id="nicho-selected-text"></span>
+        <button class="nicho-clear" onclick="clearNicho()">×</button>
+      </div>
+    </div>
     <div class="step-nav"><button class="btn-back" onclick="goStep(0)">← Voltar</button><button class="btn-next" id="next-1" disabled onclick="goStep(2)">Continuar →</button></div>
   </div>
+
+  <!-- STEP 2: CIDADE + PORTE + MODELO -->
   <div id="step-2" class="hidden">
     <div class="step-bar" id="bar-2"></div>
-    <h2 class="step-title">Porte e modelo de vendas</h2>
-    <p class="step-sub">Isso muda completamente a estratégia recomendada.</p>
-    <div class="field-label">Tamanho da empresa</div><div class="chip-row" id="size-chips"></div>
-    <div class="field-label" style="margin-top:24px">Modelo de venda</div><div class="chip-row" id="model-chips"></div>
+    <h2 class="step-title">Onde e como você vende?</h2>
+    <p class="step-sub">Essas informações mudam completamente a estratégia recomendada.</p>
+
+    <div class="field-label">📍 Cidade da empresa</div>
+    <div class="city-input-wrap">
+      <span style="font-size:18px">📍</span>
+      <input class="city-input" id="city-input" type="text" placeholder="Ex: Maceió, São Paulo, Fortaleza..."/>
+    </div>
+
+    <div class="field-label" style="margin-top:22px">Tamanho da empresa</div>
+    <div class="chip-row" id="size-chips"></div>
+
+    <div class="field-label" style="margin-top:22px">Modelo de venda</div>
+    <div class="chip-row" id="model-chips"></div>
+
     <div class="step-nav"><button class="btn-back" onclick="goStep(1)">← Voltar</button><button class="btn-next" id="next-2" disabled onclick="goStep(3)">Continuar →</button></div>
   </div>
+
+  <!-- STEP 3: TICKET -->
   <div id="step-3" class="hidden">
     <div class="step-bar" id="bar-3"></div>
     <h2 class="step-title">Qual é o ticket médio das suas vendas?</h2>
-    <p class="step-sub">O valor muda a abordagem, o canal e o processo de venda.</p>
+    <p class="step-sub">O valor define a abordagem, o canal e o ciclo de venda ideal.</p>
     <div class="ticket-grid" id="ticket-grid"></div>
     <div class="step-nav"><button class="btn-back" onclick="goStep(2)">← Voltar</button><button class="btn-next" id="next-3" disabled onclick="goStep(4)">Continuar →</button></div>
   </div>
+
+  <!-- STEP 4: DESAFIOS -->
   <div id="step-4" class="hidden">
     <div class="step-bar" id="bar-4"></div>
     <h2 class="step-title">Quais são seus maiores desafios de vendas?</h2>
-    <p class="step-sub">Escolha até 3. As dicas serão focadas nisso.</p>
+    <p class="step-sub">Escolha até 3. As dicas serão totalmente focadas nisso.</p>
     <div class="challenge-grid" id="challenge-grid"></div>
     <div class="step-nav"><button class="btn-back" onclick="goStep(3)">← Voltar</button><button class="btn-next" id="next-4" disabled onclick="goStep(5)">Continuar →</button></div>
   </div>
+
+  <!-- STEP 5: CONTEXTO EXTRA -->
   <div id="step-5" class="hidden">
     <div class="step-bar" id="bar-5"></div>
     <h2 class="step-title">Quer adicionar mais contexto?</h2>
-    <p class="step-sub">Opcional — mas quanto mais específico, melhor a resposta.</p>
+    <p class="step-sub">Opcional — mas quanto mais específico você for, mais certeira será a resposta.</p>
     <div class="profile-summary">
       <div class="summary-title">Seu perfil:</div>
       <div class="summary-row" id="summary-row"></div>
       <div class="summary-desafios" id="summary-des"></div>
     </div>
-    <textarea id="extra-context" rows="4" placeholder='Ex: "Tenho 3 vendedores, nosso maior concorrente baixou o preço 15%..."'></textarea>
+    <textarea id="extra-context" rows="4" placeholder='Ex: "Meu maior concorrente baixou o preço 20% este mês e estou perdendo clientes para ele..."'></textarea>
     <div class="step-nav"><button class="btn-back" onclick="goStep(4)">← Voltar</button><button class="btn-generate" onclick="startGenerate()">✨ Gerar minhas dicas</button></div>
   </div>
-</div>
+
+</div><!-- /view-onboard -->
 
 <!-- RESULT -->
 <div id="view-result" class="page hidden">
   <div class="profile-badges" id="result-badges"></div>
   <h2 class="page-title" id="result-title">Suas Dicas Personalizadas</h2>
-  <p class="page-sub" id="result-sub">Com dados reais do mercado para o seu segmento.</p>
-  <div class="result-box">
-    <div class="loading-wrap" id="loading-wrap">
-      <div class="spinner"></div>
-      <p class="loading-text" id="loading-text">Consultando especialista...</p>
+  <p class="page-sub" id="result-sub">Com dados reais do mercado para o seu perfil.</p>
+
+  <!-- Loading geral -->
+  <div class="loading-wrap hidden" id="loading-wrap">
+    <div class="spinner"></div>
+    <p class="loading-text" id="loading-text">Analisando o mercado...</p>
+  </div>
+
+  <!-- Dicas renderizadas aqui -->
+  <div id="dicas-container"></div>
+
+  <div id="result-actions" class="hidden">
+    <div class="result-actions-row">
+      <button class="btn-save" onclick="saveCurrent()">🔖 Salvar</button>
+      <button class="btn-export" onclick="exportPDF()">⬇ PDF</button>
+      <button class="btn-whatsapp" onclick="shareWhatsApp()">📲 WhatsApp</button>
+      <button class="btn-new" onclick="goHome()">↺ Nova consulta</button>
     </div>
-    <div id="result-content" class="hidden">
-      <p class="result-text" id="result-text"></p>
-      <div class="result-actions">
-        <button class="btn-save" onclick="saveCurrent()">🔖 Salvar</button>
-        <button class="btn-export" onclick="exportPDF()">⬇ PDF</button>
-        <button class="btn-whatsapp" onclick="shareWhatsApp()">📲 WhatsApp</button>
-        <button class="btn-new" onclick="goHome()">↺ Nova consulta</button>
-      </div>
-      <a class="ig-result-banner" href="https://instagram.com/grupoalianca_monitoramento" target="_blank">
-        <span>📸</span>
-        <span>Gostou das dicas? Siga <strong>@grupoalianca_monitoramento</strong> para mais estratégias!</span>
-      </a>
-    </div>
+    <a class="ig-result-banner" href="https://instagram.com/grupoalianca_monitoramento" target="_blank">
+      <span>📸</span>
+      <span>Gostou das dicas? Siga <strong>@grupoalianca_monitoramento</strong> para mais estratégias de vendas!</span>
+    </a>
   </div>
 </div>
 
@@ -343,85 +379,58 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   <div id="track-container"></div>
 </div>
 
-<!-- CONTENT -->
-<div id="view-content" class="page hidden">
-  <h2 class="page-title">Conteúdo & Aprendizado</h2>
-  <p class="page-sub" id="content-sub">Dicas práticas e aulas selecionadas para o seu nicho.</p>
-  <div id="nicho-info"></div>
-  <div class="content-tabs">
-    <button class="content-tab active" onclick="switchContent('marketing')">📣 Marketing</button>
-    <button class="content-tab" onclick="switchContent('vendas')">💰 Vendas</button>
-    <button class="content-tab" onclick="switchContent('network')">🤝 Network</button>
-  </div>
-  <div id="content-marketing" class="content-section active"></div>
-  <div id="content-vendas" class="content-section"></div>
-  <div id="content-network" class="content-section"></div>
-</div>
 </main>
-
 <footer>VendaMais · IA de vendas para empresas de todos os segmentos · <a href="https://instagram.com/grupoalianca_monitoramento" target="_blank" style="color:#FF6B35;text-decoration:none">@grupoalianca_monitoramento</a></footer>
 
 <script>
-const SECTORS=[
-  {id:"varejo",label:"Varejo / Loja Física",icon:"🏪"},{id:"ecommerce",label:"E-commerce",icon:"🛒"},
-  {id:"saas",label:"SaaS / Software",icon:"💻"},{id:"alimentacao",label:"Alimentação / Food Service",icon:"🍽️"},
-  {id:"saude",label:"Saúde / Clínicas",icon:"🏥"},{id:"educacao",label:"Educação / Cursos",icon:"🎓"},
-  {id:"imobiliario",label:"Imobiliário",icon:"🏢"},{id:"industria",label:"Indústria / Manufatura",icon:"🏭"},
-  {id:"financeiro",label:"Financeiro / Seguros",icon:"💰"},{id:"servicos",label:"Serviços Profissionais",icon:"💼"},
-  {id:"agencia",label:"Agência / Marketing",icon:"📣"},{id:"logistica",label:"Logística / Transporte",icon:"🚚"},
-  {id:"construcao",label:"Construção / Reforma",icon:"🔨"},{id:"beleza",label:"Beleza / Estética",icon:"✨"},
-  {id:"outro",label:"Outro segmento",icon:"🔷"},
+// ── NICHOS COM SUGESTÕES ────────────────────────────────────────────────
+const NICHOS=[
+  {icon:"🦷",label:"Odontologia"},{icon:"🦷",label:"Odontopediatria"},{icon:"🦷",label:"Ortodontia"},
+  {icon:"🏥",label:"Clínica Médica"},{icon:"💆",label:"Estética e Beleza"},{icon:"🏃",label:"Fisioterapia"},
+  {icon:"🧠",label:"Psicologia e Terapia"},{icon:"👁️",label:"Oftalmologia"},{icon:"💊",label:"Farmácia"},
+  {icon:"🏋️",label:"Academia e Personal Trainer"},{icon:"🍽️",label:"Restaurante e Delivery"},
+  {icon:"☕",label:"Cafeteria e Lanchonete"},{icon:"🍕",label:"Pizzaria e Hamburgueria"},
+  {icon:"🛒",label:"Mercado e Mercearia"},{icon:"👗",label:"Loja de Roupas e Moda"},
+  {icon:"👟",label:"Loja de Calçados"},{icon:"💻",label:"Loja de Informática"},
+  {icon:"🏠",label:"Imobiliária"},{icon:"🔨",label:"Construtora e Reforma"},
+  {icon:"⚡",label:"Elétrica e Hidráulica"},{icon:"🎓",label:"Escola e Cursinho"},
+  {icon:"📚",label:"Cursos Online e EAD"},{icon:"👶",label:"Escola Infantil e Creche"},
+  {icon:"💰",label:"Contabilidade e Finanças"},{icon:"⚖️",label:"Advocacia e Direito"},
+  {icon:"📣",label:"Agência de Marketing"},{icon:"💼",label:"Consultoria Empresarial"},
+  {icon:"🚚",label:"Transportadora e Logística"},{icon:"🏭",label:"Indústria e Manufatura"},
+  {icon:"🌿",label:"Pet Shop e Veterinária"},{icon:"🚗",label:"Oficina Mecânica e Auto"},
+  {icon:"💻",label:"SaaS e Software"},{icon:"📸",label:"Fotografia e Audiovisual"},
+  {icon:"🎵",label:"Música e Entretenimento"},{icon:"🌱",label:"Agronegócio e Rural"},
+  {icon:"🏨",label:"Hotel e Turismo"},{icon:"✈️",label:"Agência de Viagens"},
+  {icon:"🔷",label:"Outro segmento"},
 ];
-const SIZES=[{id:"mei",label:"MEI / Autônomo"},{id:"micro",label:"Micro (até 9 func.)"},{id:"pequena",label:"Pequena (10–49)"},{id:"media",label:"Média (50–249)"},{id:"grande",label:"Grande (250+)"}];
-const MODELS=[{id:"b2c",label:"B2C — vendo para pessoas físicas"},{id:"b2b",label:"B2B — vendo para empresas"},{id:"ambos",label:"Ambos (B2C + B2B)"},{id:"b2g",label:"B2G — vendo para governo"}];
-const TICKETS=[{id:"baixo",label:"Até R$200"},{id:"medio",label:"R$200 – R$2.000"},{id:"alto",label:"R$2.000 – R$20.000"},{id:"enterprise",label:"Acima de R$20.000"}];
-const CHALLENGES=["Gerar mais leads qualificados","Converter leads em clientes","Superar objeções de preço","Reduzir o ciclo de vendas","Aumentar o ticket médio","Reter e fidelizar clientes","Montar / treinar equipe de vendas","Vender online / digital","Reativar clientes inativos","Escalar as vendas"];
+
+const SIZES=[
+  {id:"mei",label:"MEI / Autônomo"},{id:"micro",label:"Micro (até 9 func.)"},
+  {id:"pequena",label:"Pequena (10–49)"},{id:"media",label:"Média (50–249)"},{id:"grande",label:"Grande (250+)"}
+];
+const MODELS=[
+  {id:"b2c",label:"B2C — vendo para pessoas físicas"},{id:"b2b",label:"B2B — vendo para empresas"},
+  {id:"ambos",label:"Ambos (B2C + B2B)"},{id:"b2g",label:"B2G — vendo para governo"}
+];
+const TICKETS=[
+  {id:"baixo",label:"Até R$200"},{id:"medio",label:"R$200 – R$2.000"},
+  {id:"alto",label:"R$2.000 – R$20.000"},{id:"enterprise",label:"Acima de R$20.000"}
+];
+const CHALLENGES=[
+  "Gerar mais leads qualificados","Converter leads em clientes",
+  "Superar objeções de preço","Reduzir o ciclo de vendas",
+  "Aumentar o ticket médio","Reter e fidelizar clientes",
+  "Montar ou treinar equipe de vendas","Vender online e no digital",
+  "Reativar clientes inativos","Escalar as vendas"
+];
 const TOTAL_STEPS=5;
 
-// Dicas fixas por categoria (sempre mostradas)
-const TIPS={
-  marketing:[
-    {title:"Conteúdo que vende",text:"Produza conteúdo que resolve dores reais do seu cliente antes de tentar vender. Regra 80/20: 80% educação, 20% oferta."},
-    {title:"Prova social em tudo",text:"Depoimentos em vídeo convertem 3x mais que texto. Peça ao cliente gravar 30 segundos logo após uma boa experiência."},
-    {title:"SEO local para negócios físicos",text:"Preencha 100% do Google Meu Negócio com fotos, horários e respostas a avaliações. É tráfego gratuito e qualificado."},
-    {title:"Email marketing ainda funciona",text:"Uma lista de emails própria vale mais que 10k seguidores em rede social. Capte emails em troca de conteúdo gratuito."},
-  ],
-  vendas:[
-    {title:"Escuta ativa antes de tudo",text:"Faça 3 perguntas antes de apresentar qualquer solução. Quem faz as perguntas controla a conversa."},
-    {title:"Nunca dê desconto sem contrapartida",text:"Se o cliente pede desconto, peça algo em troca: prazo menor, volume maior, pagamento à vista ou indicação."},
-    {title:"Follow-up é onde mora o dinheiro",text:"80% das vendas acontecem após o 5º contato. A maioria dos vendedores desiste no 1º ou 2º. Seja o que persiste."},
-    {title:"Use urgência real",text:"Vagas limitadas, bônus por tempo determinado ou início de projeto criam senso de urgência sem parecer pressão falsa."},
-  ],
-  network:[
-    {title:"Dê antes de pedir",text:"Networking não é trocar cartão — é construir relações de valor. Indique, apresente e ajude antes de esperar algo."},
-    {title:"LinkedIn como ferramenta de vendas",text:"Poste 3x por semana sobre sua área. Em 90 dias você será referência na sua rede e receberá oportunidades sem prospectar."},
-    {title:"Eventos presenciais valem ouro",text:"Uma conversa de 5 minutos num evento vale mais que 50 mensagens no WhatsApp. Vá aos eventos do seu setor."},
-    {title:"Parcerias estratégicas",text:"Identifique negócios que atendem o mesmo cliente que você mas não concorrem. Uma parceria de indicação pode dobrar seu faturamento."},
-  ]
-};
-
-// Vídeos fallback garantidos
-const FALLBACK_VIDEOS={
-  marketing:[
-    {id:"3466p8uVwEQ",title:"Marketing Digital para Iniciantes e Avançados",channel:"Natanael Oliveira",type:"aula"},
-    {id:"38gX3WT5mqk",title:"Marketing Digital 2026: Tendências",channel:"Natanael Oliveira",type:"conteudo"},
-  ],
-  vendas:[
-    {id:"aZG9j4eqG3E",title:"Quando o Cliente Diz 'Tá Caro' — O Maior Vídeo de Vendas do Brasil",channel:"Thiago Concer",type:"aula"},
-    {id:"dQOXsn7kKyo",title:"O Que Todo Vendedor Precisa Saber",channel:"Thiago Concer",type:"conteudo"},
-  ],
-  network:[
-    {id:"irTe2XF4s8k",title:"Como Fazer Network — Pablo Marçal",channel:"Empreender é Mais",type:"aula"},
-    {id:"s4tU92xq5Os",title:"Joel Jota, Caio Carneiro e Flávio Augusto sobre Negócios",channel:"Inteligência Ltda",type:"conteudo"},
-  ]
-};
-
-let state={sector:null,size:null,model:null,ticket:null,challenges:[],sectorCustom:null,currentText:"",currentMeta:"",videos:null};
+let state={nicho:null,nichoLabel:"",city:"",size:null,model:null,ticket:null,challenges:[],currentText:"",currentMeta:"",dicasData:[]};
 let currentFilter="all";
 let currentUser=JSON.parse(localStorage.getItem("vm_user")||"null");
-let currentContentTab="marketing";
 
-// AUTH
+// ── AUTH ────────────────────────────────────────────────────────────────
 function getUsers(){return JSON.parse(localStorage.getItem("vm_users")||"{}")}
 function saveUsers(u){localStorage.setItem("vm_users",JSON.stringify(u))}
 function getUserSaved(){
@@ -448,8 +457,7 @@ function doRegister(){
   if(!name||!email||!pass){showAuthError("Preencha todos os campos.");return;}
   if(pass.length<6){showAuthError("Mínimo 6 caracteres.");return;}
   const u=getUsers();if(u[email]){showAuthError("E-mail já cadastrado.");return;}
-  const local=JSON.parse(localStorage.getItem("vendamais_saved")||"[]");
-  u[email]={password:btoa(pass),name,saved:local};saveUsers(u);
+  u[email]={password:btoa(pass),name,saved:[]};saveUsers(u);
   currentUser={email,name};localStorage.setItem("vm_user",JSON.stringify(currentUser));
   closeAuth();updateUserUI();
 }
@@ -471,7 +479,7 @@ function updateUserUI(){
   updateSavedBtn();
 }
 
-// IG TRANSITION
+// ── IG TRANSITION ────────────────────────────────────────────────────────
 function showIgTransition(callback){
   const overlay=document.getElementById("ig-transition");
   const bar=document.getElementById("ig-prog-bar");
@@ -480,89 +488,81 @@ function showIgTransition(callback){
   const iv=setInterval(()=>{pct+=2.5;bar.style.width=pct+"%";if(pct>=100){clearInterval(iv);overlay.classList.add("hidden");if(callback)callback();}},100);
 }
 
-// INIT
-(function init(){
-  const sg=document.getElementById("sector-grid");
-  SECTORS.forEach(s=>{
-    const btn=document.createElement("button");btn.className="sector-card";btn.dataset.id=s.id;
-    btn.innerHTML='<span class="sector-icon">'+s.icon+'</span><span class="sector-label">'+s.label+'</span>';
-    btn.onclick=()=>selectSector(s.id);sg.appendChild(btn);
+// ── NICHO AUTOCOMPLETE ────────────────────────────────────────────────────
+(function initNicho(){
+  const input=document.getElementById("nicho-input");
+  const sugg=document.getElementById("nicho-suggestions");
+  let activeIdx=-1;
+
+  function renderSuggestions(query){
+    const q=query.toLowerCase().trim();
+    sugg.innerHTML="";
+    if(!q){sugg.classList.add("hidden");return;}
+    const filtered=NICHOS.filter(n=>n.label.toLowerCase().includes(q)).slice(0,8);
+    if(!filtered.length){sugg.classList.add("hidden");return;}
+    filtered.forEach((n,i)=>{
+      const div=document.createElement("div");
+      div.className="nicho-item";
+      div.innerHTML='<span class="nicho-item-icon">'+n.icon+'</span>'+n.label;
+      div.onclick=()=>selectNicho(n);
+      sugg.appendChild(div);
+    });
+    sugg.classList.remove("hidden");
+    activeIdx=-1;
+  }
+
+  input.addEventListener("input",function(){renderSuggestions(this.value)});
+  input.addEventListener("keydown",function(e){
+    const items=sugg.querySelectorAll(".nicho-item");
+    if(e.key==="ArrowDown"){activeIdx=Math.min(activeIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle("active",i===activeIdx));}
+    else if(e.key==="ArrowUp"){activeIdx=Math.max(activeIdx-1,0);items.forEach((el,i)=>el.classList.toggle("active",i===activeIdx));}
+    else if(e.key==="Enter"){
+      if(activeIdx>=0&&items[activeIdx]){items[activeIdx].click();}
+      else if(this.value.trim()){selectNicho({icon:"🔷",label:this.value.trim()});}
+    }
   });
-  const ow=document.createElement("div");
-  ow.id="outro-wrap";ow.style.cssText="grid-column:1/-1;display:none;margin-top:4px";
-  ow.innerHTML='<input id="outro-input" type="text" placeholder="Digite o segmento da sua empresa..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,53,0.4);border-radius:10px;padding:11px 15px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none"/>';
-  sg.appendChild(ow);
-  document.getElementById("outro-input").addEventListener("input",function(){
-    state.sectorCustom=this.value.trim();document.getElementById("next-1").disabled=!state.sectorCustom;
-  });
+  document.addEventListener("click",function(e){if(!document.getElementById("nicho-wrap").contains(e.target))sugg.classList.add("hidden");});
+})();
+
+function selectNicho(n){
+  state.nicho=n.label;state.nichoLabel=n.icon+" "+n.label;
+  document.getElementById("nicho-input").value="";
+  document.getElementById("nicho-suggestions").classList.add("hidden");
+  document.getElementById("nicho-selected-wrap").classList.remove("hidden");
+  document.getElementById("nicho-selected-text").textContent=state.nichoLabel;
+  document.getElementById("next-1").disabled=false;
+}
+function clearNicho(){
+  state.nicho=null;state.nichoLabel="";
+  document.getElementById("nicho-selected-wrap").classList.add("hidden");
+  document.getElementById("nicho-input").value="";
+  document.getElementById("next-1").disabled=true;
+}
+
+// ── INIT CHIPS ───────────────────────────────────────────────────────────
+(function initChips(){
   const sc=document.getElementById("size-chips");
-  SIZES.forEach(s=>{const b=document.createElement("button");b.className="chip";b.dataset.id=s.id;b.textContent=s.label;b.onclick=()=>selectChip("size",s.id,"size-chips","next-2");sc.appendChild(b);});
+  SIZES.forEach(s=>{const b=document.createElement("button");b.className="chip";b.dataset.id=s.id;b.textContent=s.label;b.onclick=()=>selectChip("size",s.id,"size-chips");sc.appendChild(b);});
   const mc=document.getElementById("model-chips");
-  MODELS.forEach(m=>{const b=document.createElement("button");b.className="chip";b.dataset.id=m.id;b.textContent=m.label;b.onclick=()=>selectChip("model",m.id,"model-chips","next-2");mc.appendChild(b);});
+  MODELS.forEach(m=>{const b=document.createElement("button");b.className="chip";b.dataset.id=m.id;b.textContent=m.label;b.onclick=()=>selectChip("model",m.id,"model-chips");mc.appendChild(b);});
   const tg=document.getElementById("ticket-grid");
   TICKETS.forEach(t=>{const b=document.createElement("button");b.className="ticket-card";b.dataset.id=t.id;b.textContent=t.label;b.onclick=()=>selectTicket(t.id);tg.appendChild(b);});
   const cg=document.getElementById("challenge-grid");
   CHALLENGES.forEach(c=>{const b=document.createElement("button");b.className="challenge-btn";b.dataset.val=c;b.textContent=c;b.onclick=()=>toggleChallenge(c);cg.appendChild(b);});
-  buildContent(FALLBACK_VIDEOS);
+  document.getElementById("city-input").addEventListener("input",function(){
+    state.city=this.value.trim();
+    checkStep2();
+  });
   updateUserUI();
   if(!currentUser)document.getElementById("btn-login-nav").classList.remove("hidden");
 })();
 
-// CONTENT
-function buildContent(videos){
-  state.videos=videos;
-  ["marketing","vendas","network"].forEach(key=>{
-    const tips=TIPS[key];
-    const vids=videos[key]||FALLBACK_VIDEOS[key];
-    const el=document.getElementById("content-"+key);
-    const tipsHtml='<div class="tip-cards">'+tips.map(t=>'<div class="tip-card-c"><h4>'+t.title+'</h4><p>'+t.text+'</p></div>').join("")+'</div>';
-    const videosHtml='<div class="videos-title">🎬 Aulas Selecionadas para seu Nicho</div><div class="video-grid">'+vids.map(v=>{
-      const typeLabel=v.type==="aula"?"🎓 Videoaula":"📈 Conteúdo";
-      const typeClass=v.type==="aula"?"aula":"conteudo";
-      return '<a class="video-card" href="https://youtube.com/watch?v='+v.id+'" target="_blank">'
-        +'<div class="video-thumb"><img src="https://img.youtube.com/vi/'+v.id+'/mqdefault.jpg" alt="'+v.title+'" loading="lazy"/>'
-        +'<div class="video-play"><span>▶</span></div></div>'
-        +'<div class="video-info"><div class="video-title">'+v.title+'</div>'
-        +'<div class="video-channel">'+v.channel+'</div>'
-        +'<div class="video-type '+typeClass+'">'+typeLabel+'</div></div></a>';
-    }).join("")+'</div>';
-    el.innerHTML=tipsHtml+videosHtml;
-  });
+function checkStep2(){
+  const ok=state.size&&state.model;
+  document.getElementById("next-2").disabled=!ok;
 }
 
-function switchContent(tab){
-  currentContentTab=tab;
-  document.querySelectorAll(".content-tab").forEach((b,i)=>b.classList.toggle("active",["marketing","vendas","network"][i]===tab));
-  document.querySelectorAll(".content-section").forEach(s=>s.classList.remove("active"));
-  document.getElementById("content-"+tab).classList.add("active");
-}
-
-async function loadVideosForSector(sectorLabel){
-  const nicho=document.getElementById("nicho-info");
-  nicho.innerHTML='<div class="videos-loading">🔍 Buscando vídeos para <strong>'+sectorLabel+'</strong>...</div>';
-  // Atualiza sub
-  document.getElementById("content-sub").textContent="Conteúdo selecionado pela IA para "+sectorLabel;
-  // Mostra loading nos grids de vídeos
-  ["marketing","vendas","network"].forEach(key=>{
-    const el=document.getElementById("content-"+key);
-    const tips=TIPS[key];
-    const tipsHtml='<div class="tip-cards">'+tips.map(t=>'<div class="tip-card-c"><h4>'+t.title+'</h4><p>'+t.text+'</p></div>').join("")+'</div>';
-    el.innerHTML=tipsHtml+'<div class="videos-title">🎬 Buscando vídeos...</div><div class="videos-loading">⏳ Carregando...</div>';
-  });
-  try{
-    const res=await fetch("/api/videos",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({sector:state.sector,sectorLabel})});
-    const videos=await res.json();
-    nicho.innerHTML='<div class="nicho-badge">🎯 Conteúdo para: '+sectorLabel+'</div>';
-    buildContent(videos);
-    switchContent(currentContentTab);
-  }catch(e){
-    nicho.innerHTML='<div class="nicho-badge">🎯 Conteúdo geral de vendas</div>';
-    buildContent(FALLBACK_VIDEOS);
-  }
-}
-
-// NAVIGATION
+// ── NAVIGATION ────────────────────────────────────────────────────────────
 function goStep(n){
   for(let i=0;i<=5;i++){const el=document.getElementById("step-"+i);if(el)el.classList.toggle("hidden",i!==n)}
   if(n>=1)renderBar(n);if(n===5)renderSummary();window.scrollTo(0,0);
@@ -572,24 +572,19 @@ function renderBar(cur){
   for(let i=0;i<TOTAL_STEPS;i++){const s=document.createElement("div");s.className="step-seg"+(i<cur?" active":"");bar.appendChild(s);}
 }
 function showView(name){
-  ["onboard","result","saved","track","content"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden",v!==name));
+  ["onboard","result","saved","track"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden",v!==name));
   document.getElementById("btn-restart").classList.toggle("hidden",name!=="result");
   document.getElementById("btn-saved-nav").classList.toggle("active",name==="saved");
   document.getElementById("btn-track-nav").classList.toggle("active",name==="track");
-  document.getElementById("btn-content-nav").classList.toggle("active",name==="content");
-  if(name==="track")renderTrack();
-  if(name==="content"){
-    const s=state.sectorCustom?{label:state.sectorCustom}:SECTORS.find(x=>x.id===state.sector);
-    if(s)loadVideosForSector(s.label);
-  }
-  window.scrollTo(0,0);
+  if(name==="track")renderTrack();window.scrollTo(0,0);
 }
 function goHome(){
-  state={sector:null,size:null,model:null,ticket:null,challenges:[],sectorCustom:null,currentText:"",currentMeta:"",videos:null};
-  document.querySelectorAll(".sector-card,.chip,.ticket-card,.challenge-btn").forEach(el=>el.classList.remove("selected","disabled"));
+  state={nicho:null,nichoLabel:"",city:"",size:null,model:null,ticket:null,challenges:[],currentText:"",currentMeta:"",dicasData:[]};
+  document.querySelectorAll(".chip,.ticket-card,.challenge-btn").forEach(el=>el.classList.remove("selected","disabled"));
   ["next-1","next-2","next-3","next-4"].forEach(id=>document.getElementById(id).disabled=true);
   document.getElementById("extra-context").value="";
-  document.getElementById("outro-wrap").style.display="none";
+  document.getElementById("city-input").value="";
+  clearNicho();
   goStep(0);showView("onboard");
 }
 function toggleSaved(){
@@ -598,18 +593,11 @@ function toggleSaved(){
   else{renderSaved();showView("saved");}
 }
 
-// SELECTIONS
-function selectSector(id){
-  state.sector=id;state.sectorCustom=null;
-  document.querySelectorAll(".sector-card").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
-  const ow=document.getElementById("outro-wrap"),oi=document.getElementById("outro-input");
-  if(id==="outro"){ow.style.display="block";oi.value="";oi.focus();document.getElementById("next-1").disabled=true;}
-  else{ow.style.display="none";document.getElementById("next-1").disabled=false;}
-}
-function selectChip(field,id,gid,nid){
+// ── SELECTIONS ────────────────────────────────────────────────────────────
+function selectChip(field,id,groupId){
   state[field]=id;
-  document.querySelectorAll("#"+gid+" .chip").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
-  if(state.size&&state.model)document.getElementById(nid).disabled=false;
+  document.querySelectorAll("#"+groupId+" .chip").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
+  checkStep2();
 }
 function selectTicket(id){
   state.ticket=id;
@@ -627,69 +615,171 @@ function toggleChallenge(val){
   document.getElementById("next-4").disabled=state.challenges.length===0;
 }
 function renderSummary(){
-  const s=state.sectorCustom?{icon:"🔷",label:state.sectorCustom}:SECTORS.find(x=>x.id===state.sector);
   const sz=SIZES.find(x=>x.id===state.size),mo=MODELS.find(x=>x.id===state.model),ti=TICKETS.find(x=>x.id===state.ticket);
-  document.getElementById("summary-row").innerHTML=[s?.icon+" "+s?.label,sz?.label,mo?.label,"Ticket "+ti?.label].filter(Boolean).map(t=>'<span>'+t+'</span><span>·</span>').join("").replace(/·<\/span>$/,"</span>");
-  document.getElementById("summary-des").innerHTML=state.challenges.map(c=>'<span class="des-badge">'+c+'</span>').join("");
+  document.getElementById("summary-row").innerHTML=[state.nichoLabel,state.city||null,sz?.label,mo?.label,"Ticket "+ti?.label].filter(Boolean).map(t=>"<span>"+t+"</span><span>·</span>").join("").replace(/·<\/span>$/,"</span>");
+  document.getElementById("summary-des").innerHTML=state.challenges.map(c=>'<span class="des-badge">'+c+"</span>").join("");
 }
 
-// GENERATE
-function startGenerate(){
-  showIgTransition(()=>generateTips());
-}
+// ── GENERATE ──────────────────────────────────────────────────────────────
+function startGenerate(){showIgTransition(()=>generateTips());}
 
 async function generateTips(){
   showView("result");
   document.getElementById("loading-wrap").classList.remove("hidden");
-  document.getElementById("result-content").classList.add("hidden");
+  document.getElementById("dicas-container").innerHTML="";
+  document.getElementById("result-actions").classList.add("hidden");
   document.getElementById("result-title").textContent="Gerando suas dicas...";
-  document.getElementById("result-sub").textContent="Analisando o mercado de "+((state.sectorCustom)||(SECTORS.find(x=>x.id===state.sector)?.label)||"")+"...";
+  document.getElementById("result-sub").textContent="Analisando o mercado de "+state.nicho+(state.city?" em "+state.city:"")+"...";
   document.getElementById("btn-restart").classList.remove("hidden");
 
-  const s=state.sectorCustom?{icon:"🔷",label:state.sectorCustom}:SECTORS.find(x=>x.id===state.sector);
   const sz=SIZES.find(x=>x.id===state.size),mo=MODELS.find(x=>x.id===state.model),ti=TICKETS.find(x=>x.id===state.ticket);
-  const extra=document.getElementById("extra-context").value.trim();
 
-  document.getElementById("result-badges").innerHTML=[s?.icon+" "+s?.label,sz?.label,mo?.label,ti?.label].filter(Boolean).map(t=>'<span class="badge">'+t+'</span>').join("");
-  document.getElementById("loading-text").textContent="Pesquisando dados do mercado de "+s?.label+"...";
+  document.getElementById("result-badges").innerHTML=[state.nichoLabel,state.city||null,sz?.label,mo?.label,ti?.label].filter(Boolean).map(t=>'<span class="badge">'+t+"</span>").join("");
+  document.getElementById("loading-text").textContent="Pesquisando dados do mercado de "+state.nicho+(state.city?" em "+state.city:"")+"...";
 
-  const sys=`Você é um consultor sênior de estratégia comercial com 25+ anos de experiência no mercado brasileiro, especializado em diferentes setores. Você tem profundo conhecimento dos desafios reais enfrentados por empresas de cada segmento.
+  const sys=`Você é um consultor comercial sênior com 25 anos de experiência no mercado brasileiro, especialista em crescimento de vendas em diferentes setores e regiões do país.
 
-REGRAS ABSOLUTAS:
-1. Suas respostas devem ter PROFUNDIDADE REAL — cite dados, percentuais, tendências e realidades específicas do setor informado
-2. NUNCA seja genérico — cada dica deve mencionar situações concretas do mercado daquele nicho (ex: para saúde, mencione planos de saúde, ANVISA, prontuários; para construção, mencione CREA, orçamentos, materiais)
-3. Baseie-se em como esse mercado realmente funciona no Brasil em 2025-2026
-4. Cada dica deve ter: contexto do setor + estratégia + ação imediata + resultado esperado
-5. Use linguagem direta, humana, como um mentor falando com um empresário, não como um robô listando itens
-6. Cite exemplos reais de como empresas do mesmo setor resolveram problemas similares
-7. Formato: 3 dicas numeradas, cada uma com título forte + desenvolvimento de 3-4 linhas + ação desta semana`;
+REGRAS ABSOLUTAS DE QUALIDADE:
+1. PROFUNDIDADE REAL — cite dados concretos, percentuais, tendências e realidades específicas do setor
+2. REGIONAL — considere a realidade econômica e cultural da cidade/região informada quando possível
+3. ZERO GENERICIDADE — cada dica menciona situações concretas daquele nicho específico
+4. LINGUAGEM HUMANA — escreva como um mentor experiente falando com um empresário, não como uma lista de tópicos
+5. AÇÃO IMEDIATA — cada dica termina com algo que pode ser feito HOJE ou AMANHÃ
+6. O ÓBVIO DEVE SER DITO — não presuma que o empresário já sabe o básico; explique o porquê de cada passo
 
-  const usr=`PERFIL COMPLETO:
-Setor: ${s?.label}
+FORMATO DE RESPOSTA — siga exatamente este padrão para cada dica:
+[TEMA: Marketing/Vendas/Network]
+[TITULO: título forte e direto]
+[TEXTO: desenvolvimento de 4-5 linhas com dados reais, contexto do setor e exemplos concretos]
+[ACAO: ação específica para executar esta semana]`;
+
+  const usr=`PERFIL DA EMPRESA:
+Nicho: ${state.nicho}
+Cidade: ${state.city||"Brasil (não informada)"}
 Porte: ${sz?.label}
-Modelo de venda: ${mo?.label}
+Modelo: ${mo?.label}
 Ticket médio: ${ti?.label}
-Principais desafios: ${state.challenges.join(", ")}
-${extra?"Contexto adicional: "+extra:""}
+Desafios prioritários: ${state.challenges.join(", ")}
+${document.getElementById("extra-context").value.trim()?"Contexto adicional: "+document.getElementById("extra-context").value.trim():""}
 
-Com base no cenário atual do mercado brasileiro de ${s?.label} em 2026, gere 3 recomendações estratégicas profundas e específicas. Considere as particularidades regulatórias, comportamentais e competitivas desse setor. As dicas devem soar como um especialista que conhece intimamente esse mercado, não como um conselho genérico de vendas.`;
+Gere exatamente 3 dicas estratégicas. Para cada dica, use o formato especificado com os campos [TEMA:], [TITULO:], [TEXTO:] e [ACAO:] em linhas separadas. As dicas devem ser profundas, específicas para o nicho "${state.nicho}" e considerar a realidade de "${state.city||"Brasil"}".`;
 
   try{
     const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,system:sys,messages:[{role:"user",content:usr}]})});
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1400,system:sys,messages:[{role:"user",content:usr}]})});
     const data=await res.json();
-    const text=data.content?.map(b=>b.text||"").join("")||"Erro ao gerar dicas.";
-    state.currentText=text;state.currentMeta=(s?.icon||"")+" "+(s?.label||"")+" · "+(mo?.label||"");
+    const text=data.content?.map(b=>b.text||"").join("")||"";
+    state.currentText=text;
+    state.currentMeta=state.nichoLabel+(state.city?" · "+state.city:"")+" · "+mo?.label;
+
+    const dicas=parseDicas(text);
+    state.dicasData=dicas;
+
     document.getElementById("loading-wrap").classList.add("hidden");
-    document.getElementById("result-content").classList.remove("hidden");
     document.getElementById("result-title").textContent="Suas Dicas Personalizadas";
-    document.getElementById("result-sub").textContent="Com dados reais do mercado de "+s?.label+" para o seu perfil.";
-    typewrite(text,document.getElementById("result-text"));
+    document.getElementById("result-sub").textContent="Com dados reais do mercado de "+state.nicho+(state.city?" em "+state.city:"")+" para o seu perfil.";
+
+    renderDicas(dicas);
+    document.getElementById("result-actions").classList.remove("hidden");
+
+    // Busca vídeos em paralelo
+    loadVideosForDicas(dicas);
+
   }catch(e){
     document.getElementById("loading-wrap").classList.add("hidden");
-    document.getElementById("result-content").classList.remove("hidden");
-    document.getElementById("result-text").textContent="Erro ao gerar dicas. Tente novamente.";
+    document.getElementById("dicas-container").innerHTML='<p style="color:#666;font-family:sans-serif;text-align:center;padding:40px 0">Erro ao gerar dicas. Tente novamente.</p>';
   }
+}
+
+// ── PARSER DE DICAS ───────────────────────────────────────────────────────
+function parseDicas(text){
+  const dicas=[];
+  const blocks=text.split(/\n(?=\[TEMA:)/);
+  blocks.forEach(block=>{
+    const tema=(block.match(/\[TEMA:\s*([^\]]+)\]/)||[])[1]?.trim()||"Estratégia";
+    const titulo=(block.match(/\[TITULO:\s*([^\]]+)\]/)||[])[1]?.trim()||"Dica de vendas";
+    const textoM=block.match(/\[TEXTO:\s*([\s\S]+?)\]\s*\[ACAO:/);
+    const texto=textoM?textoM[1].trim():"";
+    const acao=(block.match(/\[ACAO:\s*([\s\S]+?)(?:\]|$)/)||[])[1]?.trim()||"";
+    if(titulo)dicas.push({tema,titulo,texto,acao});
+  });
+  if(!dicas.length){
+    const paras=text.split(/\n{2,}/).filter(p=>p.trim().length>30);
+    paras.slice(0,3).forEach((p,i)=>{
+      dicas.push({tema:["Marketing","Vendas","Network"][i]||"Estratégia",titulo:"Dica "+(i+1),texto:p.trim(),acao:""});
+    });
+  }
+  return dicas.slice(0,3);
+}
+
+// ── RENDER DICAS ──────────────────────────────────────────────────────────
+function renderDicas(dicas){
+  const container=document.getElementById("dicas-container");
+  container.innerHTML="";
+  dicas.forEach((d,i)=>{
+    const card=document.createElement("div");
+    card.className="dica-card";
+    card.id="dica-card-"+i;
+    const temaColor={Marketing:"#4CC9F0",Vendas:"#FF6B35",Network:"#00C9A7"}[d.tema]||"#FF6B35";
+    card.innerHTML=
+      '<div class="dica-tag" style="color:'+temaColor+';background:rgba('+hexToRgb(temaColor)+',0.08);border-color:rgba('+hexToRgb(temaColor)+',0.3)">'+(i+1)+'. '+d.tema+'</div>'+
+      '<div class="dica-titulo">'+d.titulo+'</div>'+
+      '<div class="dica-texto">'+d.texto+(d.acao?'\n\n<span style="color:#FF6B35;font-weight:700">→ Ação desta semana:</span> '+d.acao:"")+'</div>'+
+      '<div class="videos-section" id="videos-'+i+'">'+
+        '<div class="videos-loading-inline"><div class="spinner-sm"></div><span>Buscando vídeos relacionados...</span></div>'+
+      '</div>';
+    container.appendChild(card);
+  });
+}
+
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return r+","+g+","+b;
+}
+
+// ── CARREGAR VÍDEOS PARA CADA DICA ────────────────────────────────────────
+async function loadVideosForDicas(dicas){
+  try{
+    const dicasInfo=dicas.map(d=>({tema:d.tema,resumo:d.titulo}));
+    const res=await fetch("/api/videos",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({sectorLabel:state.nicho,city:state.city,dicas:dicasInfo})});
+    const videos=await res.json();
+
+    dicas.forEach((d,i)=>{
+      const key="dica"+(i+1);
+      const vids=videos[key]||[];
+      renderVideosPorDica(i,vids);
+    });
+  }catch(e){
+    dicas.forEach((d,i)=>renderVideosPorDica(i,[]));
+  }
+}
+
+function renderVideosPorDica(idx,videos){
+  const section=document.getElementById("videos-"+idx);
+  if(!section)return;
+  if(!videos.length){section.innerHTML="";return;}
+
+  const roleLabel={principal:"🎯 Principal",complementar1:"📖 Aprofunde",complementar2:"💡 Mentalidade"};
+  const roleClass={principal:"principal",complementar1:"complementar",complementar2:"complementar"};
+
+  section.innerHTML=
+    '<div class="videos-label">📚 Aprenda mais sobre esta dica</div>'+
+    videos.map(v=>{
+      const role=v.role||"principal";
+      return '<a class="video-pill" href="https://youtube.com/watch?v='+v.id+'" target="_blank">'+
+        '<div class="video-pill-thumb">'+
+          '<img src="https://img.youtube.com/vi/'+v.id+'/mqdefault.jpg" alt="'+v.title+'" loading="lazy"/>'+
+          '<div class="video-pill-play"><span>▶</span></div>'+
+        '</div>'+
+        '<div class="video-pill-info">'+
+          '<div class="video-pill-role '+(roleClass[role]||"complementar")+'">'+(roleLabel[role]||"📖 Complementar")+'</div>'+
+          '<div class="video-pill-title">'+v.title+'</div>'+
+          '<div class="video-pill-channel">'+v.channel+'</div>'+
+        '</div>'+
+        '<div class="video-pill-arrow">↗</div>'+
+      '</a>';
+    }).join("");
 }
 
 function typewrite(text,el,speed=11){
@@ -698,15 +788,13 @@ function typewrite(text,el,speed=11){
   const iv=setInterval(()=>{if(i<text.length){el.insertBefore(document.createTextNode(text[i++]),cur)}else{clearInterval(iv);cur.remove()}},speed);
 }
 
-// SAVE
+// ── SAVE ──────────────────────────────────────────────────────────────────
 function saveCurrent(){
   if(!state.currentText)return;
   const arr=getUserSaved();
   if(arr.find(s=>s.text===state.currentText))return;
-  const lines=state.currentText.split("\n").filter(l=>l.trim().match(/^[123]\./));
-  const checks=lines.length>=3?lines.slice(0,3):state.challenges.slice(0,3).map((c,i)=>(i+1)+". "+c);
-  arr.push({text:state.currentText,meta:state.currentMeta,status:"todo",date:new Date().toLocaleDateString("pt-BR"),id:Date.now(),
-    checks:checks.map(c=>({label:c.replace(/^\d+\.\s*/,"").split(":")[0].substring(0,70),done:false}))});
+  const checks=state.dicasData.map(d=>({label:d.titulo.substring(0,70),done:false}));
+  arr.push({text:state.currentText,meta:state.currentMeta,status:"todo",date:new Date().toLocaleDateString("pt-BR"),id:Date.now(),checks});
   setUserSaved(arr);updateSavedBtn();
   const btn=document.querySelector(".btn-save");btn.textContent="✅ Salvo!";setTimeout(()=>btn.textContent="🔖 Salvar",2000);
 }
@@ -715,31 +803,32 @@ function updateSavedBtn(){
   document.getElementById("btn-saved-nav").textContent=arr.length>0?"🔖 Salvos ("+arr.length+")":"🔖 Salvos";
 }
 
-// SAVED VIEW
+// ── SAVED VIEW ────────────────────────────────────────────────────────────
 function renderSaved(){
   const arr=getUserSaved(),container=document.getElementById("saved-container");
   let html=!currentUser?'<div class="cloud-banner"><div class="cloud-banner-text"><strong>☁ Salve na nuvem</strong><br>Crie uma conta para acessar de qualquer dispositivo.</div><button class="btn-cloud-login" onclick="openAuth()">Criar conta</button></div>':"";
   if(arr.length===0){container.innerHTML=html+'<div class="empty">Nenhuma dica salva ainda.</div>';return;}
-  html+='<div class="saved-list">'+arr.map((item,i)=>'<div class="saved-card">'
-    +'<div class="saved-meta">'+item.meta+'</div>'
-    +'<div class="saved-date">Salvo em '+(item.date||"–")+'</div>'
-    +'<p class="saved-text">'+item.text+'</p>'
-    +'<div class="saved-footer">'
-    +'<div class="track-btns">'
-    +'<button class="track-btn" onclick="setSavedStatus('+i+',\"todo\")">⚪ Pendente</button>'
-    +'<button class="track-btn" onclick="setSavedStatus('+i+',\"doing\")">🟡 Em andamento</button>'
-    +'<button class="track-btn" onclick="setSavedStatus('+i+',\"done\")">🟢 Concluída</button>'
-    +'</div>'
-    +'<div class="saved-actions">'
-    +'<button class="btn-export-sm" onclick="exportSinglePDF('+i+')">⬇ PDF</button>'
-    +'<button class="btn-remove" onclick="removeSaved('+i+')">Remover</button>'
-    +'</div></div></div>').join("")+'</div>';
+  html+='<div class="saved-list">'+arr.map((item,i)=>
+    '<div class="saved-card">'+
+    '<div class="saved-meta">'+item.meta+'</div>'+
+    '<div class="saved-date">Salvo em '+(item.date||"–")+'</div>'+
+    '<p class="saved-text">'+item.text.substring(0,300)+(item.text.length>300?"...":"")+'</p>'+
+    '<div class="saved-footer">'+
+    '<div class="track-btns">'+
+    '<button class="track-btn" onclick="setSavedStatus('+i+',\"todo\")">⚪ Pendente</button>'+
+    '<button class="track-btn" onclick="setSavedStatus('+i+',\"doing\")">🟡 Em andamento</button>'+
+    '<button class="track-btn" onclick="setSavedStatus('+i+',\"done\")">🟢 Concluída</button>'+
+    '</div>'+
+    '<div class="saved-actions">'+
+    '<button class="btn-export-sm" onclick="exportSinglePDF('+i+')">⬇ PDF</button>'+
+    '<button class="btn-remove" onclick="removeSaved('+i+')">Remover</button>'+
+    '</div></div></div>').join("")+'</div>';
   container.innerHTML=html;
 }
 function setSavedStatus(i,status){const arr=getUserSaved();arr[i].status=status;setUserSaved(arr);renderSaved();}
 function removeSaved(i){const arr=getUserSaved();arr.splice(i,1);setUserSaved(arr);updateSavedBtn();renderSaved();}
 
-// TRACKING
+// ── TRACKING ──────────────────────────────────────────────────────────────
 function setFilter(f){
   currentFilter=f;
   ["all","todo","doing","done"].forEach(x=>document.getElementById("filter-"+x).classList.toggle("active",x===f));
@@ -748,61 +837,61 @@ function setFilter(f){
 function renderTrack(){
   const arr=getUserSaved(),container=document.getElementById("track-container");
   const total=arr.length,done=arr.filter(x=>x.status==="done").length,doing=arr.filter(x=>x.status==="doing").length;
-  const totalChecks=arr.reduce((s,i)=>(i.checks||[]).length+s,0);
-  const doneChecks=arr.reduce((s,i)=>(i.checks||[]).filter(c=>c.done).length+s,0);
-  const globalPct=totalChecks>0?Math.round(doneChecks/totalChecks*100):0;
+  const totalC=arr.reduce((s,i)=>(i.checks||[]).length+s,0);
+  const doneC=arr.reduce((s,i)=>(i.checks||[]).filter(c=>c.done).length+s,0);
+  const pctGlobal=totalC>0?Math.round(doneC/totalC*100):0;
 
-  let html='<div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:14px;padding:20px 22px;margin-bottom:24px">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-    +'<div style="font-size:14px;color:#aaa;font-family:sans-serif">Progresso geral das ações</div>'
-    +'<div style="font-size:26px;font-weight:700;color:#FF6B35">'+globalPct+'%</div></div>'
-    +'<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+globalPct+'%"></div></div>'
-    +'<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px">'
-    +[["Total",total,"#777"],["Em andamento",doing,"#F9C74F"],["Concluídas",done,"#00C9A7"],["Ações feitas",doneChecks+"/"+totalChecks,"#4CC9F0"]].map(function(a){
+  let html='<div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:14px;padding:20px 22px;margin-bottom:24px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
+    '<div style="font-size:14px;color:#aaa;font-family:sans-serif">Progresso geral das ações</div>'+
+    '<div style="font-size:26px;font-weight:700;color:#FF6B35">'+pctGlobal+'%</div></div>'+
+    '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+pctGlobal+'%"></div></div>'+
+    '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px">'+
+    [["Total",total,"#777"],["Em andamento",doing,"#F9C74F"],["Concluídas",done,"#00C9A7"],["Ações feitas",doneC+"/"+totalC,"#4CC9F0"]].map(function(a){
       return '<div style="text-align:center;flex:1;min-width:70px"><div style="font-size:18px;font-weight:700;color:'+a[2]+'">'+a[1]+'</div><div style="font-size:11px;color:#444;font-family:sans-serif">'+a[0]+'</div></div>';
     }).join("")+'</div></div>';
 
   const filtered=currentFilter==="all"?arr:arr.filter(x=>(x.status||"todo")===currentFilter);
-  if(arr.length===0){container.innerHTML=html+'<div class="empty">Nenhuma dica salva. Gere e salve dicas para acompanhar aqui.</div>';return;}
-  if(filtered.length===0){container.innerHTML=html+'<div class="empty">Nenhuma dica com este status.</div>';return;}
+  if(!arr.length){container.innerHTML=html+'<div class="empty">Nenhuma dica salva. Gere e salve para acompanhar aqui.</div>';return;}
+  if(!filtered.length){container.innerHTML=html+'<div class="empty">Nenhuma dica com este status.</div>';return;}
 
   html+=filtered.map(function(item){
-    const realIdx=arr.indexOf(item);
+    const ri=arr.indexOf(item);
     const checks=item.checks||[];
-    const doneC=checks.filter(c=>c.done).length;
-    const pct=checks.length>0?Math.round(doneC/checks.length*100):0;
-    const statusClass=item.status||"todo";
-    const statusLabel={todo:"⚪ Pendente",doing:"🟡 Em andamento",done:"🟢 Concluída"}[statusClass];
-    const barColor={todo:"#555",doing:"#F9C74F",done:"#00C9A7"}[statusClass];
-    const checklistHtml=checks.map(function(c,ci){
-      return '<div class="check-item" onclick="toggleCheck('+realIdx+','+ci+')">'
-        +'<div class="check-box '+(c.done?"checked":"")+'>'+(c.done?"✓":"")+"</div>"
-        +'<span class="check-label '+(c.done?"done":"")+'">'+c.label+"</span></div>";
+    const dc=checks.filter(c=>c.done).length;
+    const pct=checks.length?Math.round(dc/checks.length*100):0;
+    const sc=item.status||"todo";
+    const sl={todo:"⚪ Pendente",doing:"🟡 Em andamento",done:"🟢 Concluída"}[sc];
+    const bc={todo:"#555",doing:"#F9C74F",done:"#00C9A7"}[sc];
+    const cl=checks.map(function(c,ci){
+      return '<div class="check-item" onclick="toggleCheck('+ri+','+ci+')">'+
+        '<div class="check-box '+(c.done?"checked":"")+'>'+(c.done?"✓":"")+"</div>"+
+        '<span class="check-label '+(c.done?"done":"")+'">'+c.label+"</span></div>";
     }).join("");
-    return '<div class="progress-card">'
-      +'<div class="progress-header">'
-      +'<div><div class="saved-meta" style="margin:0">'+item.meta+'</div><div class="saved-date">'+(item.date||"")+"</div></div>"
-      +'<div style="text-align:right"><div class="progress-pct">'+pct+'%</div><span class="track-badge '+statusClass+'">'+statusLabel+"</span></div></div>"
-      +'<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+pct+"%;background:"+barColor+'"></div></div>'
-      +(checks.length>0?'<div class="checklist">'+checklistHtml+"</div>":"")
-      +'<div class="track-btns">'
-      +'<button class="track-btn" onclick="setTrackStatus('+realIdx+',\"todo\")">⚪ Pendente</button>'
-      +'<button class="track-btn" onclick="setTrackStatus('+realIdx+',\"doing\")">🟡 Em andamento</button>'
-      +'<button class="track-btn" onclick="setTrackStatus('+realIdx+',\"done\")">🟢 Concluída</button>'
-      +'</div></div>';
+    return '<div class="progress-card">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'+
+      '<div><div class="saved-meta" style="margin:0">'+item.meta+'</div><div class="saved-date">'+(item.date||"")+"</div></div>"+
+      '<div style="text-align:right"><div style="font-size:22px;font-weight:700;color:#FF6B35">'+pct+'%</div><span class="track-badge '+sc+(sc==="done"?"-b":"")+'">'+sl+"</span></div></div>"+
+      '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+pct+"%;background:"+bc+'"></div></div>'+
+      (checks.length?'<div class="checklist">'+cl+"</div>":"")+
+      '<div class="track-btns">'+
+      '<button class="track-btn" onclick="setTrackStatus('+ri+',\"todo\")">⚪ Pendente</button>'+
+      '<button class="track-btn" onclick="setTrackStatus('+ri+',\"doing\")">🟡 Em andamento</button>'+
+      '<button class="track-btn" onclick="setTrackStatus('+ri+',\"done\")">🟢 Concluída</button>'+
+      "</div></div>";
   }).join("");
   container.innerHTML=html;
 }
-function toggleCheck(itemIdx,checkIdx){
-  const arr=getUserSaved();if(!arr[itemIdx].checks)return;
-  arr[itemIdx].checks[checkIdx].done=!arr[itemIdx].checks[checkIdx].done;
-  const allDone=arr[itemIdx].checks.every(c=>c.done),anyDone=arr[itemIdx].checks.some(c=>c.done);
-  if(allDone)arr[itemIdx].status="done";else if(anyDone)arr[itemIdx].status="doing";else arr[itemIdx].status="todo";
+function toggleCheck(ii,ci){
+  const arr=getUserSaved();if(!arr[ii]?.checks)return;
+  arr[ii].checks[ci].done=!arr[ii].checks[ci].done;
+  const all=arr[ii].checks.every(c=>c.done),any=arr[ii].checks.some(c=>c.done);
+  arr[ii].status=all?"done":any?"doing":"todo";
   setUserSaved(arr);renderTrack();updateSavedBtn();
 }
-function setTrackStatus(i,status){const arr=getUserSaved();arr[i].status=status;setUserSaved(arr);renderTrack();updateSavedBtn();}
+function setTrackStatus(i,s){const arr=getUserSaved();arr[i].status=s;setUserSaved(arr);renderTrack();updateSavedBtn();}
 
-// EXPORT
+// ── EXPORT ────────────────────────────────────────────────────────────────
 function exportPDF(){if(!state.currentText)return;generatePDF(state.currentText,state.currentMeta);}
 function exportSinglePDF(i){const arr=getUserSaved(),item=arr[i];if(!item)return;generatePDF(item.text,item.meta);}
 function generatePDF(text,meta){
