@@ -155,22 +155,22 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .ig-result-banner strong{color:#FF6B35}
 
 /* TRACKING */
-.progress-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px;margin-bottom:16px}
+.progress-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px;margin-bottom:16px;overflow:hidden;word-break:break-word}
 .progress-bar-wrap{background:rgba(255,255,255,0.06);border-radius:6px;height:8px;margin-bottom:14px;overflow:hidden}
 .progress-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#FF6B35,#F9C74F);transition:width .5s ease}
-.checklist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:8px 10px;border-radius:8px;transition:background .15s}
+.checklist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;width:100%}
+.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:8px 10px;border-radius:8px;transition:background .15s;width:100%}
 .check-item:hover{background:rgba(255,255,255,0.04)}
-.check-box{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:1px;font-size:12px}
+.check-box{width:20px;height:20px;min-width:20px;border-radius:6px;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:1px;font-size:12px}
 .check-box.checked{background:#00C9A7;border-color:#00C9A7;color:#000}
-.check-label{font-size:13px;color:#bbb;font-family:sans-serif;line-height:1.5}
+.check-label{font-size:13px;color:#bbb;font-family:sans-serif;line-height:1.5;flex:1;min-width:0;word-break:break-word}
 .check-label.done{text-decoration:line-through;color:#444}
-.track-badge{border-radius:20px;padding:4px 10px;font-size:11px;font-family:sans-serif;font-weight:600}
+.track-badge{border-radius:20px;padding:4px 10px;font-size:11px;font-family:sans-serif;font-weight:600;white-space:nowrap}
 .track-badge.todo{background:rgba(255,255,255,0.05);color:#555}
 .track-badge.doing{background:rgba(249,199,79,0.15);color:#F9C74F}
 .track-badge.done-b{background:rgba(0,201,167,0.15);color:#00C9A7}
 .track-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.track-btn{border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#666;transition:all .2s}
+.track-btn{border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#666;transition:all .2s;white-space:nowrap}
 .filter-row{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap}
 .filter-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#777;border-radius:20px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .filter-btn.active{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35}
@@ -180,7 +180,7 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .saved-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px}
 .saved-meta{font-size:11px;color:#555;font-family:sans-serif;margin-bottom:6px}
 .saved-date{font-size:10px;color:#333;font-family:sans-serif;margin-bottom:10px}
-.saved-text{font-size:13px;line-height:1.8;color:#ccc;white-space:pre-line;margin-bottom:14px;font-family:sans-serif}
+.saved-text{font-size:13px;line-height:1.8;color:#ccc;white-space:pre-line;margin-bottom:14px;font-family:sans-serif;word-break:break-word;overflow-wrap:break-word}
 .saved-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .saved-actions{display:flex;gap:6px}
 .btn-remove{background:transparent;border:1px solid rgba(255,60,60,0.25);color:#c66;border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer;font-family:sans-serif}
@@ -191,10 +191,63 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .btn-cloud-login{background:#FF6B35;color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:sans-serif}
 
 footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans-serif;border-top:1px solid rgba(255,255,255,0.04)}
+
+/* SIGNUP GATE */
+#signup-gate{position:fixed;inset:0;background:#09090E;z-index:600;display:flex;align-items:center;justify-content:center;padding:20px}
+.signup-box{background:#13131A;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;animation:slideDown .4s ease}
+.signup-logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:28px}
+.signup-logo-icon{font-size:24px}
+.signup-logo-text{font-size:22px;font-weight:700;color:#FF6B35;letter-spacing:-.5px}
+.signup-title{font-size:20px;font-weight:700;margin-bottom:6px;text-align:center}
+.signup-sub{color:#555;font-size:13px;margin-bottom:28px;font-family:sans-serif;text-align:center;line-height:1.6}
+.signup-form-group{margin-bottom:14px}
+.signup-label{display:block;font-size:11px;color:#555;font-family:sans-serif;margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
+.signup-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none;transition:border-color .2s}
+.signup-input:focus{border-color:rgba(255,107,53,0.5);box-shadow:0 0 0 3px rgba(255,107,53,0.06)}
+.signup-btn{width:100%;background:#FF6B35;color:#000;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:6px;transition:opacity .2s}
+.signup-btn:hover{opacity:.9}
+.signup-skip{display:block;text-align:center;margin-top:14px;font-size:12px;color:#444;font-family:sans-serif;cursor:pointer;transition:color .2s}
+.signup-skip:hover{color:#666}
+.signup-error{background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.25);border-radius:8px;padding:9px 13px;font-size:13px;color:#e88;font-family:sans-serif;margin-bottom:12px;display:none}
+.signup-benefits{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.signup-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:#777;font-family:sans-serif}
+.signup-benefit-icon{font-size:16px}
 @media(max-width:480px){header{padding:9px 13px}.header-right{gap:4px}.nav-btn{padding:6px 9px;font-size:11px}.ticket-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+
+<!-- SIGNUP GATE -->
+<div id="signup-gate">
+  <div class="signup-box">
+    <div class="signup-logo">
+      <span class="signup-logo-icon">⚡</span>
+      <span class="signup-logo-text">VendaMais</span>
+    </div>
+    <h2 class="signup-title">Acesse gratuitamente</h2>
+    <p class="signup-sub">Cadastre-se para receber dicas personalizadas de vendas para o seu negócio.</p>
+    <div class="signup-benefits">
+      <div class="signup-benefit"><span class="signup-benefit-icon">🎯</span><span>Dicas personalizadas para o seu nicho</span></div>
+      <div class="signup-benefit"><span class="signup-benefit-icon">📊</span><span>Acompanhamento do seu progresso</span></div>
+      <div class="signup-benefit"><span class="signup-benefit-icon">📲</span><span>Exporte e compartilhe suas dicas</span></div>
+    </div>
+    <div id="signup-error" class="signup-error"></div>
+    <div class="signup-form-group">
+      <label class="signup-label">Nome completo</label>
+      <input class="signup-input" id="gate-name" type="text" placeholder="Seu nome" autocomplete="name"/>
+    </div>
+    <div class="signup-form-group">
+      <label class="signup-label">WhatsApp</label>
+      <input class="signup-input" id="gate-phone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel"/>
+    </div>
+    <div class="signup-form-group">
+      <label class="signup-label">E-mail</label>
+      <input class="signup-input" id="gate-email" type="email" placeholder="seu@email.com" autocomplete="email"/>
+    </div>
+    <button class="signup-btn" onclick="submitGate()">Começar agora →</button>
+    <span class="signup-skip" onclick="skipGate()">Continuar sem cadastro</span>
+  </div>
+</div>
 
 <div id="ig-transition" class="hidden">
   <div class="ig-avatar">📸</div>
@@ -383,7 +436,69 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
 <footer>VendaMais · IA de vendas para empresas de todos os segmentos · <a href="https://instagram.com/grupoalianca_monitoramento" target="_blank" style="color:#FF6B35;text-decoration:none">@grupoalianca_monitoramento</a></footer>
 
 <script>
-// ── NICHOS COM SUGESTÕES ────────────────────────────────────────────────
+// ── SIGNUP GATE ──────────────────────────────────────────────────────────
+(function initGate(){
+  // Se já passou pelo gate, não mostra de novo
+  const passed = localStorage.getItem("vm_gate_passed");
+  if(passed){
+    document.getElementById("signup-gate").style.display="none";
+    return;
+  }
+
+  // Formata telefone
+  document.getElementById("gate-phone").addEventListener("input", function(){
+    let v = this.value.replace(/\D/g,"");
+    if(v.length > 11) v = v.slice(0,11);
+    if(v.length > 6) v = "("+v.slice(0,2)+") "+v.slice(2,7)+"-"+v.slice(7);
+    else if(v.length > 2) v = "("+v.slice(0,2)+") "+v.slice(2);
+    else if(v.length > 0) v = "("+v;
+    this.value = v;
+  });
+
+  // Enter no último campo submete
+  document.getElementById("gate-email").addEventListener("keydown", function(e){
+    if(e.key==="Enter") submitGate();
+  });
+})();
+
+function submitGate(){
+  const name = document.getElementById("gate-name").value.trim();
+  const phone = document.getElementById("gate-phone").value.trim();
+  const email = document.getElementById("gate-email").value.trim();
+  const errEl = document.getElementById("signup-error");
+
+  if(!name){errEl.textContent="Por favor, informe seu nome.";errEl.style.display="block";return;}
+  if(!phone || phone.replace(/\D/g,"").length < 10){errEl.textContent="Informe um WhatsApp válido.";errEl.style.display="block";return;}
+  if(!email || !email.includes("@")){errEl.textContent="Informe um e-mail válido.";errEl.style.display="block";return;}
+
+  // Salva lead
+  const leads = JSON.parse(localStorage.getItem("vm_leads")||"[]");
+  leads.push({name, phone, email, date: new Date().toISOString()});
+  localStorage.setItem("vm_leads", JSON.stringify(leads));
+
+  // Registra usuário automaticamente se não existir
+  const users = JSON.parse(localStorage.getItem("vm_users")||"{}");
+  if(!users[email]){
+    users[email] = {name, phone, saved:[]};
+    localStorage.setItem("vm_users", JSON.stringify(users));
+  }
+  currentUser = {email, name};
+  localStorage.setItem("vm_user", JSON.stringify(currentUser));
+
+  passGate();
+}
+
+function skipGate(){
+  passGate();
+}
+
+function passGate(){
+  localStorage.setItem("vm_gate_passed","1");
+  document.getElementById("signup-gate").style.display="none";
+  updateUserUI();
+}
+
+// ── NICHOS COM SUGESTÕES ────────────────────────────────────────────────────
 const NICHOS=[
   // Saúde
   {icon:"🦷",label:"Odontologia"},{icon:"🦷",label:"Odontopediatria"},{icon:"🦷",label:"Ortodontia"},
