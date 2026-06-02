@@ -7,6 +7,68 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const KEY = process.env.ANTHROPIC_API_KEY;
 
+// ── Google Sheets config ──────────────────────────────────────────────────
+const SHEET_ID = "1YTuFKECrTdgmfHruO2eCbvDT0O3DKZmwm5dGKDWUYSY";
+const SHEET_NAME = "Página1";
+const SA_EMAIL = process.env.GOOGLE_SA_EMAIL;
+const SA_KEY = process.env.GOOGLE_SA_KEY;
+
+async function getGoogleToken() {
+  const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
+  const now = Math.floor(Date.now() / 1000);
+  const claim = Buffer.from(JSON.stringify({
+    iss: SA_EMAIL,
+    scope: "https://www.googleapis.com/auth/spreadsheets",
+    aud: "https://oauth2.googleapis.com/token",
+    exp: now + 3600,
+    iat: now,
+  })).toString("base64url");
+
+  const { createSign } = await import("node:crypto");
+  const sign = createSign("RSA-SHA256");
+  sign.update(`${header}.${claim}`);
+  const sig = sign.sign(SA_KEY.replace(/\\n/g, "\n"), "base64url");
+  const jwt = `${header}.${claim}.${sig}`;
+
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
+  });
+  const data = await res.json();
+  return data.access_token;
+}
+
+async function appendToSheet(row) {
+  if (!SA_EMAIL || !SA_KEY) {
+    console.log("Google Sheets não configurado — pulando.");
+    return;
+  }
+  try {
+    const token = await getGoogleToken();
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}:append?valueInputOption=USER_ENTERED`;
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ values: [row] }),
+    });
+    console.log("✅ Lead salvo no Sheets:", row[1]);
+  } catch (err) {
+    console.error("❌ Erro ao salvar no Sheets:", err.message);
+  }
+}
+
+// ── SALVAR LEAD ───────────────────────────────────────────────────────────
+app.post("/api/lead", async (req, res) => {
+  const { name, phone, email, nicho, city } = req.body;
+  if (!name || !email) return res.status(400).json({ error: "Dados incompletos." });
+
+  const date = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  await appendToSheet([date, name, phone || "", email, nicho || "", city || ""]);
+  res.json({ ok: true });
+});
+
+// ── ANTHROPIC PROXY ───────────────────────────────────────────────────────
 async function callAI(messages, system, maxTokens = 1200) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -16,6 +78,28 @@ async function callAI(messages, system, maxTokens = 1200) {
   return r.json();
 }
 
+app.post("/api/chat", async (req, res) => {
+  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
+  try {
+    const data = await callAI(req.body.messages, req.body.system, req.body.max_tokens || 1400);
+    res.json(data);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ── SUGESTÃO DE NICHOS VIA IA ─────────────────────────────────────────────
+app.post("/api/nichos", async (req, res) => {
+  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
+  const { query } = req.body;
+  if (!query || query.length < 2) return res.json({ nichos: [] });
+  const prompt = `Liste até 8 tipos de negócios ou nichos de mercado brasileiros que correspondam à busca: "${query}". Retorne APENAS JSON válido sem markdown: {"nichos":[{"icon":"emoji","label":"nome do negócio"},...]}`; 
+  try {
+    const data = await callAI([{ role: "user", content: prompt }], "", 300);
+    const text = data.content?.map(b => b.text || "").join("") || '{"nichos":[]}';
+    res.json(JSON.parse(text.replace(/```json|```/g, "").trim()));
+  } catch { res.json({ nichos: [] }); }
+});
+
+// ── BUSCAR E VALIDAR VÍDEOS ───────────────────────────────────────────────
 async function videoExists(id) {
   try {
     const r = await fetch(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, { method: "HEAD" });
@@ -25,103 +109,31 @@ async function videoExists(id) {
   } catch { return false; }
 }
 
-// ── GERAR DICAS ───────────────────────────────────────────────────────────
-app.post("/api/chat", async (req, res) => {
-  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
-  try {
-    const data = await callAI(req.body.messages, req.body.system, req.body.max_tokens || 1400);
-    res.json(data);
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// ── BUSCAR E VALIDAR VÍDEOS POR DICA ─────────────────────────────────────
 app.post("/api/videos", async (req, res) => {
   if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
-
   const { sectorLabel, city, dicas } = req.body;
-
   const FALLBACK = [
     { id: "aZG9j4eqG3E", title: "Quando o Cliente Diz 'Tá Caro'", channel: "Thiago Concer", role: "principal" },
-    { id: "RAOppNOpNUI", title: "5 Técnicas de Persuasão para Fechar Vendas", channel: "Thiago Concer", role: "complementar" },
-    { id: "irTe2XF4s8k", title: "Como Fazer Network", channel: "Pablo Marçal", role: "complementar" },
+    { id: "RAOppNOpNUI", title: "5 Técnicas de Persuasão para Fechar Vendas", channel: "Thiago Concer", role: "complementar1" },
+    { id: "irTe2XF4s8k", title: "Como Fazer Network", channel: "Pablo Marçal", role: "complementar2" },
   ];
-
-  const prompt = `Você conhece vídeos reais do YouTube em português brasileiro.
-
-Para uma empresa do nicho "${sectorLabel}" na cidade "${city || "Brasil"}", preciso de vídeos para aprofundar cada uma das 3 dicas abaixo.
-
-DICAS GERADAS:
-${dicas.map((d, i) => `${i + 1}. Tema: ${d.tema} — ${d.resumo}`).join("\n")}
-
-Para cada dica, sugira 3 vídeos reais do YouTube:
-- "principal": vídeo diretamente sobre o tema da dica
-- "complementar1": aprofunda a técnica ou psicologia por trás
-- "complementar2": mentalidade ou hábito que sustenta a prática
-
-Retorne APENAS JSON válido sem markdown:
-{
-  "dica1": [
-    {"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"principal"},
-    {"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar1"},
-    {"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar2"}
-  ],
-  "dica2": [...],
-  "dica3": [...]
-}
-
-REGRAS ABSOLUTAS:
-- IDs de exatamente 11 caracteres
-- Apenas vídeos que você tem CERTEZA que existem no YouTube
-- Todos em português brasileiro
-- Canais de referência: Thiago Concer, G4 Educação, Natanael Oliveira, Joel Jota, Flávio Augusto, Sebrae, Pablo Marçal, Leandro Ladeira, Conquer, Me Poupe
-- Se não tiver certeza do ID, use um desses IDs garantidos: aZG9j4eqG3E, RAOppNOpNUI, dQOXsn7kKyo, irTe2XF4s8k, 3466p8uVwEQ, s4tU92xq5Os`;
-
+  const prompt = `Para uma empresa do nicho "${sectorLabel}" em "${city||"Brasil"}", sugira vídeos reais do YouTube em português para aprofundar estas dicas: ${dicas.map((d,i)=>`${i+1}. ${d.tema}: ${d.resumo}`).join(", ")}. Retorne APENAS JSON: {"dica1":[{"id":"...","title":"...","channel":"...","role":"principal"},{"id":"...","title":"...","channel":"...","role":"complementar1"},{"id":"...","title":"...","channel":"...","role":"complementar2"}],"dica2":[...],"dica3":[...]}. IDs reais de 11 chars, em português.`;
   try {
     const data = await callAI([{ role: "user", content: prompt }], "", 1000);
     const text = data.content?.map(b => b.text || "").join("") || "{}";
     const suggested = JSON.parse(text.replace(/```json|```/g, "").trim());
-
     const result = { dica1: [], dica2: [], dica3: [] };
-
     for (const key of ["dica1", "dica2", "dica3"]) {
-      const candidates = suggested[key] || [];
-      for (const v of candidates) {
+      for (const v of (suggested[key] || [])) {
         if (!v.id || v.id.length !== 11) continue;
-        const ok = await videoExists(v.id);
-        console.log(`${ok ? "✅" : "❌"} ${key} ${v.id} — ${v.title}`);
-        if (ok) result[key].push(v);
+        if (await videoExists(v.id)) result[key].push(v);
+        if (result[key].length >= 3) break;
       }
-      if (result[key].length < 3) {
-        const missing = 3 - result[key].length;
-        result[key].push(...FALLBACK.slice(0, missing));
-      }
+      if (result[key].length < 3) result[key].push(...FALLBACK.slice(0, 3 - result[key].length));
     }
-
     res.json(result);
   } catch (err) {
-    console.error("Erro vídeos:", err.message);
     res.json({ dica1: FALLBACK, dica2: FALLBACK, dica3: FALLBACK });
-  }
-});
-
-
-// ── SUGESTÃO DE NICHOS VIA IA ─────────────────────────────────────────────
-app.post("/api/nichos", async (req, res) => {
-  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
-  const { query } = req.body;
-  if (!query || query.length < 2) return res.json({ nichos: [] });
-
-  const prompt = `Liste até 8 tipos de negócios ou nichos de mercado brasileiros que correspondam à busca: "${query}".
-Retorne APENAS JSON válido sem markdown:
-{"nichos":[{"icon":"emoji","label":"nome do negócio"},...]}`; 
-
-  try {
-    const data = await callAI([{ role: "user", content: prompt }], "", 300);
-    const text = data.content?.map(b => b.text || "").join("") || '{"nichos":[]}';
-    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-    res.json(parsed);
-  } catch (err) {
-    res.json({ nichos: [] });
   }
 });
 
