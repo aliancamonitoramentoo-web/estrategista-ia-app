@@ -104,6 +104,27 @@ REGRAS ABSOLUTAS:
   }
 });
 
+
+// ── SUGESTÃO DE NICHOS VIA IA ─────────────────────────────────────────────
+app.post("/api/nichos", async (req, res) => {
+  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
+  const { query } = req.body;
+  if (!query || query.length < 2) return res.json({ nichos: [] });
+
+  const prompt = `Liste até 8 tipos de negócios ou nichos de mercado brasileiros que correspondam à busca: "${query}".
+Retorne APENAS JSON válido sem markdown:
+{"nichos":[{"icon":"emoji","label":"nome do negócio"},...]}`; 
+
+  try {
+    const data = await callAI([{ role: "user", content: prompt }], "", 300);
+    const text = data.content?.map(b => b.text || "").join("") || '{"nichos":[]}';
+    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+    res.json(parsed);
+  } catch (err) {
+    res.json({ nichos: [] });
+  }
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
