@@ -385,24 +385,83 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
 <script>
 // ── NICHOS COM SUGESTÕES ────────────────────────────────────────────────
 const NICHOS=[
+  // Saúde
   {icon:"🦷",label:"Odontologia"},{icon:"🦷",label:"Odontopediatria"},{icon:"🦷",label:"Ortodontia"},
-  {icon:"🏥",label:"Clínica Médica"},{icon:"💆",label:"Estética e Beleza"},{icon:"🏃",label:"Fisioterapia"},
+  {icon:"🦷",label:"Odontologia Estética"},{icon:"🏥",label:"Clínica Médica"},{icon:"🏥",label:"Clínica de Especialidades"},
+  {icon:"💆",label:"Clínica de Estética"},{icon:"💆",label:"Estética e Cosmetologia"},{icon:"🏃",label:"Fisioterapia"},
   {icon:"🧠",label:"Psicologia e Terapia"},{icon:"👁️",label:"Oftalmologia"},{icon:"💊",label:"Farmácia"},
-  {icon:"🏋️",label:"Academia e Personal Trainer"},{icon:"🍽️",label:"Restaurante e Delivery"},
-  {icon:"☕",label:"Cafeteria e Lanchonete"},{icon:"🍕",label:"Pizzaria e Hamburgueria"},
-  {icon:"🛒",label:"Mercado e Mercearia"},{icon:"👗",label:"Loja de Roupas e Moda"},
-  {icon:"👟",label:"Loja de Calçados"},{icon:"💻",label:"Loja de Informática"},
-  {icon:"🏠",label:"Imobiliária"},{icon:"🔨",label:"Construtora e Reforma"},
-  {icon:"⚡",label:"Elétrica e Hidráulica"},{icon:"🎓",label:"Escola e Cursinho"},
-  {icon:"📚",label:"Cursos Online e EAD"},{icon:"👶",label:"Escola Infantil e Creche"},
-  {icon:"💰",label:"Contabilidade e Finanças"},{icon:"⚖️",label:"Advocacia e Direito"},
-  {icon:"📣",label:"Agência de Marketing"},{icon:"💼",label:"Consultoria Empresarial"},
-  {icon:"🚚",label:"Transportadora e Logística"},{icon:"🏭",label:"Indústria e Manufatura"},
-  {icon:"🌿",label:"Pet Shop e Veterinária"},{icon:"🚗",label:"Oficina Mecânica e Auto"},
-  {icon:"💻",label:"SaaS e Software"},{icon:"📸",label:"Fotografia e Audiovisual"},
-  {icon:"🎵",label:"Música e Entretenimento"},{icon:"🌱",label:"Agronegócio e Rural"},
-  {icon:"🏨",label:"Hotel e Turismo"},{icon:"✈️",label:"Agência de Viagens"},
-  {icon:"🔷",label:"Outro segmento"},
+  {icon:"💊",label:"Farmácia de Manipulação"},{icon:"🧬",label:"Laboratório de Análises"},{icon:"🩺",label:"Nutrição e Dietética"},
+  {icon:"🦴",label:"Ortopedia e Traumatologia"},{icon:"❤️",label:"Cardiologia"},{icon:"👶",label:"Pediatria"},
+  {icon:"🌸",label:"Ginecologia e Obstetrícia"},{icon:"🧠",label:"Neurologia"},{icon:"🦻",label:"Otorrinolaringologia"},
+  {icon:"🦿",label:"Prótese e Órtese"},{icon:"🧘",label:"Pilates e Bem-Estar"},{icon:"💉",label:"Vacinas e Imunização"},
+  // Beleza
+  {icon:"✂️",label:"Salão de Beleza"},{icon:"✂️",label:"Barbearia"},{icon:"💅",label:"Manicure e Pedicure"},
+  {icon:"💅",label:"Nail Designer"},{icon:"👁️",label:"Design de Sobrancelhas"},{icon:"💇",label:"Cabeleireiro"},
+  {icon:"🌟",label:"Micropigmentação"},{icon:"💄",label:"Maquiagem e Visagismo"},
+  // Alimentação
+  {icon:"🍽️",label:"Restaurante"},{icon:"🍽️",label:"Restaurante por Quilo"},{icon:"🚗",label:"Drive-Thru e Fast Food"},
+  {icon:"🛵",label:"Delivery de Comida"},{icon:"☕",label:"Cafeteria"},{icon:"🧋",label:"Casa de Açaí e Smoothies"},
+  {icon:"🍕",label:"Pizzaria"},{icon:"🍔",label:"Hamburgueria"},{icon:"🍣",label:"Sushi e Comida Japonesa"},
+  {icon:"🌮",label:"Churrascaria"},{icon:"🥗",label:"Comida Saudável e Vegana"},{icon:"🎂",label:"Confeitaria e Bolos"},
+  {icon:"🥐",label:"Padaria e Panificadora"},{icon:"🍦",label:"Sorveteria e Açaí"},{icon:"🍷",label:"Bar e Pub"},
+  {icon:"🎉",label:"Buffet e Eventos"},{icon:"☕",label:"Cafeteria e Lanchonete"},
+  // Varejo
+  {icon:"👗",label:"Loja de Roupas"},{icon:"👗",label:"Moda Feminina"},{icon:"👔",label:"Moda Masculina"},
+  {icon:"👶",label:"Moda Infantil"},{icon:"👟",label:"Loja de Calçados"},{icon:"💍",label:"Joalheria e Bijuteria"},
+  {icon:"⌚",label:"Relojoaria"},{icon:"🕶️",label:"Ótica"},{icon:"🎒",label:"Loja de Bolsas e Acessórios"},
+  {icon:"🧸",label:"Loja de Brinquedos"},{icon:"📚",label:"Livraria"},{icon:"🎮",label:"Loja de Games e Eletrônicos"},
+  {icon:"📱",label:"Loja de Celulares e Acessórios"},{icon:"💻",label:"Loja de Informática"},
+  {icon:"🖨️",label:"Loja de Suprimentos de Escritório"},{icon:"🛋️",label:"Loja de Móveis e Decoração"},
+  {icon:"🌸",label:"Floricultura"},{icon:"🐾",label:"Pet Shop"},{icon:"🌿",label:"Loja de Produtos Naturais"},
+  {icon:"🧴",label:"Loja de Cosméticos"},{icon:"🏋️",label:"Loja de Artigos Esportivos"},
+  {icon:"🔧",label:"Loja de Ferramentas e Hardware"},{icon:"🏗️",label:"Loja de Materiais de Construção"},
+  {icon:"🌾",label:"Agropecuária e Insumos Agrícolas"},{icon:"🛒",label:"Mercado e Supermercado"},
+  {icon:"🍷",label:"Adega e Distribuidora de Bebidas"},
+  // Serviços Automotivos
+  {icon:"🚗",label:"Oficina Mecânica"},{icon:"🚗",label:"Oficina de Motos"},{icon:"🚲",label:"Oficina de Bicicletas"},
+  {icon:"🎨",label:"Funilaria e Pintura"},{icon:"🔧",label:"Martelinho de Ouro"},{icon:"🧼",label:"Lava-Rápido"},
+  {icon:"⛽",label:"Posto de Combustíveis"},{icon:"🔋",label:"Elétrica Automotiva"},{icon:"🚗",label:"Despachante e Documentação"},
+  {icon:"🚛",label:"Transportadora e Logística"},{icon:"🚌",label:"Empresa de Ônibus e Vans"},
+  // Segurança e Tecnologia
+  {icon:"🔒",label:"Segurança Eletrônica"},{icon:"📷",label:"CFTV e Câmeras de Segurança"},
+  {icon:"🚨",label:"Alarmes e Cercas Elétricas"},{icon:"🔐",label:"Chaveiro e Fechaduras"},
+  {icon:"💻",label:"Assistência Técnica em Informática"},{icon:"📱",label:"Assistência Técnica em Celulares"},
+  {icon:"📺",label:"Assistência Técnica em Eletrodomésticos"},{icon:"💻",label:"Desenvolvimento de Software"},
+  {icon:"☁️",label:"Serviços em Nuvem e TI"},{icon:"🤖",label:"Automação e IA para Negócios"},
+  // Construção e Casa
+  {icon:"🏗️",label:"Construtora"},{icon:"🔨",label:"Reformas e Acabamentos"},{icon:"🪟",label:"Esquadrias e Vidraçaria"},
+  {icon:"🎨",label:"Pintura Residencial e Comercial"},{icon:"⚡",label:"Elétrica e Instalações"},
+  {icon:"🚿",label:"Hidráulica e Encanamento"},{icon:"❄️",label:"Climatização e Ar-Condicionado"},
+  {icon:"🪴",label:"Paisagismo e Jardinagem"},{icon:"🧹",label:"Limpeza Residencial e Comercial"},
+  {icon:"🛡️",label:"Impermeabilização e Dedetização"},{icon:"🪑",label:"Marcenaria e Móveis Planejados"},
+  {icon:"🏊",label:"Piscinas e Spas"},
+  // Educação
+  {icon:"🎓",label:"Escola Particular"},{icon:"🎓",label:"Cursinho e Pré-Vestibular"},
+  {icon:"👶",label:"Escola Infantil e Creche"},{icon:"📚",label:"Cursos Profissionalizantes"},
+  {icon:"🌐",label:"Escola de Idiomas"},{icon:"📚",label:"Cursos Online e EAD"},
+  {icon:"🎵",label:"Escola de Música"},{icon:"🎨",label:"Escola de Artes e Dança"},
+  {icon:"💻",label:"Escola de Programação e Tecnologia"},{icon:"🏋️",label:"Personal Trainer e Coaching"},
+  // Finanças e Jurídico
+  {icon:"💰",label:"Contabilidade"},{icon:"💰",label:"Escritório Contábil"},{icon:"⚖️",label:"Advocacia"},
+  {icon:"⚖️",label:"Escritório Jurídico"},{icon:"🏦",label:"Correspondente Bancário"},
+  {icon:"📊",label:"Consultoria Financeira"},{icon:"🏠",label:"Seguros e Previdência"},
+  {icon:"📈",label:"Investimentos e Assessoria"},
+  // Marketing e Comunicação
+  {icon:"📣",label:"Agência de Marketing Digital"},{icon:"📱",label:"Gestão de Redes Sociais"},
+  {icon:"🎨",label:"Design Gráfico e Identidade Visual"},{icon:"📸",label:"Fotografia e Vídeo"},
+  {icon:"🎬",label:"Produtora de Conteúdo"},{icon:"🖨️",label:"Gráfica e Impressão"},
+  {icon:"📺",label:"Assessoria de Imprensa e PR"},
+  // Imóveis
+  {icon:"🏠",label:"Imobiliária"},{icon:"🏠",label:"Corretor Autônomo de Imóveis"},
+  {icon:"🏢",label:"Administradora de Condomínios"},{icon:"🏗️",label:"Incorporadora Imobiliária"},
+  // Entretenimento e Turismo
+  {icon:"🏨",label:"Hotel e Pousada"},{icon:"✈️",label:"Agência de Viagens"},
+  {icon:"🎉",label:"Espaço de Eventos"},{icon:"🎮",label:"Lan House e Games"},
+  {icon:"🎭",label:"Teatro e Entretenimento"},{icon:"⛳",label:"Academia e Fitness"},
+  // Agro e Meio Ambiente
+  {icon:"🌾",label:"Produtor Rural e Agronegócio"},{icon:"🐄",label:"Pecuária"},
+  {icon:"🌱",label:"Jardinagem e Paisagismo"},{icon:"♻️",label:"Gestão Ambiental e Reciclagem"},
+  {icon:"☀️",label:"Energia Solar e Sustentabilidade"},
 ];
 
 const SIZES=[
@@ -494,13 +553,26 @@ function showIgTransition(callback){
   const sugg=document.getElementById("nicho-suggestions");
   let activeIdx=-1;
 
-  function renderSuggestions(query){
+  let aiDebounce=null;
+
+  function renderSuggestions(query, aiResults){
     const q=query.toLowerCase().trim();
     sugg.innerHTML="";
     if(!q){sugg.classList.add("hidden");return;}
-    const filtered=NICHOS.filter(n=>n.label.toLowerCase().includes(q)).slice(0,8);
-    if(!filtered.length){sugg.classList.add("hidden");return;}
-    filtered.forEach((n,i)=>{
+    const local=NICHOS.filter(n=>n.label.toLowerCase().includes(q)).slice(0,8);
+    const extra=(aiResults||[]).filter(a=>!local.find(l=>l.label.toLowerCase()===a.label.toLowerCase()));
+    const all=[...local,...extra].slice(0,10);
+    if(!all.length){
+      // Mostra o que o usuário digitou como opção livre
+      const div=document.createElement("div");
+      div.className="nicho-item";
+      div.innerHTML='<span class="nicho-item-icon">🔷</span>'+query+' <span style="font-size:10px;color:#555;margin-left:6px">· usar este</span>';
+      div.onclick=()=>selectNicho({icon:"🔷",label:query});
+      sugg.appendChild(div);
+      sugg.classList.remove("hidden");
+      return;
+    }
+    all.forEach((n)=>{
       const div=document.createElement("div");
       div.className="nicho-item";
       div.innerHTML='<span class="nicho-item-icon">'+n.icon+'</span>'+n.label;
@@ -511,7 +583,26 @@ function showIgTransition(callback){
     activeIdx=-1;
   }
 
-  input.addEventListener("input",function(){renderSuggestions(this.value)});
+  async function fetchAiNichos(query){
+    try{
+      const res=await fetch("/api/nichos",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
+      const data=await res.json();
+      renderSuggestions(query, data.nichos||[]);
+    }catch(e){renderSuggestions(query,[]);}
+  }
+
+  input.addEventListener("input",function(){
+    const q=this.value.trim();
+    if(!q){sugg.classList.add("hidden");return;}
+    // Mostra local primeiro imediatamente
+    renderSuggestions(q,[]);
+    // Busca IA se local tiver menos de 3 resultados
+    const local=NICHOS.filter(n=>n.label.toLowerCase().includes(q.toLowerCase()));
+    if(local.length<3){
+      clearTimeout(aiDebounce);
+      aiDebounce=setTimeout(()=>fetchAiNichos(q),500);
+    }
+  });
   input.addEventListener("keydown",function(e){
     const items=sugg.querySelectorAll(".nicho-item");
     if(e.key==="ArrowDown"){activeIdx=Math.min(activeIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle("active",i===activeIdx));}
