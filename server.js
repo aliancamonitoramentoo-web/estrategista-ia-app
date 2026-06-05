@@ -75,6 +75,10 @@ app.post("/api/lead", async (req, res) => {
 
   const date = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
   await appendToSheet([date, name, phone || "", email, nicho || "", city || ""]);
+
+  // Notifica dono no WhatsApp
+  notifyWhatsApp(`🆕 Novo lead VendaMais!\nNome: ${name}\nWhatsApp: ${phone||"?"}\nEmail: ${email}\nNicho: ${nicho||"?"}\nCidade: ${city||"?"}`);
+
   res.json({ ok: true });
 });
 
@@ -170,6 +174,61 @@ REGRAS ABSOLUTAS:
   } catch (err) {
     res.json({ dica1: FALLBACK, dica2: FALLBACK, dica3: FALLBACK });
   }
+});
+
+// ── NOTIFICAÇÃO WHATSAPP ──────────────────────────────────────────────────
+const OWNER_WHATSAPP = "5581997914939";
+
+async function notifyWhatsApp(msg) {
+  try {
+    const text = encodeURIComponent(msg);
+    // Usa CallMeBot API gratuita — envia mensagem ao dono
+    await fetch(`https://api.callmebot.com/whatsapp.php?phone=${OWNER_WHATSAPP}&text=${text}&apikey=${process.env.CALLMEBOT_KEY||""}`)
+      .catch(()=>{});
+  } catch(e) { console.log("WhatsApp notify erro:", e.message); }
+}
+
+// ── SALVAR LEAD (atualizado com notificação) ──────────────────────────────
+// (já existe o /api/lead acima, vamos sobrescrever via middleware)
+
+// ── CHAT DO CONSULTOR ─────────────────────────────────────────────────────
+app.post("/api/consult", async (req, res) => {
+  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
+  const { messages, nicho, city, userName } = req.body;
+
+  const sys = `Você é um consultor especialista em vendas para o segmento "${nicho||"negócios"}" ${city?"na cidade de "+city:"no Brasil"}.
+Seu papel é responder dúvidas práticas de vendas de forma direta, humana e específica para esse nicho.
+- Respostas curtas e acionáveis (máximo 4 parágrafos)
+- Cite exemplos reais do setor sempre que possível
+- Use linguagem de mentor, não de robô
+- Se a pergunta for vaga, peça um exemplo concreto
+- Nunca dê conselhos genéricos`;
+
+  try {
+    const data = await callAI(messages, sys, 800);
+    const text = data.content?.map(b => b.text || "").join("") || "";
+
+    // Notifica dono que cliente está ativo
+    const lastName = messages[messages.length-1]?.content || "";
+    if (userName) {
+      notifyWhatsApp(`💬 VendaMais\n${userName} (${nicho||"?"}) está no chat!\nPergunta: "${lastName.substring(0,80)}"`);
+    }
+
+    res.json({ text });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ── NOTIFICAR PROGRESSO ───────────────────────────────────────────────────
+app.post("/api/notify", async (req, res) => {
+  const { type, userName, nicho, city, detail } = req.body;
+  const msgs = {
+    cadastro: `🆕 Novo cadastro no VendaMais!\nNome: ${userName}\nNicho: ${nicho||"?"}\nCidade: ${city||"?"}`,
+    concluiu: `✅ ${userName} concluiu uma dica!\nNicho: ${nicho||"?"}\nDica: "${detail||""}"`,
+    chat: `💬 ${userName} está no chat consultando sobre:\n"${detail||""}"`,
+  };
+  const msg = msgs[type] || `⚡ VendaMais: ${type} — ${userName}`;
+  await notifyWhatsApp(msg);
+  res.json({ ok: true });
 });
 
 app.get("*", (req, res) => {
