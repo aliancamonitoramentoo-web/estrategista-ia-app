@@ -181,10 +181,19 @@ const OWNER_WHATSAPP = "5581997914939";
 
 async function notifyWhatsApp(msg) {
   try {
-    const text = encodeURIComponent(msg);
-    // Usa CallMeBot API gratuita — envia mensagem ao dono
-    await fetch(`https://api.callmebot.com/whatsapp.php?phone=${OWNER_WHATSAPP}&text=${text}&apikey=${process.env.CALLMEBOT_KEY||""}`)
-      .catch(()=>{});
+    const instanceId = process.env.ULTRAMSG_INSTANCE || "instance179480";
+    const token = process.env.ULTRAMSG_TOKEN || "4cnb765o5tjxyyyp";
+    const url = `https://api.ultramsg.com/${instanceId}/messages/chat`;
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        token,
+        to: OWNER_WHATSAPP,
+        body: msg.replace(/\\n/g, "\n"),
+      }).toString(),
+    });
+    console.log("✅ WhatsApp enviado para", OWNER_WHATSAPP);
   } catch(e) { console.log("WhatsApp notify erro:", e.message); }
 }
 
