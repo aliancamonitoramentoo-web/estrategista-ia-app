@@ -190,6 +190,31 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .cloud-banner-text strong{color:#ccc}
 .btn-cloud-login{background:#FF6B35;color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:sans-serif}
 
+
+/* CONSULTOR CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:400px}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-bottom:16px}
+.chat-msg-user{display:flex;justify-content:flex-end}
+.chat-msg-ai{display:flex;gap:10px;align-items:flex-start}
+.chat-bubble-user{background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.25);border-radius:16px 16px 0 16px;padding:11px 15px;max-width:78%;font-size:14px;color:#EDEBE6;font-family:sans-serif;line-height:1.6}
+.chat-bubble-ai{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0 16px 16px 16px;padding:11px 15px;max-width:82%;font-size:14px;color:#DEDBD5;font-family:sans-serif;line-height:1.7;white-space:pre-line}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,107,53,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;margin-top:2px}
+.chat-input-wrap{display:flex;gap:8px;align-items:flex-end;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
+.chat-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:11px 14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;resize:none;outline:none;line-height:1.5;max-height:120px}
+.chat-input:focus{border-color:rgba(255,107,53,0.4)}
+.chat-send{width:40px;height:40px;border-radius:50%;background:#FF6B35;border:none;color:#000;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s}
+.chat-send:disabled{opacity:.4;cursor:not-allowed}
+.chat-typing{display:flex;align-items:center;gap:6px;padding:8px 0;font-size:12px;color:#555;font-family:sans-serif}
+.chat-dot{width:7px;height:7px;border-radius:50%;background:#555;animation:pulse 1.2s ease infinite}
+.chat-dot:nth-child(2){animation-delay:.2s}.chat-dot:nth-child(3){animation-delay:.4s}
+.consult-header{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.consult-avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,107,53,0.12);display:flex;align-items:center;justify-content:center;font-size:22px}
+.consult-info-name{font-size:15px;font-weight:700;color:#EDEBE6}
+.consult-info-sub{font-size:12px;color:#555;font-family:sans-serif;margin-top:2px}
+.chat-suggest{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.chat-suggest-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 13px;font-size:12px;color:#bbb;cursor:pointer;font-family:sans-serif;transition:all .15s}
+.chat-suggest-btn:hover{border-color:rgba(255,107,53,0.4);color:#FF6B35}
+
 footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans-serif;border-top:1px solid rgba(255,255,255,0.04)}
 
 /* SIGNUP GATE */
@@ -284,6 +309,7 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   <a class="logo" onclick="goHome()"><span class="logo-icon">⚡</span><span class="logo-text">VendaMais</span></a>
   <div class="header-right">
     <button class="nav-btn hidden" id="btn-restart" onclick="goHome()">← Recomeçar</button>
+    <button class="nav-btn" id="btn-consult-nav" onclick="showView('consult')">💬 Consultor</button>
     <button class="nav-btn" id="btn-track-nav" onclick="showView('track')">📊 Progresso</button>
     <button class="nav-btn" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
     <span class="user-chip hidden" id="user-chip" onclick="doLogout()"></span>
@@ -430,6 +456,31 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
     <button class="filter-btn" id="filter-done" onclick="setFilter('done')">🟢 Concluída</button>
   </div>
   <div id="track-container"></div>
+</div>
+
+
+<!-- CONSULTOR -->
+<div id="view-consult" class="page hidden">
+  <div class="consult-header">
+    <div class="consult-avatar">⚡</div>
+    <div>
+      <div class="consult-info-name">Consultor de Vendas IA</div>
+      <div class="consult-info-sub" id="consult-sub">Tire dúvidas sobre qualquer estratégia de vendas</div>
+    </div>
+  </div>
+  <div class="chat-suggest" id="chat-suggest">
+    <button class="chat-suggest-btn" onclick="sendSuggestion(this)">Como aplicar a dica no meu negócio?</button>
+    <button class="chat-suggest-btn" onclick="sendSuggestion(this)">Como superar objeção de preço?</button>
+    <button class="chat-suggest-btn" onclick="sendSuggestion(this)">Como conseguir mais indicações?</button>
+    <button class="chat-suggest-btn" onclick="sendSuggestion(this)">Como fidelizar clientes?</button>
+  </div>
+  <div class="chat-wrap">
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-wrap">
+      <textarea class="chat-input" id="chat-input" rows="1" placeholder="Pergunte sobre vendas no seu nicho..."></textarea>
+      <button class="chat-send" id="chat-send-btn" onclick="sendChat()">↑</button>
+    </div>
+  </div>
 </div>
 
 </main>
@@ -787,11 +838,14 @@ function renderBar(cur){
   for(let i=0;i<TOTAL_STEPS;i++){const s=document.createElement("div");s.className="step-seg"+(i<cur?" active":"");bar.appendChild(s);}
 }
 function showView(name){
-  ["onboard","result","saved","track"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden",v!==name));
+  ["onboard","result","saved","track","consult"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden",v!==name));
   document.getElementById("btn-restart").classList.toggle("hidden",name!=="result");
   document.getElementById("btn-saved-nav").classList.toggle("active",name==="saved");
   document.getElementById("btn-track-nav").classList.toggle("active",name==="track");
-  if(name==="track")renderTrack();window.scrollTo(0,0);
+  document.getElementById("btn-consult-nav").classList.toggle("active",name==="consult");
+  if(name==="track")renderTrack();
+  if(name==="consult")initConsult();
+  window.scrollTo(0,0);
 }
 function goHome(){
   state={nicho:null,nichoLabel:"",city:"",size:null,model:null,ticket:null,challenges:[],currentText:"",currentMeta:"",dicasData:[]};
@@ -1013,6 +1067,13 @@ function saveCurrent(){
   setUserSaved(arr);updateSavedBtn();
   const btn=document.querySelector(".btn-save");btn.textContent="✅ Salvo!";setTimeout(()=>btn.textContent="🔖 Salvar",2000);
 }
+
+function notifyOwner(type, detail){
+  if(!currentUser) return;
+  fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({type,userName:currentUser.name,nicho:state.nicho||"",city:state.city||"",detail:detail||""})
+  }).catch(()=>{});
+}
 function updateSavedBtn(){
   const arr=getUserSaved();
   document.getElementById("btn-saved-nav").textContent=arr.length>0?"🔖 Salvos ("+arr.length+")":"🔖 Salvos";
@@ -1099,10 +1160,12 @@ function renderTrack(){
 }
 function toggleCheck(ii,ci){
   const arr=getUserSaved();if(!arr[ii]?.checks)return;
+  const wasUndone=!arr[ii].checks[ci].done;
   arr[ii].checks[ci].done=!arr[ii].checks[ci].done;
   const all=arr[ii].checks.every(c=>c.done),any=arr[ii].checks.some(c=>c.done);
   arr[ii].status=all?"done":any?"doing":"todo";
   setUserSaved(arr);renderTrack();updateSavedBtn();
+  if(wasUndone) notifyOwner("concluiu", arr[ii].checks[ci].label);
 }
 function setTrackStatus(i,s){const arr=getUserSaved();arr[i].status=s;setUserSaved(arr);renderTrack();updateSavedBtn();}
 
@@ -1136,7 +1199,103 @@ function shareWhatsApp(){
   window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
 
-document.getElementById("auth-modal").addEventListener("click",function(e){if(e.target===this)closeAuth()});
+document.getElementById("auth-modal").addEventListener("click",function(e){if(e.target===this)closeAuth();});
+
+// ── CONSULTOR CHAT ────────────────────────────────────────────────────────
+let chatHistory=[];
+let consultInited=false;
+
+function initConsult(){
+  if(!state.nicho) return;
+  const sub=document.getElementById("consult-sub");
+  if(sub) sub.textContent="Especialista em "+state.nicho+(state.city?" · "+state.city:"");
+  if(!consultInited && chatHistory.length===0){
+    addAIMessage("Olá! Sou seu consultor especializado em "+state.nicho+". Pode perguntar sobre qualquer estratégia, dica ou desafio de vendas do seu negócio. O que quer aprofundar?");
+    consultInited=true;
+  }
+}
+
+function addUserMessage(text){
+  chatHistory.push({role:"user",content:text});
+  const el=document.createElement("div");
+  el.className="chat-msg-user";
+  el.innerHTML='<div class="chat-bubble-user">'+text+'</div>';
+  document.getElementById("chat-messages").appendChild(el);
+  scrollChat();
+  document.getElementById("chat-suggest").classList.add("hidden");
+}
+
+function addAIMessage(text){
+  chatHistory.push({role:"assistant",content:text});
+  const el=document.createElement("div");
+  el.className="chat-msg-ai";
+  el.innerHTML='<div class="chat-avatar">⚡</div><div class="chat-bubble-ai">'+text+'</div>';
+  document.getElementById("chat-messages").appendChild(el);
+  scrollChat();
+}
+
+function showTyping(){
+  const el=document.createElement("div");
+  el.className="chat-msg-ai";el.id="typing-indicator";
+  el.innerHTML='<div class="chat-avatar">⚡</div><div class="chat-typing"><div class="chat-dot"></div><div class="chat-dot"></div><div class="chat-dot"></div></div>';
+  document.getElementById("chat-messages").appendChild(el);
+  scrollChat();
+}
+
+function removeTyping(){
+  const el=document.getElementById("typing-indicator");
+  if(el) el.remove();
+}
+
+function scrollChat(){
+  const msgs=document.getElementById("chat-messages");
+  if(msgs) msgs.scrollTop=msgs.scrollHeight;
+}
+
+function sendSuggestion(btn){
+  document.getElementById("chat-input").value=btn.textContent;
+  sendChat();
+}
+
+async function sendChat(){
+  const input=document.getElementById("chat-input");
+  const text=input.value.trim();
+  if(!text) return;
+  input.value="";
+  input.style.height="auto";
+  document.getElementById("chat-send-btn").disabled=true;
+
+  addUserMessage(text);
+  notifyOwner("chat", text);
+  showTyping();
+
+  try{
+    const res=await fetch("/api/consult",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        messages:chatHistory.filter(m=>m.role==="user"||m.role==="assistant"),
+        nicho:state.nicho||"negócios",
+        city:state.city||"",
+        userName:currentUser?.name||"visitante"
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+    addAIMessage(data.text||"Erro ao responder. Tente novamente.");
+  }catch(e){
+    removeTyping();
+    addAIMessage("Erro de conexão. Verifique sua internet.");
+  }
+  document.getElementById("chat-send-btn").disabled=false;
+}
+
+// Auto-resize textarea
+document.getElementById("chat-input")?.addEventListener("input",function(){
+  this.style.height="auto";
+  this.style.height=Math.min(this.scrollHeight,120)+"px";
+});
+document.getElementById("chat-input")?.addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}
+});
 </script>
 </body>
 </html>
