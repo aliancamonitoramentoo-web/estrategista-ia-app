@@ -114,110 +114,98 @@ app.post("/api/nichos", async (req, res) => {
 });
 
 // ── BUSCAR E VALIDAR VÍDEOS ───────────────────────────────────────────────
-async function videoExists(id) {
-  try {
-    // Check thumbnail exists and is valid size
-    const r = await fetch(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, { method: "HEAD" });
-    if (!r.ok) return false;
-    const len = r.headers.get("content-length");
-    if (len && parseInt(len) < 3000) return false;
-    return true;
-  } catch { return false; }
-}
+const YOUTUBE_KEY = process.env.YOUTUBE_API_KEY || "AIzaSyDXAR1E-XfTiIl1x-u5WW7VP6Xd_O6a58Y";
 
-async function videoIsRelevant(id, title, channel, topic) {
-  // Use AI to verify if video title/channel matches the topic (not music/entertainment)
-  const musicKeywords = ["música","music","song","letra","lyric","clipe","clip","mc ","funk","sertanejo","pagode","forró","gospel","novela","série","filme","trailer","gameplay","game","minecraft","roblox"];
-  const titleLower = (title||"").toLowerCase();
-  const channelLower = (channel||"").toLowerCase();
-  
-  for (const kw of musicKeywords) {
-    if (titleLower.includes(kw) || channelLower.includes(kw)) {
-      console.log(`❌ Filtrado por palavra-chave "${kw}": ${title}`);
-      return false;
-    }
-  }
-  
-  // Check if channel is a known business/sales channel
-  const validChannels = ["thiago concer","g4 educação","natanael oliveira","joel jota","flávio augusto","sebrae","conquer","me poupe","primo rico","leandro ladeira","pablo marçal","camila porto","gestor de trafego","marketing","vendas","empreende","negócio","business","startup","empresa"];
-  const isKnownChannel = validChannels.some(ch => channelLower.includes(ch));
-  
-  if (isKnownChannel) return true;
-  
-  // For unknown channels, verify topic relevance via AI
+// Busca vídeos reais no YouTube pela API oficial
+async function searchYouTube(query, maxResults = 3) {
   try {
-    const prompt = `O vídeo "${title}" do canal "${channel}" é sobre vendas, marketing, empreendedorismo ou negócios relacionados ao nicho "${topic}"? Responda apenas SIM ou NÃO.`;
-    const data = await callAI([{role:"user",content:prompt}], "", 50);
-    const answer = data.content?.map(b=>b.text||"").join("").trim().toUpperCase();
-    const relevant = answer.includes("SIM");
-    if (!relevant) console.log(`❌ IA rejeitou: ${title} — ${channel}`);
-    return relevant;
-  } catch { return true; }
+    const q = encodeURIComponent(query);
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${q}&type=video&videoCategoryId=27&relevanceLanguage=pt&regionCode=BR&maxResults=${maxResults}&key=${YOUTUBE_KEY}`;
+    const r = await fetch(url);
+    const data = await r.json();
+    
+    if (!data.items) {
+      console.log("YouTube API erro:", JSON.stringify(data));
+      return [];
+    }
+
+    // Filtra músicas e entretenimento
+    const blocked = ["música","music","song","letra","lyric","clipe","mc ","funk","sertanejo","pagode","gospel","novela","série","filme","trailer","gameplay","minecraft","roblox","shorts"];
+    
+    return data.items
+      .filter(item => {
+        const title = (item.snippet.title || "").toLowerCase();
+        const channel = (item.snippet.channelTitle || "").toLowerCase();
+        return !blocked.some(kw => title.includes(kw) || channel.includes(kw));
+      })
+      .map(item => ({
+        id: item.id.videoId,
+        title: item.snippet.title,
+        channel: item.snippet.channelTitle,
+      }));
+  } catch(e) {
+    console.log("YouTube search erro:", e.message);
+    return [];
+  }
 }
 
 app.post("/api/videos", async (req, res) => {
-  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
   const { sectorLabel, city, dicas } = req.body;
+
   const FALLBACK = [
     { id: "aZG9j4eqG3E", title: "Quando o Cliente Diz 'Tá Caro'", channel: "Thiago Concer", role: "principal" },
-    { id: "RAOppNOpNUI", title: "5 Técnicas de Persuasão para Fechar Vendas", channel: "Thiago Concer", role: "complementar1" },
-    { id: "irTe2XF4s8k", title: "Como Fazer Network", channel: "Pablo Marçal", role: "complementar2" },
+    { id: "RAOppNOpNUI", title: "5 Técnicas de Persuasão — Vendas", channel: "Thiago Concer", role: "complementar1" },
+    { id: "irTe2XF4s8k", title: "Como Fazer Network", channel: "Empreender é Mais", role: "complementar2" },
   ];
-  // Monta referências de grandes marcas do nicho para contextualizar
-  const prompt = `Você é especialista em conteúdo educativo do YouTube brasileiro.
 
-NICHO: "${sectorLabel}" | CIDADE: "${city||"Brasil"}"
-DICAS GERADAS:
-${dicas.map((d,i)=>`${i+1}. [${d.tema}] ${d.resumo}`).join("\n")}
-
-TAREFA: Para cada dica, indique 3 vídeos reais do YouTube em PORTUGUÊS BRASILEIRO.
-- Use cases de GRANDES EMPRESAS/MARCAS reais do nicho quando possível
-  Ex: roupa → Renner, C&A, Zara Brasil | chocolate → Cacau Show, Kopenhagen | farmácia → Drogasil, Ultrafarma
-  Ex: academia → Smart Fit | hamburguer → Madero, Bob's | pizzaria → Domino's, Pizza Hut Brasil
-  Ex: odontologia → Dr. Consulta | imóveis → QuintoAndar, Loft | beleza → Boticário, Natura
-- Priorize canais DIFERENTES em cada dica para evitar repetição
-- Canais válidos: G4 Educação, Thiago Concer, Natanael Oliveira, Joel Jota, Flávio Augusto, Sebrae, Conquer, Me Poupe, Primo Rico, Leandro Ladeira, Pablo Marçal, Camila Porto, canais especializados no nicho
-- role "principal": vídeo diretamente sobre o tema da dica
-- role "complementar1": técnica ou psicologia por trás
-- role "complementar2": mentalidade ou case de sucesso do setor
-
-Retorne APENAS JSON válido sem markdown:
-{"dica1":[{"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"principal"},{"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar1"},{"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar2"}],"dica2":[...],"dica3":[...]}
-
-REGRAS ABSOLUTAS:
-- IDs de EXATAMENTE 11 caracteres
-- Apenas vídeos que você tem CERTEZA que existem
-- Canais DIFERENTES entre as 3 dicas sempre que possível
-- Se não tiver vídeo específico do nicho, use Thiago Concer, G4 Educação ou Sebrae`;
   try {
-    const data = await callAI([{ role: "user", content: prompt }], "", 1000);
-    const text = data.content?.map(b => b.text || "").join("") || "{}";
-    const suggested = JSON.parse(text.replace(/```json|```/g, "").trim());
     const result = { dica1: [], dica2: [], dica3: [] };
-    for (const key of ["dica1", "dica2", "dica3"]) {
-      const dicaIdx = parseInt(key.replace("dica","")) - 1;
-      const dicaTopic = dicas[dicaIdx]?.tema || sectorLabel;
-      
-      for (const v of (suggested[key] || [])) {
-        if (!v.id || v.id.length !== 11) continue;
-        
-        const exists = await videoExists(v.id);
-        if (!exists) { console.log(`❌ Não existe: ${v.id}`); continue; }
-        
-        const relevant = await videoIsRelevant(v.id, v.title, v.channel, dicaTopic);
-        if (!relevant) continue;
-        
-        console.log(`✅ Aprovado: ${v.id} — ${v.title}`);
-        result[key].push(v);
-        if (result[key].length >= 3) break;
+    const roles = ["principal", "complementar1", "complementar2"];
+
+    for (let i = 0; i < dicas.length; i++) {
+      const key = "dica" + (i + 1);
+      const dica = dicas[i];
+
+      // Monta queries específicas para cada papel do vídeo
+      const queries = [
+        // Principal: direto ao tema da dica + nicho
+        `${dica.tema} ${sectorLabel} como fazer vendas`,
+        // Complementar 1: técnica relacionada
+        `técnica ${dica.tema} vendas empreendedorismo Brasil`,
+        // Complementar 2: case ou mentalidade
+        `case sucesso ${sectorLabel} vendas empreendedor Brasil`,
+      ];
+
+      const usedIds = new Set();
+
+      for (let q = 0; q < queries.length; q++) {
+        const videos = await searchYouTube(queries[q], 5);
+        const filtered = videos.filter(v => !usedIds.has(v.id));
+
+        if (filtered.length > 0) {
+          const v = filtered[0];
+          v.role = roles[q];
+          usedIds.add(v.id);
+          result[key].push(v);
+          console.log(`✅ ${key} [${roles[q]}]: ${v.title} — ${v.channel}`);
+        }
       }
-      if (result[key].length < 3) {
-        console.log(`⚠️ Completando ${key} com fallback`);
-        result[key].push(...FALLBACK.slice(0, 3 - result[key].length));
+
+      // Completa com fallback se necessário
+      while (result[key].length < 3) {
+        const fb = {...FALLBACK[result[key].length]};
+        if (!usedIds.has(fb.id)) {
+          result[key].push(fb);
+          usedIds.add(fb.id);
+        } else {
+          break;
+        }
       }
     }
+
     res.json(result);
   } catch (err) {
+    console.error("Erro vídeos:", err.message);
     res.json({ dica1: FALLBACK, dica2: FALLBACK, dica3: FALLBACK });
   }
 });
