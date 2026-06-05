@@ -116,11 +116,43 @@ app.post("/api/nichos", async (req, res) => {
 // ── BUSCAR E VALIDAR VÍDEOS ───────────────────────────────────────────────
 async function videoExists(id) {
   try {
+    // Check thumbnail exists and is valid size
     const r = await fetch(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, { method: "HEAD" });
     if (!r.ok) return false;
     const len = r.headers.get("content-length");
-    return !len || parseInt(len) > 3000;
+    if (len && parseInt(len) < 3000) return false;
+    return true;
   } catch { return false; }
+}
+
+async function videoIsRelevant(id, title, channel, topic) {
+  // Use AI to verify if video title/channel matches the topic (not music/entertainment)
+  const musicKeywords = ["música","music","song","letra","lyric","clipe","clip","mc ","funk","sertanejo","pagode","forró","gospel","novela","série","filme","trailer","gameplay","game","minecraft","roblox"];
+  const titleLower = (title||"").toLowerCase();
+  const channelLower = (channel||"").toLowerCase();
+  
+  for (const kw of musicKeywords) {
+    if (titleLower.includes(kw) || channelLower.includes(kw)) {
+      console.log(`❌ Filtrado por palavra-chave "${kw}": ${title}`);
+      return false;
+    }
+  }
+  
+  // Check if channel is a known business/sales channel
+  const validChannels = ["thiago concer","g4 educação","natanael oliveira","joel jota","flávio augusto","sebrae","conquer","me poupe","primo rico","leandro ladeira","pablo marçal","camila porto","gestor de trafego","marketing","vendas","empreende","negócio","business","startup","empresa"];
+  const isKnownChannel = validChannels.some(ch => channelLower.includes(ch));
+  
+  if (isKnownChannel) return true;
+  
+  // For unknown channels, verify topic relevance via AI
+  try {
+    const prompt = `O vídeo "${title}" do canal "${channel}" é sobre vendas, marketing, empreendedorismo ou negócios relacionados ao nicho "${topic}"? Responda apenas SIM ou NÃO.`;
+    const data = await callAI([{role:"user",content:prompt}], "", 50);
+    const answer = data.content?.map(b=>b.text||"").join("").trim().toUpperCase();
+    const relevant = answer.includes("SIM");
+    if (!relevant) console.log(`❌ IA rejeitou: ${title} — ${channel}`);
+    return relevant;
+  } catch { return true; }
 }
 
 app.post("/api/videos", async (req, res) => {
@@ -163,12 +195,26 @@ REGRAS ABSOLUTAS:
     const suggested = JSON.parse(text.replace(/```json|```/g, "").trim());
     const result = { dica1: [], dica2: [], dica3: [] };
     for (const key of ["dica1", "dica2", "dica3"]) {
+      const dicaIdx = parseInt(key.replace("dica","")) - 1;
+      const dicaTopic = dicas[dicaIdx]?.tema || sectorLabel;
+      
       for (const v of (suggested[key] || [])) {
         if (!v.id || v.id.length !== 11) continue;
-        if (await videoExists(v.id)) result[key].push(v);
+        
+        const exists = await videoExists(v.id);
+        if (!exists) { console.log(`❌ Não existe: ${v.id}`); continue; }
+        
+        const relevant = await videoIsRelevant(v.id, v.title, v.channel, dicaTopic);
+        if (!relevant) continue;
+        
+        console.log(`✅ Aprovado: ${v.id} — ${v.title}`);
+        result[key].push(v);
         if (result[key].length >= 3) break;
       }
-      if (result[key].length < 3) result[key].push(...FALLBACK.slice(0, 3 - result[key].length));
+      if (result[key].length < 3) {
+        console.log(`⚠️ Completando ${key} com fallback`);
+        result[key].push(...FALLBACK.slice(0, 3 - result[key].length));
+      }
     }
     res.json(result);
   } catch (err) {
@@ -229,13 +275,40 @@ Seu papel é responder dúvidas práticas de vendas de forma direta, humana e es
 
 // ── NOTIFICAR PROGRESSO ───────────────────────────────────────────────────
 app.post("/api/notify", async (req, res) => {
-  const { type, userName, nicho, city, detail } = req.body;
-  const msgs = {
-    cadastro: `🆕 Novo cadastro no VendaMais!\nNome: ${userName}\nNicho: ${nicho||"?"}\nCidade: ${city||"?"}`,
-    concluiu: `✅ ${userName} concluiu uma dica!\nNicho: ${nicho||"?"}\nDica: "${detail||""}"`,
-    chat: `💬 ${userName} está no chat consultando sobre:\n"${detail||""}"`,
-  };
-  const msg = msgs[type] || `⚡ VendaMais: ${type} — ${userName}`;
+  const { type, userName, nicho, city, detail, profile } = req.body;
+
+  let msg = "";
+  if (type === "perfil_completo") {
+    const p = profile || {};
+    msg = `🎯 *VendaMais — Novo Lead Completo!*
+━━━━━━━━━━━━━━━━━━━
+👤 Nome: ${userName}
+📍 Cidade: ${city||"Não informada"}
+🏢 Nicho: ${nicho||"?"}
+👥 Porte: ${p.size||"?"}
+💰 Ticket médio: ${p.ticket||"?"}
+🤝 Modelo de venda: ${p.model||"?"}
+🎯 Desafios: ${p.challenges||"?"}
+📝 Contexto: ${p.extra||"Não informado"}
+━━━━━━━━━━━━━━━━━━━
+⚡ Momento ideal para contato!`;
+  } else if (type === "cadastro") {
+    msg = `🆕 *Novo cadastro VendaMais!*
+Nome: ${userName}
+Nicho: ${nicho||"?"}
+Cidade: ${city||"?"}`;
+  } else if (type === "concluiu") {
+    msg = `✅ *${userName}* concluiu uma dica!
+Nicho: ${nicho||"?"}
+Dica: "${detail||""}"`;
+  } else if (type === "chat") {
+    msg = `💬 *${userName}* está no chat!
+Nicho: ${nicho||"?"}
+Pergunta: "${detail||""}"`;
+  } else {
+    msg = `⚡ VendaMais: ${type} — ${userName}`;
+  }
+
   await notifyWhatsApp(msg);
   res.json({ ok: true });
 });
