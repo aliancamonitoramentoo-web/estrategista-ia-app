@@ -356,20 +356,20 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
 </div>
 
 <!-- HEADER -->
-<header>
+<header id="main-header" style="display:none">
   <a class="logo" onclick="goHome()"><span class="logo-icon">⚡</span><span class="logo-text">VendaMais</span></a>
   <div class="header-right">
     <button class="nav-btn hidden" id="btn-restart" onclick="goHome()">← Recomeçar</button>
-    <button class="nav-btn" id="btn-consult-nav" onclick="showView('consult')">💬 Consultor</button>
-    <button class="nav-btn" id="btn-track-nav" onclick="showView('track')">🏆 Progresso</button>
-    <button class="nav-btn" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
-    <span class="xp-chip" id="xp-chip">⚡ 0 XP</span>
+    <button class="nav-btn hidden" id="btn-consult-nav" onclick="showView('consult')">💬 Consultor</button>
+    <button class="nav-btn hidden" id="btn-track-nav" onclick="showView('track')">🏆 Progresso</button>
+    <button class="nav-btn hidden" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
+    <span class="xp-chip" id="xp-chip" style="display:none">⚡ 0 XP</span>
     <span class="user-chip hidden" id="user-chip" onclick="doLogout()"></span>
   </div>
 </header>
 
-<a id="ig-badge" href="https://instagram.com/grupoalianca_monitoramento" target="_blank"><span>📸</span><span>@grupoalianca_monitoramento</span></a>
-<button id="consult-fab" onclick="showView('consult')"><span>💬</span><span>Consultor</span><div class="fab-dot"></div></button>
+<a id="ig-badge" href="https://instagram.com/grupoalianca_monitoramento" target="_blank" style="display:none"><span>📸</span><span>@grupoalianca_monitoramento</span></a>
+<button id="consult-fab" onclick="showView('consult')" style="display:none"><span>💬</span><span>Consultor</span><div class="fab-dot"></div></button>
 
 <main>
 
@@ -650,6 +650,8 @@ function updateUserUI(){
 (function initGate(){
   if(localStorage.getItem("vm_gate_passed")){
     document.getElementById("signup-gate").style.display="none";
+    document.getElementById("main-header").style.display="flex";
+    document.getElementById("ig-badge").style.display="flex";
     return;
   }
   document.getElementById("gate-phone").addEventListener("input",function(){
@@ -777,6 +779,15 @@ function clearNicho(){
   CHALLENGES.forEach(c=>{const b=document.createElement("button");b.className="challenge-btn";b.dataset.val=c;b.textContent=c;b.onclick=()=>toggleChallenge(c);cg.appendChild(b);});
   document.getElementById("city-input").addEventListener("input",function(){state.city=this.value.trim();checkStep2();});
   updateUserUI();
+  // Show nav if user already has dicas saved
+  const hasSaved = getUserSaved().length > 0;
+  if(hasSaved){
+    document.getElementById("btn-consult-nav").classList.remove("hidden");
+    document.getElementById("btn-track-nav").classList.remove("hidden");
+    document.getElementById("btn-saved-nav").classList.remove("hidden");
+    document.getElementById("xp-chip").style.display="flex";
+    document.getElementById("consult-fab").style.display="flex";
+  }
 })();
 
 function checkStep2(){document.getElementById("next-2").disabled=!(state.size&&state.model);}
@@ -806,7 +817,15 @@ function goHome(){
   ["next-1","next-2","next-3","next-4"].forEach(id=>document.getElementById(id).disabled=true);
   document.getElementById("extra-context").value="";
   document.getElementById("city-input").value="";
-  document.getElementById("consult-fab").style.display="none";
+  // Keep nav visible if user already has saved dicas
+  const hasDicas = getUserSaved().length > 0;
+  if(!hasDicas){
+    document.getElementById("consult-fab").style.display="none";
+    document.getElementById("btn-consult-nav").classList.add("hidden");
+    document.getElementById("btn-track-nav").classList.add("hidden");
+    document.getElementById("btn-saved-nav").classList.add("hidden");
+    document.getElementById("xp-chip").style.display="none";
+  }
   clearNicho();goStep(0);showView("onboard");
 }
 function toggleSaved(){
@@ -907,8 +926,12 @@ Gere exatamente 3 dicas estratégicas profundas e específicas para "${state.nic
     renderDicas(dicas);
     document.getElementById("result-actions").classList.remove("hidden");
 
-    // Mostra FAB do consultor
+    // Mostra FAB e nav buttons apenas após gerar dicas
     document.getElementById("consult-fab").style.display="flex";
+    document.getElementById("btn-consult-nav").classList.remove("hidden");
+    document.getElementById("btn-track-nav").classList.remove("hidden");
+    document.getElementById("btn-saved-nav").classList.remove("hidden");
+    document.getElementById("xp-chip").style.display="flex";
 
     // XP por gerar dicas
     addXP(30,"Dicas geradas!");
