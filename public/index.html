@@ -944,6 +944,25 @@ Gere exatamente 3 dicas estratégicas. Para cada dica, use o formato especificad
     const dicas=parseDicas(text);
     state.dicasData=dicas;
 
+    // Notifica dono com perfil completo
+    if(currentUser){
+      fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          type:"perfil_completo",
+          userName:currentUser.name,
+          nicho:state.nicho||"",
+          city:state.city||"",
+          profile:{
+            size:sz?.label||"",
+            ticket:ti?.label||"",
+            model:mo?.label||"",
+            challenges:state.challenges.join(", "),
+            extra:document.getElementById("extra-context").value.trim()
+          }
+        })
+      }).catch(()=>{});
+    }
+
     document.getElementById("loading-wrap").classList.add("hidden");
     document.getElementById("result-title").textContent="Suas Dicas Personalizadas";
     document.getElementById("result-sub").textContent="Com dados reais do mercado de "+state.nicho+(state.city?" em "+state.city:"")+" para o seu perfil.";
