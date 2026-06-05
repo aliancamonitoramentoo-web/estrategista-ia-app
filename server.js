@@ -127,7 +127,32 @@ app.post("/api/videos", async (req, res) => {
     { id: "RAOppNOpNUI", title: "5 Técnicas de Persuasão para Fechar Vendas", channel: "Thiago Concer", role: "complementar1" },
     { id: "irTe2XF4s8k", title: "Como Fazer Network", channel: "Pablo Marçal", role: "complementar2" },
   ];
-  const prompt = `Para uma empresa do nicho "${sectorLabel}" em "${city||"Brasil"}", sugira vídeos reais do YouTube em português para aprofundar estas dicas: ${dicas.map((d,i)=>`${i+1}. ${d.tema}: ${d.resumo}`).join(", ")}. Retorne APENAS JSON: {"dica1":[{"id":"...","title":"...","channel":"...","role":"principal"},{"id":"...","title":"...","channel":"...","role":"complementar1"},{"id":"...","title":"...","channel":"...","role":"complementar2"}],"dica2":[...],"dica3":[...]}. IDs reais de 11 chars, em português.`;
+  // Monta referências de grandes marcas do nicho para contextualizar
+  const prompt = `Você é especialista em conteúdo educativo do YouTube brasileiro.
+
+NICHO: "${sectorLabel}" | CIDADE: "${city||"Brasil"}"
+DICAS GERADAS:
+${dicas.map((d,i)=>`${i+1}. [${d.tema}] ${d.resumo}`).join("\n")}
+
+TAREFA: Para cada dica, indique 3 vídeos reais do YouTube em PORTUGUÊS BRASILEIRO.
+- Use cases de GRANDES EMPRESAS/MARCAS reais do nicho quando possível
+  Ex: roupa → Renner, C&A, Zara Brasil | chocolate → Cacau Show, Kopenhagen | farmácia → Drogasil, Ultrafarma
+  Ex: academia → Smart Fit | hamburguer → Madero, Bob's | pizzaria → Domino's, Pizza Hut Brasil
+  Ex: odontologia → Dr. Consulta | imóveis → QuintoAndar, Loft | beleza → Boticário, Natura
+- Priorize canais DIFERENTES em cada dica para evitar repetição
+- Canais válidos: G4 Educação, Thiago Concer, Natanael Oliveira, Joel Jota, Flávio Augusto, Sebrae, Conquer, Me Poupe, Primo Rico, Leandro Ladeira, Pablo Marçal, Camila Porto, canais especializados no nicho
+- role "principal": vídeo diretamente sobre o tema da dica
+- role "complementar1": técnica ou psicologia por trás
+- role "complementar2": mentalidade ou case de sucesso do setor
+
+Retorne APENAS JSON válido sem markdown:
+{"dica1":[{"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"principal"},{"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar1"},{"id":"XXXXXXXXXXX","title":"título exato","channel":"canal exato","role":"complementar2"}],"dica2":[...],"dica3":[...]}
+
+REGRAS ABSOLUTAS:
+- IDs de EXATAMENTE 11 caracteres
+- Apenas vídeos que você tem CERTEZA que existem
+- Canais DIFERENTES entre as 3 dicas sempre que possível
+- Se não tiver vídeo específico do nicho, use Thiago Concer, G4 Educação ou Sebrae`;
   try {
     const data = await callAI([{ role: "user", content: prompt }], "", 1000);
     const text = data.content?.map(b => b.text || "").join("") || "{}";
