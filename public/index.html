@@ -17,7 +17,10 @@ main{flex:1;max-width:820px;margin:0 auto;width:100%;padding:0 20px}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 @keyframes igFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes xpPop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
+/* HEADER */
 header{display:flex;align-items:center;justify-content:space-between;padding:13px 22px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(9,9,14,0.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
 .logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none}
 .logo-icon{font-size:19px}.logo-text{font-size:17px;font-weight:700;color:#FF6B35;letter-spacing:-.4px}
@@ -25,7 +28,30 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .nav-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#999;border-radius:8px;padding:6px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;transition:all .2s;white-space:nowrap}
 .nav-btn.active,.nav-btn:hover{color:#FF6B35;border-color:rgba(255,107,53,0.4)}
 .user-chip{background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3);color:#FF6B35;border-radius:20px;padding:5px 11px;font-size:11px;font-family:sans-serif;cursor:pointer}
+.xp-chip{background:rgba(249,199,79,0.12);border:1px solid rgba(249,199,79,0.3);color:#F9C74F;border-radius:20px;padding:5px 11px;font-size:11px;font-family:sans-serif;cursor:pointer;display:none}
 
+/* GATE */
+#signup-gate{position:fixed;inset:0;background:#09090E;z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.gate-box{width:100%;max-width:460px;animation:slideDown .4s ease;padding:20px 0}
+.gate-logo{text-align:center;margin-bottom:24px}
+.gate-logo-icon{font-size:36px;display:block;margin-bottom:6px}
+.gate-logo-text{font-size:26px;font-weight:700;color:#FF6B35;letter-spacing:-.5px}
+.gate-tagline{font-size:14px;color:#555;font-family:sans-serif;margin-top:4px}
+.gate-benefits{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.gate-benefit{background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);border-radius:12px;padding:14px 12px}
+.gate-benefit-icon{font-size:22px;margin-bottom:6px}
+.gate-benefit-title{font-size:12px;font-weight:600;color:#EDEBE6;margin-bottom:2px}
+.gate-benefit-sub{font-size:11px;color:#555;font-family:sans-serif;line-height:1.4}
+.gate-form{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px}
+.gate-form-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:18px;color:#EDEBE6}
+.gate-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s}
+.gate-input:focus{border-color:rgba(255,107,53,0.5)}
+.gate-btn{width:100%;background:#FF6B35;color:#000;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:6px}
+.gate-btn:hover{opacity:.9}
+.gate-error{background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.25);border-radius:8px;padding:9px 13px;font-size:13px;color:#e88;font-family:sans-serif;margin-bottom:12px;display:none}
+.gate-privacy{font-size:11px;color:#333;text-align:center;margin-top:10px;font-family:sans-serif}
+
+/* AUTH MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .modal{background:#13131A;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;width:100%;max-width:390px;position:relative;animation:slideDown .3s ease}
 .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#555;font-size:20px;cursor:pointer}
@@ -41,10 +67,12 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .btn-auth{width:100%;background:#FF6B35;color:#000;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:4px}
 .auth-error{background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.25);border-radius:8px;padding:9px 13px;font-size:13px;color:#e88;font-family:sans-serif;margin-bottom:12px}
 
+/* STEP BAR */
 .step-bar{display:flex;gap:6px;margin-bottom:28px}
 .step-seg{flex:1;height:3px;border-radius:4px;background:rgba(255,255,255,0.1);transition:background .3s}
 .step-seg.active{background:#FF6B35}
 
+/* HERO */
 .hero{text-align:center;padding-top:16px}
 .hero-badge{display:inline-block;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;background:rgba(255,107,53,0.08);border-radius:24px;padding:5px 15px;font-size:13px;margin-bottom:24px;font-family:sans-serif}
 .hero-title{font-size:clamp(32px,5vw,54px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:18px}
@@ -53,14 +81,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .hero-cta{background:#FF6B35;color:#000;border:none;border-radius:12px;padding:14px 30px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif}
 .hero-note{color:#444;font-size:13px;margin-top:12px;font-family:sans-serif}
 
+/* STEPS */
 .step-title{font-size:clamp(19px,3vw,26px);font-weight:700;margin-bottom:7px;letter-spacing:-.5px}
 .step-sub{color:#666;font-size:14px;margin-bottom:24px;font-family:sans-serif}
 
-/* NICHO COM SUGESTÕES */
+/* NICHO */
 .nicho-wrap{position:relative;margin-bottom:8px}
 .nicho-input-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px}
 .nicho-input-row:focus-within{border-color:rgba(255,107,53,0.5)}
-.nicho-search-icon{font-size:18px;flex-shrink:0}
 .nicho-input{background:transparent;border:none;outline:none;color:#EDEBE6;font-size:15px;font-family:sans-serif;width:100%}
 .nicho-input::placeholder{color:#444}
 .nicho-suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#13131A;border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;z-index:50;max-height:280px;overflow-y:auto}
@@ -70,12 +98,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .nicho-selected{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.4);border-radius:24px;padding:6px 14px;font-size:14px;font-family:sans-serif;color:#FF6B35;margin-top:8px}
 .nicho-clear{background:none;border:none;color:rgba(255,107,53,0.6);font-size:16px;cursor:pointer;padding:0;line-height:1}
 
-/* CIDADE */
+/* CITY */
 .city-input-wrap{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px;margin-bottom:8px}
 .city-input-wrap:focus-within{border-color:rgba(255,107,53,0.5)}
 .city-input{background:transparent;border:none;outline:none;color:#EDEBE6;font-size:15px;font-family:sans-serif;width:100%}
 .city-input::placeholder{color:#444}
 
+.field-label{font-size:13px;color:#666;margin-bottom:11px;font-family:sans-serif}
 .chip-row{display:flex;flex-wrap:wrap;gap:8px}
 .chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:9px 15px;font-size:13px;color:#bbb;cursor:pointer;font-family:sans-serif;transition:all .15s}
 .chip:hover{background:rgba(255,255,255,0.07)}.chip.selected{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.5);color:#FF6B35}
@@ -91,7 +120,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .summary-row{display:flex;gap:9px;flex-wrap:wrap;font-size:13px;color:#aaa;font-family:sans-serif;margin-bottom:10px}
 .summary-desafios{display:flex;gap:7px;flex-wrap:wrap}
 .des-badge{background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);color:#FF6B35;border-radius:6px;padding:3px 9px;font-size:11px;font-family:sans-serif}
-.field-label{font-size:13px;color:#666;margin-bottom:11px;font-family:sans-serif}
 textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:13px;color:#EDEBE6;font-size:14px;font-family:sans-serif;line-height:1.6;resize:vertical;outline:none}
 textarea:focus{border-color:rgba(255,107,53,0.4)}
 .step-nav{display:flex;gap:11px;margin-top:32px;justify-content:flex-end}
@@ -101,21 +129,27 @@ textarea:focus{border-color:rgba(255,107,53,0.4)}
 .btn-generate{background:#FF6B35;color:#000;border:none;border-radius:10px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif}
 button:hover:not(:disabled){filter:brightness(1.1)}
 
+/* IG */
 #ig-transition{position:fixed;inset:0;background:#09090E;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
 .ig-avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;font-size:42px;animation:igFloat 2s ease-in-out infinite}
 .ig-handle{font-size:22px;font-weight:700;color:#FF6B35;font-family:sans-serif}
 .ig-sub{font-size:14px;color:#555;font-family:sans-serif}
 .ig-progress{width:200px;height:3px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-top:8px}
 .ig-progress-bar{height:100%;background:#FF6B35;border-radius:3px;transition:width .1s linear}
-#ig-badge{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);border-radius:50px;padding:10px 18px;display:flex;align-items:center;gap:8px;cursor:pointer;z-index:400;box-shadow:0 4px 20px rgba(220,39,67,0.4);animation:igFloat 3s ease-in-out infinite;text-decoration:none}
-#ig-badge span{color:#fff;font-size:13px;font-weight:700;font-family:sans-serif}
+#ig-badge{position:fixed;bottom:80px;right:20px;background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);border-radius:50px;padding:10px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;z-index:400;box-shadow:0 4px 20px rgba(220,39,67,0.4);animation:igFloat 3s ease-in-out infinite;text-decoration:none}
+#ig-badge span{color:#fff;font-size:12px;font-weight:700;font-family:sans-serif}
+
+/* CONSULTOR FLOAT BTN */
+#consult-fab{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#FF6B35,#845EC2);border-radius:50px;padding:12px 18px;display:flex;align-items:center;gap:8px;cursor:pointer;z-index:399;box-shadow:0 4px 20px rgba(255,107,53,0.4);border:none;animation:slideUp .5s ease;display:none}
+#consult-fab span{color:#fff;font-size:13px;font-weight:700;font-family:sans-serif}
+.fab-dot{width:8px;height:8px;border-radius:50%;background:#00C9A7}
 
 /* RESULT */
 .profile-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
 .badge{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 11px;font-size:11px;color:#888;font-family:sans-serif}
 .page-title{font-size:clamp(20px,3vw,30px);font-weight:700;margin-bottom:7px;letter-spacing:-.5px}
 .page-sub{color:#555;font-size:14px;margin-bottom:24px;font-family:sans-serif}
-.result-actions-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px}
+.result-actions-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
 .btn-save{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#ccc;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .btn-new{background:transparent;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
 .btn-export{background:rgba(76,201,240,0.1);border:1px solid rgba(76,201,240,0.3);color:#4CC9F0;border-radius:8px;padding:8px 13px;font-size:12px;cursor:pointer;font-family:sans-serif}
@@ -125,13 +159,21 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .spinner{width:38px;height:38px;border:3px solid rgba(255,107,53,0.15);border-top:3px solid #FF6B35;border-radius:50%;animation:spin .9s linear infinite}
 .loading-text{color:#555;font-size:14px;font-family:sans-serif;animation:pulse 2s ease infinite}
 
+/* CONSULTOR CARD NO RESULTADO */
+.consult-invite{background:linear-gradient(135deg,rgba(255,107,53,0.1),rgba(132,94,194,0.1));border:1px solid rgba(255,107,53,0.3);border-radius:14px;padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s}
+.consult-invite:hover{border-color:rgba(255,107,53,0.5);background:linear-gradient(135deg,rgba(255,107,53,0.15),rgba(132,94,194,0.15))}
+.consult-invite-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#845EC2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.consult-invite-info{flex:1}
+.consult-invite-name{font-size:15px;font-weight:700;color:#EDEBE6;margin-bottom:3px}
+.consult-invite-sub{font-size:12px;color:#888;font-family:sans-serif}
+.consult-invite-quote{font-size:12px;color:#555;font-family:sans-serif;margin-top:3px;font-style:italic}
+.consult-invite-btn{background:#FF6B35;color:#000;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:sans-serif;white-space:nowrap}
+
 /* DICA CARD */
-.dica-card{border:1px solid rgba(255,255,255,0.08);border-left:3px solid #FF6B35;border-radius:0 12px 12px 0;background:rgba(255,255,255,0.03);padding:22px 24px;margin-bottom:16px}
+.dica-card{border:1px solid rgba(255,255,255,0.08);border-left:3px solid #FF6B35;border-radius:0 12px 12px 0;background:rgba(255,255,255,0.03);padding:22px 24px;margin-bottom:16px;overflow:hidden;word-break:break-word}
 .dica-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:20px;padding:3px 11px;font-size:11px;font-family:sans-serif;color:#FF6B35;margin-bottom:12px}
 .dica-titulo{font-size:16px;font-weight:700;color:#EDEBE6;margin-bottom:8px;letter-spacing:-.3px}
 .dica-texto{font-size:14px;line-height:1.8;color:#aaa;font-family:sans-serif;margin-bottom:16px}
-
-/* VIDEO CARDS POR DICA */
 .videos-section{border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;margin-top:4px}
 .videos-label{font-size:11px;color:#555;font-family:sans-serif;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
 .video-pill{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;text-decoration:none;transition:all .2s;margin-bottom:7px;cursor:pointer}
@@ -142,8 +184,7 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .video-pill-play span{width:22px;height:22px;background:#FF6B35;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px}
 .video-pill-info{flex:1;min-width:0}
 .video-pill-role{font-size:10px;font-family:sans-serif;margin-bottom:2px}
-.video-pill-role.principal{color:#FF6B35}
-.video-pill-role.complementar{color:#888}
+.video-pill-role.principal{color:#FF6B35}.video-pill-role.complementar{color:#888}
 .video-pill-title{font-size:12px;color:#ccc;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .video-pill-channel{font-size:11px;color:#555;font-family:sans-serif}
 .video-pill-arrow{font-size:14px;color:#444;flex-shrink:0}
@@ -154,30 +195,58 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .ig-result-banner span{font-size:13px;color:#ccc;font-family:sans-serif}
 .ig-result-banner strong{color:#FF6B35}
 
-/* TRACKING */
-.progress-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px;margin-bottom:16px;overflow:hidden;word-break:break-word}
-.progress-bar-wrap{background:rgba(255,255,255,0.06);border-radius:6px;height:8px;margin-bottom:14px;overflow:hidden}
-.progress-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#FF6B35,#F9C74F);transition:width .5s ease}
-.checklist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;width:100%}
-.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:8px 10px;border-radius:8px;transition:background .15s;width:100%}
-.check-item:hover{background:rgba(255,255,255,0.04)}
-.check-box{width:20px;height:20px;min-width:20px;border-radius:6px;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:1px;font-size:12px}
-.check-box.checked{background:#00C9A7;border-color:#00C9A7;color:#000}
-.check-label{font-size:13px;color:#bbb;font-family:sans-serif;line-height:1.5;flex:1;min-width:0;word-break:break-word}
-.check-label.done{text-decoration:line-through;color:#444}
-.track-badge{border-radius:20px;padding:4px 10px;font-size:11px;font-family:sans-serif;font-weight:600;white-space:nowrap}
-.track-badge.todo{background:rgba(255,255,255,0.05);color:#555}
-.track-badge.doing{background:rgba(249,199,79,0.15);color:#F9C74F}
-.track-badge.done-b{background:rgba(0,201,167,0.15);color:#00C9A7}
-.track-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.track-btn{border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#666;transition:all .2s;white-space:nowrap}
-.filter-row{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap}
-.filter-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#777;border-radius:20px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:sans-serif}
-.filter-btn.active{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35}
+/* XP TOAST */
+#xp-toast{position:fixed;top:80px;right:20px;background:linear-gradient(135deg,rgba(249,199,79,0.15),rgba(255,107,53,0.15));border:1px solid rgba(249,199,79,0.4);border-radius:12px;padding:12px 18px;z-index:500;display:none;animation:slideDown .3s ease;font-family:sans-serif}
+.xp-toast-text{font-size:14px;font-weight:700;color:#F9C74F}
+.xp-toast-sub{font-size:11px;color:#888;margin-top:2px}
 
+/* GAMIFIED PROGRESS */
+.level-card{background:linear-gradient(135deg,rgba(255,107,53,0.08),rgba(132,94,194,0.08));border:1px solid rgba(255,107,53,0.2);border-radius:16px;padding:22px;margin-bottom:24px}
+.level-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.level-info{display:flex;align-items:center;gap:12px}
+.level-emoji{font-size:36px}
+.level-name{font-size:18px;font-weight:700;color:#EDEBE6}
+.level-next{font-size:11px;color:#555;font-family:sans-serif;margin-top:2px}
+.level-xp{text-align:right}
+.level-xp-num{font-size:28px;font-weight:700;color:#F9C74F;animation:xpPop .3s ease}
+.level-xp-label{font-size:11px;color:#555;font-family:sans-serif}
+.xp-bar-wrap{background:rgba(255,255,255,0.06);border-radius:6px;height:10px;margin-bottom:16px;overflow:hidden}
+.xp-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#FF6B35,#F9C74F);transition:width .8s ease}
+.levels-row{display:flex;justify-content:space-between;margin-bottom:4px}
+.level-step{text-align:center;flex:1}
+.level-step-emoji{font-size:18px}
+.level-step-label{font-size:9px;font-family:sans-serif;margin-top:2px}
+.level-step.active .level-step-label{color:#FF6B35}
+.level-step.done .level-step-label{color:#00C9A7}
+.level-step.locked .level-step-emoji{opacity:.3}
+.level-step.locked .level-step-label{color:#333}
+
+.missions-title{font-size:13px;font-weight:700;color:#EDEBE6;margin-bottom:12px;letter-spacing:-.2px}
+.mission-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;overflow:hidden;word-break:break-word}
+.mission-card.done{border-color:rgba(0,201,167,0.3);background:rgba(0,201,167,0.04)}
+.mission-icon{font-size:24px;flex-shrink:0}
+.mission-info{flex:1;min-width:0}
+.mission-name{font-size:13px;font-weight:500;color:#EDEBE6;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mission-card.done .mission-name{text-decoration:line-through;color:#555}
+.mission-bar{background:rgba(255,255,255,0.06);border-radius:4px;height:6px;overflow:hidden}
+.mission-bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.mission-xp{text-align:right;flex-shrink:0}
+.mission-xp-val{font-size:13px;font-weight:700}
+.mission-xp-pct{font-size:10px;color:#555;font-family:sans-serif;margin-top:2px}
+
+.achievements-title{font-size:13px;font-weight:700;color:#EDEBE6;margin:20px 0 12px;letter-spacing:-.2px}
+.achievements-grid{display:flex;gap:8px;flex-wrap:wrap}
+.achievement{text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;min-width:64px;transition:all .2s}
+.achievement.unlocked{border-color:rgba(255,107,53,0.3);background:rgba(255,107,53,0.08)}
+.achievement.locked{opacity:.3}
+.achievement-emoji{font-size:22px;margin-bottom:4px}
+.achievement-label{font-size:9px;font-family:sans-serif;color:#888;line-height:1.3}
+.achievement.unlocked .achievement-label{color:#FF6B35}
+
+/* SAVED */
 .empty{color:#444;text-align:center;padding:50px 0;font-family:sans-serif}
 .saved-list{display:flex;flex-direction:column;gap:14px}
-.saved-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px}
+.saved-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px;overflow:hidden;word-break:break-word}
 .saved-meta{font-size:11px;color:#555;font-family:sans-serif;margin-bottom:6px}
 .saved-date{font-size:10px;color:#333;font-family:sans-serif;margin-bottom:10px}
 .saved-text{font-size:13px;line-height:1.8;color:#ccc;white-space:pre-line;margin-bottom:14px;font-family:sans-serif;word-break:break-word;overflow-wrap:break-word}
@@ -189,91 +258,68 @@ button:hover:not(:disabled){filter:brightness(1.1)}
 .cloud-banner-text{font-size:13px;color:#888;font-family:sans-serif}
 .cloud-banner-text strong{color:#ccc}
 .btn-cloud-login{background:#FF6B35;color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:sans-serif}
-
+.track-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.track-btn{border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#666;transition:all .2s;white-space:nowrap}
 
 /* CONSULTOR CHAT */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:400px}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 280px);min-height:380px}
 .chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-bottom:16px}
 .chat-msg-user{display:flex;justify-content:flex-end}
 .chat-msg-ai{display:flex;gap:10px;align-items:flex-start}
 .chat-bubble-user{background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.25);border-radius:16px 16px 0 16px;padding:11px 15px;max-width:78%;font-size:14px;color:#EDEBE6;font-family:sans-serif;line-height:1.6}
 .chat-bubble-ai{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0 16px 16px 16px;padding:11px 15px;max-width:82%;font-size:14px;color:#DEDBD5;font-family:sans-serif;line-height:1.7;white-space:pre-line}
-.chat-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,107,53,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;margin-top:2px}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#845EC2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;margin-top:2px}
 .chat-input-wrap{display:flex;gap:8px;align-items:flex-end;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
 .chat-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:11px 14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;resize:none;outline:none;line-height:1.5;max-height:120px}
 .chat-input:focus{border-color:rgba(255,107,53,0.4)}
-.chat-send{width:40px;height:40px;border-radius:50%;background:#FF6B35;border:none;color:#000;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s}
+.chat-send{width:40px;height:40px;border-radius:50%;background:#FF6B35;border:none;color:#000;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send:disabled{opacity:.4;cursor:not-allowed}
-.chat-typing{display:flex;align-items:center;gap:6px;padding:8px 0;font-size:12px;color:#555;font-family:sans-serif}
 .chat-dot{width:7px;height:7px;border-radius:50%;background:#555;animation:pulse 1.2s ease infinite}
 .chat-dot:nth-child(2){animation-delay:.2s}.chat-dot:nth-child(3){animation-delay:.4s}
-.consult-header{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
-.consult-avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,107,53,0.12);display:flex;align-items:center;justify-content:center;font-size:22px}
-.consult-info-name{font-size:15px;font-weight:700;color:#EDEBE6}
-.consult-info-sub{font-size:12px;color:#555;font-family:sans-serif;margin-top:2px}
-.chat-suggest{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.consult-header-bar{background:linear-gradient(135deg,rgba(255,107,53,0.1),rgba(132,94,194,0.1));border:1px solid rgba(255,107,53,0.25);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.consult-avatar-lg{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#845EC2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.consult-online{display:flex;align-items:center;gap:5px;font-size:11px;color:#00C9A7;font-family:sans-serif;margin-top:2px}
+.consult-online-dot{width:7px;height:7px;border-radius:50%;background:#00C9A7}
+.dica-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.dica-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:6px 12px;font-size:12px;color:#888;cursor:pointer;font-family:sans-serif;transition:all .15s}
+.dica-chip:hover,.dica-chip.active{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35}
+.chat-suggest{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
 .chat-suggest-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 13px;font-size:12px;color:#bbb;cursor:pointer;font-family:sans-serif;transition:all .15s}
 .chat-suggest-btn:hover{border-color:rgba(255,107,53,0.4);color:#FF6B35}
 
 footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans-serif;border-top:1px solid rgba(255,255,255,0.04)}
-
-/* SIGNUP GATE */
-#signup-gate{position:fixed;inset:0;background:#09090E;z-index:600;display:flex;align-items:center;justify-content:center;padding:20px}
-.signup-box{background:#13131A;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;animation:slideDown .4s ease}
-.signup-logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:28px}
-.signup-logo-icon{font-size:24px}
-.signup-logo-text{font-size:22px;font-weight:700;color:#FF6B35;letter-spacing:-.5px}
-.signup-title{font-size:20px;font-weight:700;margin-bottom:6px;text-align:center}
-.signup-sub{color:#555;font-size:13px;margin-bottom:28px;font-family:sans-serif;text-align:center;line-height:1.6}
-.signup-form-group{margin-bottom:14px}
-.signup-label{display:block;font-size:11px;color:#555;font-family:sans-serif;margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
-.signup-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#EDEBE6;font-size:14px;font-family:sans-serif;outline:none;transition:border-color .2s}
-.signup-input:focus{border-color:rgba(255,107,53,0.5);box-shadow:0 0 0 3px rgba(255,107,53,0.06)}
-.signup-btn{width:100%;background:#FF6B35;color:#000;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:6px;transition:opacity .2s}
-.signup-btn:hover{opacity:.9}
-.signup-skip{display:block;text-align:center;margin-top:14px;font-size:12px;color:#444;font-family:sans-serif;cursor:pointer;transition:color .2s}
-.signup-skip:hover{color:#666}
-.signup-error{background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.25);border-radius:8px;padding:9px 13px;font-size:13px;color:#e88;font-family:sans-serif;margin-bottom:12px;display:none}
-.signup-benefits{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.signup-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:#777;font-family:sans-serif}
-.signup-benefit-icon{font-size:16px}
-@media(max-width:480px){header{padding:9px 13px}.header-right{gap:4px}.nav-btn{padding:6px 9px;font-size:11px}.ticket-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){header{padding:9px 13px}.header-right{gap:4px}.nav-btn{padding:6px 9px;font-size:11px}.ticket-grid{grid-template-columns:1fr 1fr}#ig-badge{bottom:70px}.gate-benefits{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
-<!-- SIGNUP GATE -->
+<!-- GATE OBRIGATÓRIO -->
 <div id="signup-gate">
-  <div class="signup-box">
-    <div class="signup-logo">
-      <span class="signup-logo-icon">⚡</span>
-      <span class="signup-logo-text">VendaMais</span>
+  <div class="gate-box">
+    <div class="gate-logo">
+      <span class="gate-logo-icon">⚡</span>
+      <div class="gate-logo-text">VendaMais</div>
+      <div class="gate-tagline">Consultoria de vendas com IA para o seu negócio</div>
     </div>
-    <h2 class="signup-title">Acesse gratuitamente</h2>
-    <p class="signup-sub">Cadastre-se para receber dicas personalizadas de vendas para o seu negócio.</p>
-    <div class="signup-benefits">
-      <div class="signup-benefit"><span class="signup-benefit-icon">🎯</span><span>Dicas personalizadas para o seu nicho</span></div>
-      <div class="signup-benefit"><span class="signup-benefit-icon">📊</span><span>Acompanhamento do seu progresso</span></div>
-      <div class="signup-benefit"><span class="signup-benefit-icon">📲</span><span>Exporte e compartilhe suas dicas</span></div>
+    <div class="gate-benefits">
+      <div class="gate-benefit"><div class="gate-benefit-icon">🎯</div><div class="gate-benefit-title">Dicas do seu nicho</div><div class="gate-benefit-sub">Estratégias específicas para o seu mercado</div></div>
+      <div class="gate-benefit"><div class="gate-benefit-icon">💬</div><div class="gate-benefit-title">Consultor 24h</div><div class="gate-benefit-sub">Tire dúvidas a qualquer hora com IA</div></div>
+      <div class="gate-benefit"><div class="gate-benefit-icon">🏆</div><div class="gate-benefit-title">Progresso gamificado</div><div class="gate-benefit-sub">Execute dicas e evolua de nível</div></div>
+      <div class="gate-benefit"><div class="gate-benefit-icon">🎬</div><div class="gate-benefit-title">Vídeos do seu setor</div><div class="gate-benefit-sub">Aulas selecionadas pela IA</div></div>
     </div>
-    <div id="signup-error" class="signup-error"></div>
-    <div class="signup-form-group">
-      <label class="signup-label">Nome completo</label>
-      <input class="signup-input" id="gate-name" type="text" placeholder="Seu nome" autocomplete="name"/>
+    <div class="gate-form">
+      <div class="gate-form-title">Acesso 100% gratuito</div>
+      <div id="gate-error" class="gate-error"></div>
+      <input class="gate-input" id="gate-name" type="text" placeholder="Seu nome completo" autocomplete="name"/>
+      <input class="gate-input" id="gate-phone" type="tel" placeholder="WhatsApp: (81) 99999-9999" autocomplete="tel"/>
+      <input class="gate-input" id="gate-email" type="email" placeholder="Seu melhor e-mail" autocomplete="email"/>
+      <button class="gate-btn" onclick="submitGate()">Quero minhas dicas gratuitas →</button>
+      <div class="gate-privacy">🔒 Seus dados não serão compartilhados</div>
     </div>
-    <div class="signup-form-group">
-      <label class="signup-label">WhatsApp</label>
-      <input class="signup-input" id="gate-phone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel"/>
-    </div>
-    <div class="signup-form-group">
-      <label class="signup-label">E-mail</label>
-      <input class="signup-input" id="gate-email" type="email" placeholder="seu@email.com" autocomplete="email"/>
-    </div>
-    <button class="signup-btn" onclick="submitGate()">Começar agora →</button>
-    <span class="signup-skip" onclick="skipGate()">Continuar sem cadastro</span>
   </div>
 </div>
 
+<!-- IG TRANSITION -->
 <div id="ig-transition" class="hidden">
   <div class="ig-avatar">📸</div>
   <div class="ig-handle">@grupoalianca_monitoramento</div>
@@ -281,11 +327,15 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   <div class="ig-progress"><div class="ig-progress-bar" id="ig-prog-bar"></div></div>
 </div>
 
+<!-- XP TOAST -->
+<div id="xp-toast"><div class="xp-toast-text" id="xp-toast-text"></div><div class="xp-toast-sub" id="xp-toast-sub"></div></div>
+
+<!-- AUTH MODAL -->
 <div class="modal-overlay hidden" id="auth-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeAuth()">×</button>
     <h2 class="modal-title">VendaMais</h2>
-    <p class="modal-sub">Salve suas dicas e acesse de qualquer dispositivo.</p>
+    <p class="modal-sub">Entre na sua conta.</p>
     <div class="modal-tabs">
       <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Entrar</button>
       <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Criar conta</button>
@@ -305,27 +355,26 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   </div>
 </div>
 
+<!-- HEADER -->
 <header>
   <a class="logo" onclick="goHome()"><span class="logo-icon">⚡</span><span class="logo-text">VendaMais</span></a>
   <div class="header-right">
     <button class="nav-btn hidden" id="btn-restart" onclick="goHome()">← Recomeçar</button>
     <button class="nav-btn" id="btn-consult-nav" onclick="showView('consult')">💬 Consultor</button>
-    <button class="nav-btn" id="btn-track-nav" onclick="showView('track')">📊 Progresso</button>
+    <button class="nav-btn" id="btn-track-nav" onclick="showView('track')">🏆 Progresso</button>
     <button class="nav-btn" id="btn-saved-nav" onclick="toggleSaved()">🔖 Salvos</button>
+    <span class="xp-chip" id="xp-chip">⚡ 0 XP</span>
     <span class="user-chip hidden" id="user-chip" onclick="doLogout()"></span>
-    <button class="nav-btn hidden" id="btn-login-nav" onclick="openAuth()">☁ Entrar</button>
   </div>
 </header>
 
-<a id="ig-badge" href="https://instagram.com/grupoalianca_monitoramento" target="_blank">
-  <span>📸</span><span>@grupoalianca_monitoramento</span>
-</a>
+<a id="ig-badge" href="https://instagram.com/grupoalianca_monitoramento" target="_blank"><span>📸</span><span>@grupoalianca_monitoramento</span></a>
+<button id="consult-fab" onclick="showView('consult')"><span>💬</span><span>Consultor</span><div class="fab-dot"></div></button>
 
 <main>
 
 <!-- ONBOARD -->
 <div id="view-onboard" class="page">
-
   <div id="step-0" class="hero">
     <div class="hero-badge">✦ Para qualquer tipo de empresa</div>
     <h1 class="hero-title">Dicas de vendas<br><em class="hero-em">feitas para o seu negócio</em></h1>
@@ -333,50 +382,29 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
     <button class="hero-cta" onclick="goStep(1)">Começar agora →</button>
     <p class="hero-note">Leva menos de 2 minutos · Gratuito</p>
   </div>
-
-  <!-- STEP 1: NICHO -->
   <div id="step-1" class="hidden">
     <div class="step-bar" id="bar-1"></div>
     <h2 class="step-title">Qual é o segmento da sua empresa?</h2>
-    <p class="step-sub">Digite ou escolha o seu nicho — quanto mais específico, melhor a dica.</p>
+    <p class="step-sub">Digite ou escolha — quanto mais específico, melhor a dica.</p>
     <div class="nicho-wrap" id="nicho-wrap">
-      <div class="nicho-input-row">
-        <span class="nicho-search-icon">🔍</span>
-        <input class="nicho-input" id="nicho-input" type="text" placeholder="Ex: Odontologia, Varejo de roupas, Consultoria jurídica..." autocomplete="off"/>
-      </div>
+      <div class="nicho-input-row"><span style="font-size:18px">🔍</span><input class="nicho-input" id="nicho-input" type="text" placeholder="Ex: Odontologia, Segurança Eletrônica, Chocolateria..." autocomplete="off"/></div>
       <div class="nicho-suggestions hidden" id="nicho-suggestions"></div>
     </div>
-    <div id="nicho-selected-wrap" class="hidden">
-      <div class="nicho-selected" id="nicho-selected-label">
-        <span id="nicho-selected-text"></span>
-        <button class="nicho-clear" onclick="clearNicho()">×</button>
-      </div>
-    </div>
+    <div id="nicho-selected-wrap" class="hidden"><div class="nicho-selected" id="nicho-selected-label"><span id="nicho-selected-text"></span><button class="nicho-clear" onclick="clearNicho()">×</button></div></div>
     <div class="step-nav"><button class="btn-back" onclick="goStep(0)">← Voltar</button><button class="btn-next" id="next-1" disabled onclick="goStep(2)">Continuar →</button></div>
   </div>
-
-  <!-- STEP 2: CIDADE + PORTE + MODELO -->
   <div id="step-2" class="hidden">
     <div class="step-bar" id="bar-2"></div>
     <h2 class="step-title">Onde e como você vende?</h2>
     <p class="step-sub">Essas informações mudam completamente a estratégia recomendada.</p>
-
     <div class="field-label">📍 Cidade da empresa</div>
-    <div class="city-input-wrap">
-      <span style="font-size:18px">📍</span>
-      <input class="city-input" id="city-input" type="text" placeholder="Ex: Maceió, São Paulo, Fortaleza..."/>
-    </div>
-
+    <div class="city-input-wrap"><span style="font-size:18px">📍</span><input class="city-input" id="city-input" type="text" placeholder="Ex: Maceió, Recife, São Paulo..."/></div>
     <div class="field-label" style="margin-top:22px">Tamanho da empresa</div>
     <div class="chip-row" id="size-chips"></div>
-
     <div class="field-label" style="margin-top:22px">Modelo de venda</div>
     <div class="chip-row" id="model-chips"></div>
-
     <div class="step-nav"><button class="btn-back" onclick="goStep(1)">← Voltar</button><button class="btn-next" id="next-2" disabled onclick="goStep(3)">Continuar →</button></div>
   </div>
-
-  <!-- STEP 3: TICKET -->
   <div id="step-3" class="hidden">
     <div class="step-bar" id="bar-3"></div>
     <h2 class="step-title">Qual é o ticket médio das suas vendas?</h2>
@@ -384,8 +412,6 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
     <div class="ticket-grid" id="ticket-grid"></div>
     <div class="step-nav"><button class="btn-back" onclick="goStep(2)">← Voltar</button><button class="btn-next" id="next-3" disabled onclick="goStep(4)">Continuar →</button></div>
   </div>
-
-  <!-- STEP 4: DESAFIOS -->
   <div id="step-4" class="hidden">
     <div class="step-bar" id="bar-4"></div>
     <h2 class="step-title">Quais são seus maiores desafios de vendas?</h2>
@@ -393,38 +419,28 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
     <div class="challenge-grid" id="challenge-grid"></div>
     <div class="step-nav"><button class="btn-back" onclick="goStep(3)">← Voltar</button><button class="btn-next" id="next-4" disabled onclick="goStep(5)">Continuar →</button></div>
   </div>
-
-  <!-- STEP 5: CONTEXTO EXTRA -->
   <div id="step-5" class="hidden">
     <div class="step-bar" id="bar-5"></div>
     <h2 class="step-title">Quer adicionar mais contexto?</h2>
-    <p class="step-sub">Opcional — mas quanto mais específico você for, mais certeira será a resposta.</p>
+    <p class="step-sub">Opcional — mas quanto mais específico, mais certeira será a resposta.</p>
     <div class="profile-summary">
       <div class="summary-title">Seu perfil:</div>
       <div class="summary-row" id="summary-row"></div>
       <div class="summary-desafios" id="summary-des"></div>
     </div>
-    <textarea id="extra-context" rows="4" placeholder='Ex: "Meu maior concorrente baixou o preço 20% este mês e estou perdendo clientes para ele..."'></textarea>
+    <textarea id="extra-context" rows="4" placeholder='Ex: "Meu maior concorrente baixou o preço 20% este mês..."'></textarea>
     <div class="step-nav"><button class="btn-back" onclick="goStep(4)">← Voltar</button><button class="btn-generate" onclick="startGenerate()">✨ Gerar minhas dicas</button></div>
   </div>
-
-</div><!-- /view-onboard -->
+</div>
 
 <!-- RESULT -->
 <div id="view-result" class="page hidden">
   <div class="profile-badges" id="result-badges"></div>
   <h2 class="page-title" id="result-title">Suas Dicas Personalizadas</h2>
   <p class="page-sub" id="result-sub">Com dados reais do mercado para o seu perfil.</p>
-
-  <!-- Loading geral -->
-  <div class="loading-wrap hidden" id="loading-wrap">
-    <div class="spinner"></div>
-    <p class="loading-text" id="loading-text">Analisando o mercado...</p>
-  </div>
-
-  <!-- Dicas renderizadas aqui -->
+  <div class="loading-wrap hidden" id="loading-wrap"><div class="spinner"></div><p class="loading-text" id="loading-text">Analisando o mercado...</p></div>
+  <div id="consult-invite-wrap"></div>
   <div id="dicas-container"></div>
-
   <div id="result-actions" class="hidden">
     <div class="result-actions-row">
       <button class="btn-save" onclick="saveCurrent()">🔖 Salvar</button>
@@ -433,8 +449,7 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
       <button class="btn-new" onclick="goHome()">↺ Nova consulta</button>
     </div>
     <a class="ig-result-banner" href="https://instagram.com/grupoalianca_monitoramento" target="_blank">
-      <span>📸</span>
-      <span>Gostou das dicas? Siga <strong>@grupoalianca_monitoramento</strong> para mais estratégias de vendas!</span>
+      <span>📸</span><span>Gostou das dicas? Siga <strong>@grupoalianca_monitoramento</strong> para mais estratégias!</span>
     </a>
   </div>
 </div>
@@ -445,29 +460,23 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
   <div id="saved-container"></div>
 </div>
 
-<!-- TRACKING -->
+<!-- PROGRESSO GAMIFICADO -->
 <div id="view-track" class="page hidden">
   <h2 class="page-title">Meu Progresso</h2>
-  <p class="page-sub">Marque cada ação realizada e acompanhe sua evolução.</p>
-  <div class="filter-row">
-    <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Todas</button>
-    <button class="filter-btn" id="filter-todo" onclick="setFilter('todo')">⚪ Pendente</button>
-    <button class="filter-btn" id="filter-doing" onclick="setFilter('doing')">🟡 Em andamento</button>
-    <button class="filter-btn" id="filter-done" onclick="setFilter('done')">🟢 Concluída</button>
-  </div>
+  <p class="page-sub">Execute as dicas, ganhe XP e evolua de nível.</p>
   <div id="track-container"></div>
 </div>
 
-
 <!-- CONSULTOR -->
 <div id="view-consult" class="page hidden">
-  <div class="consult-header">
-    <div class="consult-avatar">⚡</div>
-    <div>
-      <div class="consult-info-name">Consultor de Vendas IA</div>
-      <div class="consult-info-sub" id="consult-sub">Tire dúvidas sobre qualquer estratégia de vendas</div>
+  <div class="consult-header-bar">
+    <div class="consult-avatar-lg">⚡</div>
+    <div style="flex:1">
+      <div style="font-size:15px;font-weight:700;color:#EDEBE6">Consultor de Vendas IA</div>
+      <div class="consult-online"><div class="consult-online-dot"></div><span id="consult-nicho-label">Especialista no seu nicho</span></div>
     </div>
   </div>
+  <div class="dica-chips" id="dica-chips"></div>
   <div class="chat-suggest" id="chat-suggest">
     <button class="chat-suggest-btn" onclick="sendSuggestion(this)">Como aplicar a dica no meu negócio?</button>
     <button class="chat-suggest-btn" onclick="sendSuggestion(this)">Como superar objeção de preço?</button>
@@ -484,187 +493,111 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
 </div>
 
 </main>
-<footer>VendaMais · IA de vendas para empresas de todos os segmentos · <a href="https://instagram.com/grupoalianca_monitoramento" target="_blank" style="color:#FF6B35;text-decoration:none">@grupoalianca_monitoramento</a></footer>
+<footer>VendaMais · IA de vendas · <a href="https://instagram.com/grupoalianca_monitoramento" target="_blank" style="color:#FF6B35;text-decoration:none">@grupoalianca_monitoramento</a></footer>
 
 <script>
-// ── SIGNUP GATE ──────────────────────────────────────────────────────────
-(function initGate(){
-  // Se já passou pelo gate, não mostra de novo
-  const passed = localStorage.getItem("vm_gate_passed");
-  if(passed){
-    document.getElementById("signup-gate").style.display="none";
-    return;
-  }
-
-  // Formata telefone
-  document.getElementById("gate-phone").addEventListener("input", function(){
-    let v = this.value.replace(/\D/g,"");
-    if(v.length > 11) v = v.slice(0,11);
-    if(v.length > 6) v = "("+v.slice(0,2)+") "+v.slice(2,7)+"-"+v.slice(7);
-    else if(v.length > 2) v = "("+v.slice(0,2)+") "+v.slice(2);
-    else if(v.length > 0) v = "("+v;
-    this.value = v;
-  });
-
-  // Enter no último campo submete
-  document.getElementById("gate-email").addEventListener("keydown", function(e){
-    if(e.key==="Enter") submitGate();
-  });
-})();
-
-function submitGate(){
-  const name = document.getElementById("gate-name").value.trim();
-  const phone = document.getElementById("gate-phone").value.trim();
-  const email = document.getElementById("gate-email").value.trim();
-  const errEl = document.getElementById("signup-error");
-
-  if(!name){errEl.textContent="Por favor, informe seu nome.";errEl.style.display="block";return;}
-  if(!phone || phone.replace(/\D/g,"").length < 10){errEl.textContent="Informe um WhatsApp válido.";errEl.style.display="block";return;}
-  if(!email || !email.includes("@")){errEl.textContent="Informe um e-mail válido.";errEl.style.display="block";return;}
-
-  // Salva lead localmente
-  const leads = JSON.parse(localStorage.getItem("vm_leads")||"[]");
-  leads.push({name, phone, email, date: new Date().toISOString()});
-  localStorage.setItem("vm_leads", JSON.stringify(leads));
-
-  // Registra usuário automaticamente
-  const users = JSON.parse(localStorage.getItem("vm_users")||"{}");
-  if(!users[email]){
-    users[email] = {name, phone, saved:[]};
-    localStorage.setItem("vm_users", JSON.stringify(users));
-  }
-  currentUser = {email, name};
-  localStorage.setItem("vm_user", JSON.stringify(currentUser));
-
-  // Envia para Google Sheets via backend
-  const nicho = state?.nicho || "";
-  const city = state?.city || "";
-  fetch("/api/lead", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({name, phone, email, nicho, city})
-  }).catch(()=>{});
-
-  passGate();
-}
-
-function skipGate(){
-  passGate();
-}
-
-function passGate(){
-  localStorage.setItem("vm_gate_passed","1");
-  document.getElementById("signup-gate").style.display="none";
-  updateUserUI();
-}
-
-// ── NICHOS COM SUGESTÕES ────────────────────────────────────────────────────
+// ── DADOS ──────────────────────────────────────────────────────────────
 const NICHOS=[
-  // Saúde
-  {icon:"🦷",label:"Odontologia"},{icon:"🦷",label:"Odontopediatria"},{icon:"🦷",label:"Ortodontia"},
-  {icon:"🦷",label:"Odontologia Estética"},{icon:"🏥",label:"Clínica Médica"},{icon:"🏥",label:"Clínica de Especialidades"},
-  {icon:"💆",label:"Clínica de Estética"},{icon:"💆",label:"Estética e Cosmetologia"},{icon:"🏃",label:"Fisioterapia"},
-  {icon:"🧠",label:"Psicologia e Terapia"},{icon:"👁️",label:"Oftalmologia"},{icon:"💊",label:"Farmácia"},
+  {icon:"🦷",label:"Odontologia"},{icon:"🦷",label:"Odontopediatria"},{icon:"🦷",label:"Ortodontia"},{icon:"🦷",label:"Odontologia Estética"},
+  {icon:"🏥",label:"Clínica Médica"},{icon:"🏥",label:"Clínica de Especialidades"},{icon:"💆",label:"Clínica de Estética"},{icon:"💆",label:"Estética e Cosmetologia"},
+  {icon:"🏃",label:"Fisioterapia"},{icon:"🧠",label:"Psicologia e Terapia"},{icon:"👁️",label:"Oftalmologia"},{icon:"💊",label:"Farmácia"},
   {icon:"💊",label:"Farmácia de Manipulação"},{icon:"🧬",label:"Laboratório de Análises"},{icon:"🩺",label:"Nutrição e Dietética"},
-  {icon:"🦴",label:"Ortopedia e Traumatologia"},{icon:"❤️",label:"Cardiologia"},{icon:"👶",label:"Pediatria"},
-  {icon:"🌸",label:"Ginecologia e Obstetrícia"},{icon:"🧠",label:"Neurologia"},{icon:"🦻",label:"Otorrinolaringologia"},
-  {icon:"🦿",label:"Prótese e Órtese"},{icon:"🧘",label:"Pilates e Bem-Estar"},{icon:"💉",label:"Vacinas e Imunização"},
-  // Beleza
-  {icon:"✂️",label:"Salão de Beleza"},{icon:"✂️",label:"Barbearia"},{icon:"💅",label:"Manicure e Pedicure"},
-  {icon:"💅",label:"Nail Designer"},{icon:"👁️",label:"Design de Sobrancelhas"},{icon:"💇",label:"Cabeleireiro"},
-  {icon:"🌟",label:"Micropigmentação"},{icon:"💄",label:"Maquiagem e Visagismo"},
-  // Alimentação
-  {icon:"🍽️",label:"Restaurante"},{icon:"🍽️",label:"Restaurante por Quilo"},{icon:"🚗",label:"Drive-Thru e Fast Food"},
-  {icon:"🛵",label:"Delivery de Comida"},{icon:"☕",label:"Cafeteria"},{icon:"🧋",label:"Casa de Açaí e Smoothies"},
-  {icon:"🍕",label:"Pizzaria"},{icon:"🍔",label:"Hamburgueria"},{icon:"🍣",label:"Sushi e Comida Japonesa"},
-  {icon:"🌮",label:"Churrascaria"},{icon:"🥗",label:"Comida Saudável e Vegana"},{icon:"🎂",label:"Confeitaria e Bolos"},
-  {icon:"🥐",label:"Padaria e Panificadora"},{icon:"🍦",label:"Sorveteria e Açaí"},{icon:"🍷",label:"Bar e Pub"},
-  {icon:"🎉",label:"Buffet e Eventos"},{icon:"☕",label:"Cafeteria e Lanchonete"},
-  // Varejo
-  {icon:"👗",label:"Loja de Roupas"},{icon:"👗",label:"Moda Feminina"},{icon:"👔",label:"Moda Masculina"},
-  {icon:"👶",label:"Moda Infantil"},{icon:"👟",label:"Loja de Calçados"},{icon:"💍",label:"Joalheria e Bijuteria"},
-  {icon:"⌚",label:"Relojoaria"},{icon:"🕶️",label:"Ótica"},{icon:"🎒",label:"Loja de Bolsas e Acessórios"},
-  {icon:"🧸",label:"Loja de Brinquedos"},{icon:"📚",label:"Livraria"},{icon:"🎮",label:"Loja de Games e Eletrônicos"},
-  {icon:"📱",label:"Loja de Celulares e Acessórios"},{icon:"💻",label:"Loja de Informática"},
-  {icon:"🖨️",label:"Loja de Suprimentos de Escritório"},{icon:"🛋️",label:"Loja de Móveis e Decoração"},
-  {icon:"🌸",label:"Floricultura"},{icon:"🐾",label:"Pet Shop"},{icon:"🌿",label:"Loja de Produtos Naturais"},
-  {icon:"🧴",label:"Loja de Cosméticos"},{icon:"🏋️",label:"Loja de Artigos Esportivos"},
-  {icon:"🔧",label:"Loja de Ferramentas e Hardware"},{icon:"🏗️",label:"Loja de Materiais de Construção"},
-  {icon:"🌾",label:"Agropecuária e Insumos Agrícolas"},{icon:"🛒",label:"Mercado e Supermercado"},
-  {icon:"🍷",label:"Adega e Distribuidora de Bebidas"},
-  // Serviços Automotivos
+  {icon:"✂️",label:"Salão de Beleza"},{icon:"✂️",label:"Barbearia"},{icon:"💅",label:"Manicure e Pedicure"},{icon:"💅",label:"Nail Designer"},
+  {icon:"👁️",label:"Design de Sobrancelhas"},{icon:"🌟",label:"Micropigmentação"},{icon:"💄",label:"Maquiagem e Visagismo"},
+  {icon:"🍽️",label:"Restaurante"},{icon:"🚗",label:"Drive-Thru e Fast Food"},{icon:"🛵",label:"Delivery de Comida"},{icon:"☕",label:"Cafeteria"},
+  {icon:"🧋",label:"Casa de Açaí e Smoothies"},{icon:"🍕",label:"Pizzaria"},{icon:"🍔",label:"Hamburgueria"},{icon:"🍣",label:"Sushi e Comida Japonesa"},
+  {icon:"🎂",label:"Confeitaria e Bolos"},{icon:"🥐",label:"Padaria e Panificadora"},{icon:"🍦",label:"Sorveteria e Açaí"},
+  {icon:"🎉",label:"Buffet e Eventos"},{icon:"🎂",label:"Chocolateria e Confeitaria"},
+  {icon:"👗",label:"Loja de Roupas"},{icon:"👗",label:"Moda Feminina"},{icon:"👔",label:"Moda Masculina"},{icon:"👶",label:"Moda Infantil"},
+  {icon:"👟",label:"Loja de Calçados"},{icon:"💍",label:"Joalheria e Bijuteria"},{icon:"🕶️",label:"Ótica"},{icon:"🧸",label:"Loja de Brinquedos"},
+  {icon:"📱",label:"Loja de Celulares e Acessórios"},{icon:"💻",label:"Loja de Informática"},{icon:"🛋️",label:"Loja de Móveis e Decoração"},
+  {icon:"🌸",label:"Floricultura"},{icon:"🐾",label:"Pet Shop"},{icon:"🌿",label:"Loja de Produtos Naturais"},{icon:"🧴",label:"Loja de Cosméticos"},
+  {icon:"🏋️",label:"Loja de Artigos Esportivos"},{icon:"🔧",label:"Loja de Ferramentas e Hardware"},{icon:"🏗️",label:"Loja de Materiais de Construção"},
+  {icon:"🛒",label:"Mercado e Supermercado"},{icon:"🍷",label:"Adega e Distribuidora de Bebidas"},
   {icon:"🚗",label:"Oficina Mecânica"},{icon:"🚗",label:"Oficina de Motos"},{icon:"🚲",label:"Oficina de Bicicletas"},
-  {icon:"🎨",label:"Funilaria e Pintura"},{icon:"🔧",label:"Martelinho de Ouro"},{icon:"🧼",label:"Lava-Rápido"},
-  {icon:"⛽",label:"Posto de Combustíveis"},{icon:"🔋",label:"Elétrica Automotiva"},{icon:"🚗",label:"Despachante e Documentação"},
-  {icon:"🚛",label:"Transportadora e Logística"},{icon:"🚌",label:"Empresa de Ônibus e Vans"},
-  // Segurança e Tecnologia
-  {icon:"🔒",label:"Segurança Eletrônica"},{icon:"📷",label:"CFTV e Câmeras de Segurança"},
-  {icon:"🚨",label:"Alarmes e Cercas Elétricas"},{icon:"🔐",label:"Chaveiro e Fechaduras"},
-  {icon:"💻",label:"Assistência Técnica em Informática"},{icon:"📱",label:"Assistência Técnica em Celulares"},
-  {icon:"📺",label:"Assistência Técnica em Eletrodomésticos"},{icon:"💻",label:"Desenvolvimento de Software"},
-  {icon:"☁️",label:"Serviços em Nuvem e TI"},{icon:"🤖",label:"Automação e IA para Negócios"},
-  // Construção e Casa
-  {icon:"🏗️",label:"Construtora"},{icon:"🔨",label:"Reformas e Acabamentos"},{icon:"🪟",label:"Esquadrias e Vidraçaria"},
-  {icon:"🎨",label:"Pintura Residencial e Comercial"},{icon:"⚡",label:"Elétrica e Instalações"},
-  {icon:"🚿",label:"Hidráulica e Encanamento"},{icon:"❄️",label:"Climatização e Ar-Condicionado"},
-  {icon:"🪴",label:"Paisagismo e Jardinagem"},{icon:"🧹",label:"Limpeza Residencial e Comercial"},
-  {icon:"🛡️",label:"Impermeabilização e Dedetização"},{icon:"🪑",label:"Marcenaria e Móveis Planejados"},
-  {icon:"🏊",label:"Piscinas e Spas"},
-  // Educação
-  {icon:"🎓",label:"Escola Particular"},{icon:"🎓",label:"Cursinho e Pré-Vestibular"},
-  {icon:"👶",label:"Escola Infantil e Creche"},{icon:"📚",label:"Cursos Profissionalizantes"},
-  {icon:"🌐",label:"Escola de Idiomas"},{icon:"📚",label:"Cursos Online e EAD"},
-  {icon:"🎵",label:"Escola de Música"},{icon:"🎨",label:"Escola de Artes e Dança"},
-  {icon:"💻",label:"Escola de Programação e Tecnologia"},{icon:"🏋️",label:"Personal Trainer e Coaching"},
-  // Finanças e Jurídico
-  {icon:"💰",label:"Contabilidade"},{icon:"💰",label:"Escritório Contábil"},{icon:"⚖️",label:"Advocacia"},
-  {icon:"⚖️",label:"Escritório Jurídico"},{icon:"🏦",label:"Correspondente Bancário"},
-  {icon:"📊",label:"Consultoria Financeira"},{icon:"🏠",label:"Seguros e Previdência"},
-  {icon:"📈",label:"Investimentos e Assessoria"},
-  // Marketing e Comunicação
-  {icon:"📣",label:"Agência de Marketing Digital"},{icon:"📱",label:"Gestão de Redes Sociais"},
-  {icon:"🎨",label:"Design Gráfico e Identidade Visual"},{icon:"📸",label:"Fotografia e Vídeo"},
-  {icon:"🎬",label:"Produtora de Conteúdo"},{icon:"🖨️",label:"Gráfica e Impressão"},
-  {icon:"📺",label:"Assessoria de Imprensa e PR"},
-  // Imóveis
-  {icon:"🏠",label:"Imobiliária"},{icon:"🏠",label:"Corretor Autônomo de Imóveis"},
-  {icon:"🏢",label:"Administradora de Condomínios"},{icon:"🏗️",label:"Incorporadora Imobiliária"},
-  // Entretenimento e Turismo
-  {icon:"🏨",label:"Hotel e Pousada"},{icon:"✈️",label:"Agência de Viagens"},
-  {icon:"🎉",label:"Espaço de Eventos"},{icon:"🎮",label:"Lan House e Games"},
-  {icon:"🎭",label:"Teatro e Entretenimento"},{icon:"⛳",label:"Academia e Fitness"},
-  // Agro e Meio Ambiente
-  {icon:"🌾",label:"Produtor Rural e Agronegócio"},{icon:"🐄",label:"Pecuária"},
-  {icon:"🌱",label:"Jardinagem e Paisagismo"},{icon:"♻️",label:"Gestão Ambiental e Reciclagem"},
-  {icon:"☀️",label:"Energia Solar e Sustentabilidade"},
+  {icon:"🎨",label:"Funilaria e Pintura"},{icon:"🧼",label:"Lava-Rápido"},{icon:"🚛",label:"Transportadora e Logística"},
+  {icon:"🔒",label:"Segurança Eletrônica"},{icon:"📷",label:"CFTV e Câmeras de Segurança"},{icon:"🚨",label:"Alarmes e Cercas Elétricas"},
+  {icon:"🔐",label:"Chaveiro e Fechaduras"},{icon:"💻",label:"Assistência Técnica em Informática"},{icon:"📱",label:"Assistência Técnica em Celulares"},
+  {icon:"💻",label:"Desenvolvimento de Software"},{icon:"☁️",label:"Serviços em Nuvem e TI"},
+  {icon:"🏗️",label:"Construtora"},{icon:"🔨",label:"Reformas e Acabamentos"},{icon:"⚡",label:"Elétrica e Instalações"},
+  {icon:"🚿",label:"Hidráulica e Encanamento"},{icon:"❄️",label:"Climatização e Ar-Condicionado"},{icon:"🪴",label:"Paisagismo e Jardinagem"},
+  {icon:"🧹",label:"Limpeza Residencial e Comercial"},{icon:"🪑",label:"Marcenaria e Móveis Planejados"},
+  {icon:"🎓",label:"Escola Particular"},{icon:"🎓",label:"Cursinho e Pré-Vestibular"},{icon:"👶",label:"Escola Infantil e Creche"},
+  {icon:"📚",label:"Cursos Profissionalizantes"},{icon:"🌐",label:"Escola de Idiomas"},{icon:"📚",label:"Cursos Online e EAD"},
+  {icon:"🎵",label:"Escola de Música"},{icon:"💻",label:"Escola de Programação"},
+  {icon:"💰",label:"Contabilidade"},{icon:"⚖️",label:"Advocacia"},{icon:"📊",label:"Consultoria Financeira"},{icon:"🏠",label:"Seguros e Previdência"},
+  {icon:"📣",label:"Agência de Marketing Digital"},{icon:"📱",label:"Gestão de Redes Sociais"},{icon:"🎨",label:"Design Gráfico"},{icon:"📸",label:"Fotografia e Vídeo"},
+  {icon:"🏠",label:"Imobiliária"},{icon:"🏢",label:"Administradora de Condomínios"},
+  {icon:"🌾",label:"Produtor Rural e Agronegócio"},{icon:"☀️",label:"Energia Solar"},{icon:"♻️",label:"Gestão Ambiental"},
+  {icon:"🏨",label:"Hotel e Pousada"},{icon:"✈️",label:"Agência de Viagens"},{icon:"🎉",label:"Espaço de Eventos"},
+  {icon:"🔷",label:"Outro segmento"},
 ];
-
-const SIZES=[
-  {id:"mei",label:"MEI / Autônomo"},{id:"micro",label:"Micro (até 9 func.)"},
-  {id:"pequena",label:"Pequena (10–49)"},{id:"media",label:"Média (50–249)"},{id:"grande",label:"Grande (250+)"}
-];
-const MODELS=[
-  {id:"b2c",label:"B2C — vendo para pessoas físicas"},{id:"b2b",label:"B2B — vendo para empresas"},
-  {id:"ambos",label:"Ambos (B2C + B2B)"},{id:"b2g",label:"B2G — vendo para governo"}
-];
-const TICKETS=[
-  {id:"baixo",label:"Até R$200"},{id:"medio",label:"R$200 – R$2.000"},
-  {id:"alto",label:"R$2.000 – R$20.000"},{id:"enterprise",label:"Acima de R$20.000"}
-];
-const CHALLENGES=[
-  "Gerar mais leads qualificados","Converter leads em clientes",
-  "Superar objeções de preço","Reduzir o ciclo de vendas",
-  "Aumentar o ticket médio","Reter e fidelizar clientes",
-  "Montar ou treinar equipe de vendas","Vender online e no digital",
-  "Reativar clientes inativos","Escalar as vendas"
-];
+const SIZES=[{id:"mei",label:"MEI / Autônomo"},{id:"micro",label:"Micro (até 9 func.)"},{id:"pequena",label:"Pequena (10–49)"},{id:"media",label:"Média (50–249)"},{id:"grande",label:"Grande (250+)"}];
+const MODELS=[{id:"b2c",label:"B2C — vendo para pessoas físicas"},{id:"b2b",label:"B2B — vendo para empresas"},{id:"ambos",label:"Ambos (B2C + B2B)"},{id:"b2g",label:"B2G — vendo para governo"}];
+const TICKETS=[{id:"baixo",label:"Até R$200"},{id:"medio",label:"R$200 – R$2.000"},{id:"alto",label:"R$2.000 – R$20.000"},{id:"enterprise",label:"Acima de R$20.000"}];
+const CHALLENGES=["Gerar mais leads qualificados","Converter leads em clientes","Superar objeções de preço","Reduzir o ciclo de vendas","Aumentar o ticket médio","Reter e fidelizar clientes","Montar ou treinar equipe de vendas","Vender online e no digital","Reativar clientes inativos","Escalar as vendas"];
 const TOTAL_STEPS=5;
+
+// XP / NÍVEIS
+const LEVELS=[
+  {name:"Iniciante",emoji:"🥉",minXP:0,maxXP:100},
+  {name:"Vendedor Bronze",emoji:"🥉",minXP:100,maxXP:250},
+  {name:"Vendedor Prata",emoji:"🥈",minXP:250,maxXP:500},
+  {name:"Vendedor Ouro",emoji:"🥇",minXP:500,maxXP:900},
+  {name:"Diamante",emoji:"💎",minXP:900,maxXP:1500},
+  {name:"Mestre das Vendas",emoji:"👑",minXP:1500,maxXP:9999},
+];
 
 let state={nicho:null,nichoLabel:"",city:"",size:null,model:null,ticket:null,challenges:[],currentText:"",currentMeta:"",dicasData:[]};
 let currentFilter="all";
 let currentUser=JSON.parse(localStorage.getItem("vm_user")||"null");
+let chatHistory=[];
+let consultInited=false;
 
-// ── AUTH ────────────────────────────────────────────────────────────────
+// ── XP SYSTEM ────────────────────────────────────────────────────────────
+function getXP(){return parseInt(localStorage.getItem("vm_xp")||"0")}
+function addXP(amount,reason){
+  const xp=getXP()+amount;
+  localStorage.setItem("vm_xp",xp);
+  showXPToast("+"+amount+" XP",reason);
+  updateXPChip();
+  checkAchievements();
+}
+function showXPToast(text,sub){
+  const t=document.getElementById("xp-toast");
+  document.getElementById("xp-toast-text").textContent=text;
+  document.getElementById("xp-toast-sub").textContent=sub||"";
+  t.style.display="block";
+  setTimeout(()=>t.style.display="none",3000);
+}
+function updateXPChip(){
+  const xp=getXP();
+  const level=getCurrentLevel();
+  const chip=document.getElementById("xp-chip");
+  chip.textContent=level.emoji+" "+xp+" XP";
+  chip.style.display="flex";
+}
+function getCurrentLevel(){
+  const xp=getXP();
+  for(let i=LEVELS.length-1;i>=0;i--){if(xp>=LEVELS[i].minXP)return LEVELS[i];}
+  return LEVELS[0];
+}
+function getAchievements(){return JSON.parse(localStorage.getItem("vm_achievements")||"[]")}
+function unlockAchievement(id){
+  const arr=getAchievements();
+  if(!arr.includes(id)){arr.push(id);localStorage.setItem("vm_achievements",JSON.stringify(arr));return true;}
+  return false;
+}
+function checkAchievements(){
+  const xp=getXP();
+  const saved=getUserSaved();
+  if(saved.length>=1&&unlockAchievement("primeira_dica"))showXPToast("🎯 Conquista!","Primeira dica salva!");
+  if(xp>=100&&unlockAchievement("bronze"))showXPToast("🥉 Bronze desbloqueado!","100 XP atingidos!");
+  if(xp>=250&&unlockAchievement("prata"))showXPToast("🥈 Prata desbloqueado!","250 XP atingidos!");
+  if(xp>=500&&unlockAchievement("ouro"))showXPToast("🥇 Ouro desbloqueado!","500 XP atingidos!");
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────────────
 function getUsers(){return JSON.parse(localStorage.getItem("vm_users")||"{}")}
 function saveUsers(u){localStorage.setItem("vm_users",JSON.stringify(u))}
 function getUserSaved(){
@@ -707,13 +640,53 @@ function switchTab(t){
 }
 function showAuthError(msg){const e=document.getElementById("auth-error");e.textContent=msg;e.classList.remove("hidden")}
 function updateUserUI(){
-  const chip=document.getElementById("user-chip"),btn=document.getElementById("btn-login-nav");
-  if(currentUser){chip.textContent="👤 "+currentUser.name.split(" ")[0]+" (sair)";chip.classList.remove("hidden");btn.classList.add("hidden");}
-  else{chip.classList.add("hidden");btn.classList.remove("hidden");}
-  updateSavedBtn();
+  const chip=document.getElementById("user-chip");
+  if(currentUser){chip.textContent="👤 "+currentUser.name.split(" ")[0]+" (sair)";chip.classList.remove("hidden");}
+  else{chip.classList.add("hidden");}
+  updateSavedBtn();updateXPChip();
 }
 
-// ── IG TRANSITION ────────────────────────────────────────────────────────
+// ── GATE ─────────────────────────────────────────────────────────────────
+(function initGate(){
+  if(localStorage.getItem("vm_gate_passed")){
+    document.getElementById("signup-gate").style.display="none";
+    return;
+  }
+  document.getElementById("gate-phone").addEventListener("input",function(){
+    let v=this.value.replace(/\D/g,"");
+    if(v.length>11)v=v.slice(0,11);
+    if(v.length>6)v="("+v.slice(0,2)+") "+v.slice(2,7)+"-"+v.slice(7);
+    else if(v.length>2)v="("+v.slice(0,2)+") "+v.slice(2);
+    else if(v.length>0)v="("+v;
+    this.value=v;
+  });
+  document.getElementById("gate-email").addEventListener("keydown",function(e){if(e.key==="Enter")submitGate();});
+})();
+
+function submitGate(){
+  const name=document.getElementById("gate-name").value.trim();
+  const phone=document.getElementById("gate-phone").value.trim();
+  const email=document.getElementById("gate-email").value.trim();
+  const errEl=document.getElementById("gate-error");
+  if(!name){errEl.textContent="Por favor, informe seu nome.";errEl.style.display="block";return;}
+  if(!phone||phone.replace(/\D/g,"").length<10){errEl.textContent="Informe um WhatsApp válido.";errEl.style.display="block";return;}
+  if(!email||!email.includes("@")){errEl.textContent="Informe um e-mail válido.";errEl.style.display="block";return;}
+  errEl.style.display="none";
+  const leads=JSON.parse(localStorage.getItem("vm_leads")||"[]");
+  leads.push({name,phone,email,date:new Date().toISOString()});
+  localStorage.setItem("vm_leads",JSON.stringify(leads));
+  const users=getUsers();
+  if(!users[email]){users[email]={name,phone,saved:[]};saveUsers(users);}
+  currentUser={email,name};
+  localStorage.setItem("vm_user",JSON.stringify(currentUser));
+  fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,phone,email,nicho:"",city:""})}).catch(()=>{});
+  localStorage.setItem("vm_gate_passed","1");
+  document.getElementById("signup-gate").style.display="none";
+  updateUserUI();
+  addXP(10,"Bem-vindo ao VendaMais!");
+}
+
+// ── IG TRANSITION ─────────────────────────────────────────────────────────
 function showIgTransition(callback){
   const overlay=document.getElementById("ig-transition");
   const bar=document.getElementById("ig-prog-bar");
@@ -726,11 +699,10 @@ function showIgTransition(callback){
 (function initNicho(){
   const input=document.getElementById("nicho-input");
   const sugg=document.getElementById("nicho-suggestions");
+  let aiDebounce=null;
   let activeIdx=-1;
 
-  let aiDebounce=null;
-
-  function renderSuggestions(query, aiResults){
+  function renderSuggestions(query,aiResults){
     const q=query.toLowerCase().trim();
     sugg.innerHTML="";
     if(!q){sugg.classList.add("hidden");return;}
@@ -738,53 +710,41 @@ function showIgTransition(callback){
     const extra=(aiResults||[]).filter(a=>!local.find(l=>l.label.toLowerCase()===a.label.toLowerCase()));
     const all=[...local,...extra].slice(0,10);
     if(!all.length){
-      // Mostra o que o usuário digitou como opção livre
-      const div=document.createElement("div");
-      div.className="nicho-item";
+      const div=document.createElement("div");div.className="nicho-item";
       div.innerHTML='<span class="nicho-item-icon">🔷</span>'+query+' <span style="font-size:10px;color:#555;margin-left:6px">· usar este</span>';
       div.onclick=()=>selectNicho({icon:"🔷",label:query});
-      sugg.appendChild(div);
-      sugg.classList.remove("hidden");
-      return;
+      sugg.appendChild(div);sugg.classList.remove("hidden");return;
     }
-    all.forEach((n)=>{
-      const div=document.createElement("div");
-      div.className="nicho-item";
+    all.forEach(n=>{
+      const div=document.createElement("div");div.className="nicho-item";
       div.innerHTML='<span class="nicho-item-icon">'+n.icon+'</span>'+n.label;
-      div.onclick=()=>selectNicho(n);
-      sugg.appendChild(div);
+      div.onclick=()=>selectNicho(n);sugg.appendChild(div);
     });
-    sugg.classList.remove("hidden");
-    activeIdx=-1;
+    sugg.classList.remove("hidden");activeIdx=-1;
   }
 
   async function fetchAiNichos(query){
     try{
       const res=await fetch("/api/nichos",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
       const data=await res.json();
-      renderSuggestions(query, data.nichos||[]);
+      renderSuggestions(query,data.nichos||[]);
     }catch(e){renderSuggestions(query,[]);}
   }
 
   input.addEventListener("input",function(){
     const q=this.value.trim();
     if(!q){sugg.classList.add("hidden");return;}
-    // Mostra local primeiro imediatamente
     renderSuggestions(q,[]);
-    // Busca IA se local tiver menos de 3 resultados
     const local=NICHOS.filter(n=>n.label.toLowerCase().includes(q.toLowerCase()));
-    if(local.length<3){
-      clearTimeout(aiDebounce);
-      aiDebounce=setTimeout(()=>fetchAiNichos(q),500);
-    }
+    if(local.length<3){clearTimeout(aiDebounce);aiDebounce=setTimeout(()=>fetchAiNichos(q),500);}
   });
   input.addEventListener("keydown",function(e){
     const items=sugg.querySelectorAll(".nicho-item");
     if(e.key==="ArrowDown"){activeIdx=Math.min(activeIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle("active",i===activeIdx));}
     else if(e.key==="ArrowUp"){activeIdx=Math.max(activeIdx-1,0);items.forEach((el,i)=>el.classList.toggle("active",i===activeIdx));}
     else if(e.key==="Enter"){
-      if(activeIdx>=0&&items[activeIdx]){items[activeIdx].click();}
-      else if(this.value.trim()){selectNicho({icon:"🔷",label:this.value.trim()});}
+      if(activeIdx>=0&&items[activeIdx])items[activeIdx].click();
+      else if(this.value.trim())selectNicho({icon:"🔷",label:this.value.trim()});
     }
   });
   document.addEventListener("click",function(e){if(!document.getElementById("nicho-wrap").contains(e.target))sugg.classList.add("hidden");});
@@ -805,7 +765,7 @@ function clearNicho(){
   document.getElementById("next-1").disabled=true;
 }
 
-// ── INIT CHIPS ───────────────────────────────────────────────────────────
+// ── INIT CHIPS ────────────────────────────────────────────────────────────
 (function initChips(){
   const sc=document.getElementById("size-chips");
   SIZES.forEach(s=>{const b=document.createElement("button");b.className="chip";b.dataset.id=s.id;b.textContent=s.label;b.onclick=()=>selectChip("size",s.id,"size-chips");sc.appendChild(b);});
@@ -815,18 +775,11 @@ function clearNicho(){
   TICKETS.forEach(t=>{const b=document.createElement("button");b.className="ticket-card";b.dataset.id=t.id;b.textContent=t.label;b.onclick=()=>selectTicket(t.id);tg.appendChild(b);});
   const cg=document.getElementById("challenge-grid");
   CHALLENGES.forEach(c=>{const b=document.createElement("button");b.className="challenge-btn";b.dataset.val=c;b.textContent=c;b.onclick=()=>toggleChallenge(c);cg.appendChild(b);});
-  document.getElementById("city-input").addEventListener("input",function(){
-    state.city=this.value.trim();
-    checkStep2();
-  });
+  document.getElementById("city-input").addEventListener("input",function(){state.city=this.value.trim();checkStep2();});
   updateUserUI();
-  if(!currentUser)document.getElementById("btn-login-nav").classList.remove("hidden");
 })();
 
-function checkStep2(){
-  const ok=state.size&&state.model;
-  document.getElementById("next-2").disabled=!ok;
-}
+function checkStep2(){document.getElementById("next-2").disabled=!(state.size&&state.model);}
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────
 function goStep(n){
@@ -853,8 +806,8 @@ function goHome(){
   ["next-1","next-2","next-3","next-4"].forEach(id=>document.getElementById(id).disabled=true);
   document.getElementById("extra-context").value="";
   document.getElementById("city-input").value="";
-  clearNicho();
-  goStep(0);showView("onboard");
+  document.getElementById("consult-fab").style.display="none";
+  clearNicho();goStep(0);showView("onboard");
 }
 function toggleSaved(){
   const visible=!document.getElementById("view-saved").classList.contains("hidden");
@@ -897,41 +850,42 @@ async function generateTips(){
   document.getElementById("loading-wrap").classList.remove("hidden");
   document.getElementById("dicas-container").innerHTML="";
   document.getElementById("result-actions").classList.add("hidden");
+  document.getElementById("consult-invite-wrap").innerHTML="";
   document.getElementById("result-title").textContent="Gerando suas dicas...";
   document.getElementById("result-sub").textContent="Analisando o mercado de "+state.nicho+(state.city?" em "+state.city:"")+"...";
   document.getElementById("btn-restart").classList.remove("hidden");
 
   const sz=SIZES.find(x=>x.id===state.size),mo=MODELS.find(x=>x.id===state.model),ti=TICKETS.find(x=>x.id===state.ticket);
-
   document.getElementById("result-badges").innerHTML=[state.nichoLabel,state.city||null,sz?.label,mo?.label,ti?.label].filter(Boolean).map(t=>'<span class="badge">'+t+"</span>").join("");
   document.getElementById("loading-text").textContent="Pesquisando dados do mercado de "+state.nicho+(state.city?" em "+state.city:"")+"...";
 
-  const sys=`Você é um consultor comercial sênior com 25 anos de experiência no mercado brasileiro, especialista em crescimento de vendas em diferentes setores e regiões do país.
+  const sys=`Você é um consultor comercial sênior com 25 anos de experiência no mercado brasileiro, especialista em crescimento de vendas em diferentes setores e regiões do país. Você conhece profundamente como as maiores empresas de cada setor operam e usa isso para orientar pequenos e médios negócios.
 
-REGRAS ABSOLUTAS DE QUALIDADE:
-1. PROFUNDIDADE REAL — cite dados concretos, percentuais, tendências e realidades específicas do setor
-2. REGIONAL — considere a realidade econômica e cultural da cidade/região informada quando possível
-3. ZERO GENERICIDADE — cada dica menciona situações concretas daquele nicho específico
-4. LINGUAGEM HUMANA — escreva como um mentor experiente falando com um empresário, não como uma lista de tópicos
-5. AÇÃO IMEDIATA — cada dica termina com algo que pode ser feito HOJE ou AMANHÃ
-6. O ÓBVIO DEVE SER DITO — não presuma que o empresário já sabe o básico; explique o porquê de cada passo
+REGRAS ABSOLUTAS:
+1. CASES REAIS — cite como grandes empresas do setor resolveram o mesmo problema
+2. DADOS CONCRETOS — percentuais, tendências, números reais do mercado brasileiro
+3. REGIONAL — considere a realidade econômica e cultural da cidade/região informada
+4. ZERO GENERICIDADE — cada dica menciona situações e nomes concretos daquele nicho
+5. LINGUAGEM HUMANA — escreva como um mentor experiente, não como lista de tópicos
+6. AÇÃO IMEDIATA — cada dica termina com algo executável HOJE ou AMANHÃ
+7. O ÓBVIO DEVE SER DITO — não presuma que o empresário já sabe o básico
 
-FORMATO DE RESPOSTA — siga exatamente este padrão para cada dica:
+FORMATO para cada dica:
 [TEMA: Marketing/Vendas/Network]
 [TITULO: título forte e direto]
-[TEXTO: desenvolvimento de 4-5 linhas com dados reais, contexto do setor e exemplos concretos]
+[TEXTO: desenvolvimento de 4-5 linhas com dados reais e exemplos concretos]
 [ACAO: ação específica para executar esta semana]`;
 
-  const usr=`PERFIL DA EMPRESA:
+  const usr=`PERFIL:
 Nicho: ${state.nicho}
-Cidade: ${state.city||"Brasil (não informada)"}
+Cidade: ${state.city||"Brasil"}
 Porte: ${sz?.label}
 Modelo: ${mo?.label}
-Ticket médio: ${ti?.label}
-Desafios prioritários: ${state.challenges.join(", ")}
-${document.getElementById("extra-context").value.trim()?"Contexto adicional: "+document.getElementById("extra-context").value.trim():""}
+Ticket: ${ti?.label}
+Desafios: ${state.challenges.join(", ")}
+${document.getElementById("extra-context").value.trim()?"Contexto: "+document.getElementById("extra-context").value.trim():""}
 
-Gere exatamente 3 dicas estratégicas. Para cada dica, use o formato especificado com os campos [TEMA:], [TITULO:], [TEXTO:] e [ACAO:] em linhas separadas. As dicas devem ser profundas, específicas para o nicho "${state.nicho}" e considerar a realidade de "${state.city||"Brasil"}".`;
+Gere exatamente 3 dicas estratégicas profundas e específicas para "${state.nicho}" em "${state.city||"Brasil"}".`;
 
   try{
     const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
@@ -939,47 +893,56 @@ Gere exatamente 3 dicas estratégicas. Para cada dica, use o formato especificad
     const data=await res.json();
     const text=data.content?.map(b=>b.text||"").join("")||"";
     state.currentText=text;
-    state.currentMeta=state.nichoLabel+(state.city?" · "+state.city:"")+" · "+mo?.label;
+    state.currentMeta=state.nichoLabel+(state.city?" · "+state.city:"")+" · "+(mo?.label||"");
 
     const dicas=parseDicas(text);
     state.dicasData=dicas;
 
-    // Notifica dono com perfil completo
+    document.getElementById("loading-wrap").classList.add("hidden");
+    document.getElementById("result-title").textContent="Suas Dicas Personalizadas";
+    document.getElementById("result-sub").textContent="Com dados reais do mercado de "+state.nicho+(state.city?" em "+state.city:"");
+
+    // Card convite do consultor
+    renderConsultInvite();
+    renderDicas(dicas);
+    document.getElementById("result-actions").classList.remove("hidden");
+
+    // Mostra FAB do consultor
+    document.getElementById("consult-fab").style.display="flex";
+
+    // XP por gerar dicas
+    addXP(30,"Dicas geradas!");
+
+    // Notifica dono
     if(currentUser){
       fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          type:"perfil_completo",
-          userName:currentUser.name,
-          nicho:state.nicho||"",
-          city:state.city||"",
-          profile:{
-            size:sz?.label||"",
-            ticket:ti?.label||"",
-            model:mo?.label||"",
-            challenges:state.challenges.join(", "),
-            extra:document.getElementById("extra-context").value.trim()
-          }
+        body:JSON.stringify({type:"perfil_completo",userName:currentUser.name,nicho:state.nicho||"",city:state.city||"",
+          profile:{size:sz?.label||"",ticket:ti?.label||"",model:mo?.label||"",challenges:state.challenges.join(", "),extra:document.getElementById("extra-context").value.trim()}
         })
       }).catch(()=>{});
     }
 
-    document.getElementById("loading-wrap").classList.add("hidden");
-    document.getElementById("result-title").textContent="Suas Dicas Personalizadas";
-    document.getElementById("result-sub").textContent="Com dados reais do mercado de "+state.nicho+(state.city?" em "+state.city:"")+" para o seu perfil.";
-
-    renderDicas(dicas);
-    document.getElementById("result-actions").classList.remove("hidden");
-
-    // Busca vídeos em paralelo
     loadVideosForDicas(dicas);
-
   }catch(e){
     document.getElementById("loading-wrap").classList.add("hidden");
     document.getElementById("dicas-container").innerHTML='<p style="color:#666;font-family:sans-serif;text-align:center;padding:40px 0">Erro ao gerar dicas. Tente novamente.</p>';
   }
 }
 
-// ── PARSER DE DICAS ───────────────────────────────────────────────────────
+function renderConsultInvite(){
+  const wrap=document.getElementById("consult-invite-wrap");
+  wrap.innerHTML='<div class="consult-invite" onclick="showView(\'consult\')">'+
+    '<div class="consult-invite-avatar">⚡</div>'+
+    '<div class="consult-invite-info">'+
+    '<div class="consult-invite-name">Consultor de Vendas IA</div>'+
+    '<div class="consult-invite-sub">Especialista em <strong style="color:#FF6B35">'+state.nicho+'</strong> · <span style="color:#00C9A7">● Online</span></div>'+
+    '<div class="consult-invite-quote">"Tem dúvida sobre alguma dica? Me pergunte →"</div>'+
+    '</div>'+
+    '<button class="consult-invite-btn">Consultar</button>'+
+  '</div>';
+}
+
+// ── PARSER ────────────────────────────────────────────────────────────────
 function parseDicas(text){
   const dicas=[];
   const blocks=text.split(/\n(?=\[TEMA:)/);
@@ -993,9 +956,7 @@ function parseDicas(text){
   });
   if(!dicas.length){
     const paras=text.split(/\n{2,}/).filter(p=>p.trim().length>30);
-    paras.slice(0,3).forEach((p,i)=>{
-      dicas.push({tema:["Marketing","Vendas","Network"][i]||"Estratégia",titulo:"Dica "+(i+1),texto:p.trim(),acao:""});
-    });
+    paras.slice(0,3).forEach((p,i)=>dicas.push({tema:["Marketing","Vendas","Network"][i]||"Estratégia",titulo:"Dica "+(i+1),texto:p.trim(),acao:""}));
   }
   return dicas.slice(0,3);
 }
@@ -1006,96 +967,66 @@ function renderDicas(dicas){
   container.innerHTML="";
   dicas.forEach((d,i)=>{
     const card=document.createElement("div");
-    card.className="dica-card";
-    card.id="dica-card-"+i;
-    const temaColor={Marketing:"#4CC9F0",Vendas:"#FF6B35",Network:"#00C9A7"}[d.tema]||"#FF6B35";
+    card.className="dica-card";card.id="dica-card-"+i;
+    const colors={Marketing:"#4CC9F0",Vendas:"#FF6B35",Network:"#00C9A7"};
+    const c=colors[d.tema]||"#FF6B35";
+    function hexToRgb(h){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return r+","+g+","+b;}
     card.innerHTML=
-      '<div class="dica-tag" style="color:'+temaColor+';background:rgba('+hexToRgb(temaColor)+',0.08);border-color:rgba('+hexToRgb(temaColor)+',0.3)">'+(i+1)+'. '+d.tema+'</div>'+
+      '<div class="dica-tag" style="color:'+c+';background:rgba('+hexToRgb(c)+',0.08);border-color:rgba('+hexToRgb(c)+',0.3)">'+(i+1)+'. '+d.tema+'</div>'+
       '<div class="dica-titulo">'+d.titulo+'</div>'+
       '<div class="dica-texto">'+d.texto+(d.acao?'\n\n<span style="color:#FF6B35;font-weight:700">→ Ação desta semana:</span> '+d.acao:"")+'</div>'+
-      '<div class="videos-section" id="videos-'+i+'">'+
-        '<div class="videos-loading-inline"><div class="spinner-sm"></div><span>Buscando vídeos relacionados...</span></div>'+
-      '</div>';
+      '<div class="videos-section" id="videos-'+i+'"><div class="videos-loading-inline"><div class="spinner-sm"></div><span>Buscando vídeos...</span></div></div>';
     container.appendChild(card);
   });
 }
 
-function hexToRgb(hex){
-  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
-  return r+","+g+","+b;
-}
-
-// ── CARREGAR VÍDEOS PARA CADA DICA ────────────────────────────────────────
+// ── VÍDEOS ────────────────────────────────────────────────────────────────
 async function loadVideosForDicas(dicas){
   try{
-    const dicasInfo=dicas.map(d=>({tema:d.tema,resumo:d.titulo}));
     const res=await fetch("/api/videos",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({sectorLabel:state.nicho,city:state.city,dicas:dicasInfo})});
+      body:JSON.stringify({sectorLabel:state.nicho,city:state.city,dicas:dicas.map(d=>({tema:d.tema,resumo:d.titulo}))})});
     const videos=await res.json();
-
-    dicas.forEach((d,i)=>{
-      const key="dica"+(i+1);
-      const vids=videos[key]||[];
-      renderVideosPorDica(i,vids);
-    });
-  }catch(e){
-    dicas.forEach((d,i)=>renderVideosPorDica(i,[]));
-  }
+    dicas.forEach((d,i)=>renderVideosPorDica(i,videos["dica"+(i+1)]||[]));
+  }catch(e){dicas.forEach((d,i)=>renderVideosPorDica(i,[]));}
 }
-
 function renderVideosPorDica(idx,videos){
   const section=document.getElementById("videos-"+idx);
   if(!section)return;
   if(!videos.length){section.innerHTML="";return;}
-
   const roleLabel={principal:"🎯 Principal",complementar1:"📖 Aprofunde",complementar2:"💡 Mentalidade"};
   const roleClass={principal:"principal",complementar1:"complementar",complementar2:"complementar"};
-
-  section.innerHTML=
-    '<div class="videos-label">📚 Aprenda mais sobre esta dica</div>'+
-    videos.map(v=>{
-      const role=v.role||"principal";
+  section.innerHTML='<div class="videos-label">📚 Aprenda mais sobre esta dica</div>'+
+    videos.map(v=>{const role=v.role||"principal";
       return '<a class="video-pill" href="https://youtube.com/watch?v='+v.id+'" target="_blank">'+
-        '<div class="video-pill-thumb">'+
-          '<img src="https://img.youtube.com/vi/'+v.id+'/mqdefault.jpg" alt="'+v.title+'" loading="lazy"/>'+
-          '<div class="video-pill-play"><span>▶</span></div>'+
-        '</div>'+
-        '<div class="video-pill-info">'+
-          '<div class="video-pill-role '+(roleClass[role]||"complementar")+'">'+(roleLabel[role]||"📖 Complementar")+'</div>'+
-          '<div class="video-pill-title">'+v.title+'</div>'+
-          '<div class="video-pill-channel">'+v.channel+'</div>'+
-        '</div>'+
-        '<div class="video-pill-arrow">↗</div>'+
-      '</a>';
+        '<div class="video-pill-thumb"><img src="https://img.youtube.com/vi/'+v.id+'/mqdefault.jpg" loading="lazy"/>'+
+        '<div class="video-pill-play"><span>▶</span></div></div>'+
+        '<div class="video-pill-info"><div class="video-pill-role '+(roleClass[role]||"complementar")+'">'+(roleLabel[role]||"📖")+'</div>'+
+        '<div class="video-pill-title">'+v.title+'</div><div class="video-pill-channel">'+v.channel+'</div></div>'+
+        '<div class="video-pill-arrow">↗</div></a>';
     }).join("");
 }
 
-function typewrite(text,el,speed=11){
-  el.innerHTML="";let i=0;
-  const cur=document.createElement("span");cur.className="cursor-blink";cur.textContent="▍";el.appendChild(cur);
-  const iv=setInterval(()=>{if(i<text.length){el.insertBefore(document.createTextNode(text[i++]),cur)}else{clearInterval(iv);cur.remove()}},speed);
-}
-
-// ── SAVE ──────────────────────────────────────────────────────────────────
+// ── SAVE ─────────────────────────────────────────────────────────────────
 function saveCurrent(){
   if(!state.currentText)return;
   const arr=getUserSaved();
   if(arr.find(s=>s.text===state.currentText))return;
-  const checks=state.dicasData.map(d=>({label:d.titulo.substring(0,70),done:false}));
+  const checks=state.dicasData.map(d=>({label:d.titulo.substring(0,70),done:false,xp:50}));
   arr.push({text:state.currentText,meta:state.currentMeta,status:"todo",date:new Date().toLocaleDateString("pt-BR"),id:Date.now(),checks});
   setUserSaved(arr);updateSavedBtn();
+  addXP(20,"Dicas salvas!");
+  if(unlockAchievement("primeira_dica")){}
   const btn=document.querySelector(".btn-save");btn.textContent="✅ Salvo!";setTimeout(()=>btn.textContent="🔖 Salvar",2000);
-}
-
-function notifyOwner(type, detail){
-  if(!currentUser) return;
-  fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({type,userName:currentUser.name,nicho:state.nicho||"",city:state.city||"",detail:detail||""})
-  }).catch(()=>{});
 }
 function updateSavedBtn(){
   const arr=getUserSaved();
   document.getElementById("btn-saved-nav").textContent=arr.length>0?"🔖 Salvos ("+arr.length+")":"🔖 Salvos";
+}
+function notifyOwner(type,detail){
+  if(!currentUser)return;
+  fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({type,userName:currentUser.name,nicho:state.nicho||"",city:state.city||"",detail:detail||""})
+  }).catch(()=>{});
 }
 
 // ── SAVED VIEW ────────────────────────────────────────────────────────────
@@ -1104,17 +1035,13 @@ function renderSaved(){
   let html=!currentUser?'<div class="cloud-banner"><div class="cloud-banner-text"><strong>☁ Salve na nuvem</strong><br>Crie uma conta para acessar de qualquer dispositivo.</div><button class="btn-cloud-login" onclick="openAuth()">Criar conta</button></div>':"";
   if(arr.length===0){container.innerHTML=html+'<div class="empty">Nenhuma dica salva ainda.</div>';return;}
   html+='<div class="saved-list">'+arr.map((item,i)=>
-    '<div class="saved-card">'+
-    '<div class="saved-meta">'+item.meta+'</div>'+
-    '<div class="saved-date">Salvo em '+(item.date||"–")+'</div>'+
+    '<div class="saved-card"><div class="saved-meta">'+item.meta+'</div><div class="saved-date">Salvo em '+(item.date||"–")+'</div>'+
     '<p class="saved-text">'+item.text.substring(0,300)+(item.text.length>300?"...":"")+'</p>'+
-    '<div class="saved-footer">'+
-    '<div class="track-btns">'+
-    '<button class="track-btn" onclick="setSavedStatus('+i+',\"todo\")">⚪ Pendente</button>'+
-    '<button class="track-btn" onclick="setSavedStatus('+i+',\"doing\")">🟡 Em andamento</button>'+
-    '<button class="track-btn" onclick="setSavedStatus('+i+',\"done\")">🟢 Concluída</button>'+
-    '</div>'+
-    '<div class="saved-actions">'+
+    '<div class="saved-footer"><div class="track-btns">'+
+    '<button class="track-btn" onclick="setSavedStatus('+i+',\'todo\')">⚪ Pendente</button>'+
+    '<button class="track-btn" onclick="setSavedStatus('+i+',\'doing\')">🟡 Em andamento</button>'+
+    '<button class="track-btn" onclick="setSavedStatus('+i+',\'done\')">🟢 Concluída</button>'+
+    '</div><div class="saved-actions">'+
     '<button class="btn-export-sm" onclick="exportSinglePDF('+i+')">⬇ PDF</button>'+
     '<button class="btn-remove" onclick="removeSaved('+i+')">Remover</button>'+
     '</div></div></div>').join("")+'</div>';
@@ -1123,70 +1050,180 @@ function renderSaved(){
 function setSavedStatus(i,status){const arr=getUserSaved();arr[i].status=status;setUserSaved(arr);renderSaved();}
 function removeSaved(i){const arr=getUserSaved();arr.splice(i,1);setUserSaved(arr);updateSavedBtn();renderSaved();}
 
-// ── TRACKING ──────────────────────────────────────────────────────────────
-function setFilter(f){
-  currentFilter=f;
-  ["all","todo","doing","done"].forEach(x=>document.getElementById("filter-"+x).classList.toggle("active",x===f));
-  renderTrack();
-}
+// ── GAMIFIED TRACK ────────────────────────────────────────────────────────
 function renderTrack(){
   const arr=getUserSaved(),container=document.getElementById("track-container");
-  const total=arr.length,done=arr.filter(x=>x.status==="done").length,doing=arr.filter(x=>x.status==="doing").length;
-  const totalC=arr.reduce((s,i)=>(i.checks||[]).length+s,0);
-  const doneC=arr.reduce((s,i)=>(i.checks||[]).filter(c=>c.done).length+s,0);
-  const pctGlobal=totalC>0?Math.round(doneC/totalC*100):0;
+  const xp=getXP();
+  const level=getCurrentLevel();
+  const levelIdx=LEVELS.indexOf(level);
+  const nextLevel=LEVELS[levelIdx+1]||level;
+  const pct=level===nextLevel?100:Math.round((xp-level.minXP)/(nextLevel.minXP-level.minXP)*100);
 
-  let html='<div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:14px;padding:20px 22px;margin-bottom:24px">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
-    '<div style="font-size:14px;color:#aaa;font-family:sans-serif">Progresso geral das ações</div>'+
-    '<div style="font-size:26px;font-weight:700;color:#FF6B35">'+pctGlobal+'%</div></div>'+
-    '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+pctGlobal+'%"></div></div>'+
-    '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px">'+
-    [["Total",total,"#777"],["Em andamento",doing,"#F9C74F"],["Concluídas",done,"#00C9A7"],["Ações feitas",doneC+"/"+totalC,"#4CC9F0"]].map(function(a){
-      return '<div style="text-align:center;flex:1;min-width:70px"><div style="font-size:18px;font-weight:700;color:'+a[2]+'">'+a[1]+'</div><div style="font-size:11px;color:#444;font-family:sans-serif">'+a[0]+'</div></div>';
+  // Level card
+  let html='<div class="level-card">'+
+    '<div class="level-header">'+
+    '<div class="level-info"><div class="level-emoji">'+level.emoji+'</div>'+
+    '<div><div class="level-name">'+level.name+'</div>'+
+    '<div class="level-next">'+(levelIdx<LEVELS.length-1?"Próximo: "+nextLevel.name+" ("+nextLevel.minXP+" XP)":"Nível máximo! 👑")+'</div></div></div>'+
+    '<div class="level-xp"><div class="level-xp-num">'+xp+'</div><div class="level-xp-label">XP total</div></div></div>'+
+    '<div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:'+pct+'%"></div></div>'+
+    '<div class="levels-row">'+
+    LEVELS.slice(0,6).map((l,i)=>{
+      const cls=i<levelIdx?"done":i===levelIdx?"active":"locked";
+      return '<div class="level-step '+cls+'"><div class="level-step-emoji">'+l.emoji+'</div><div class="level-step-label">'+l.name.split(" ")[l.name.split(" ").length-1]+'</div></div>';
     }).join("")+'</div></div>';
 
-  const filtered=currentFilter==="all"?arr:arr.filter(x=>(x.status||"todo")===currentFilter);
-  if(!arr.length){container.innerHTML=html+'<div class="empty">Nenhuma dica salva. Gere e salve para acompanhar aqui.</div>';return;}
-  if(!filtered.length){container.innerHTML=html+'<div class="empty">Nenhuma dica com este status.</div>';return;}
+  // Missions
+  html+='<div class="missions-title">Missões ativas</div>';
+  const missions=[
+    {icon:"🎯",name:"Gerar suas primeiras dicas",xp:30,done:arr.length>0||xp>=30,pct:arr.length>0?100:0,color:"#FF6B35"},
+    {icon:"💾",name:"Salvar um conjunto de dicas",xp:20,done:xp>=50,pct:xp>=50?100:0,color:"#4CC9F0"},
+    {icon:"✅",name:"Completar uma ação das dicas",xp:50,done:arr.some(a=>(a.checks||[]).some(c=>c.done)),pct:arr.some(a=>(a.checks||[]).some(c=>c.done))?100:0,color:"#00C9A7"},
+    {icon:"💬",name:"Usar o Consultor",xp:10,done:chatHistory.length>0,pct:chatHistory.length>0?100:0,color:"#845EC2"},
+    {icon:"🔥",name:"Completar todas as ações de um conjunto",xp:100,done:arr.some(a=>(a.checks||[]).length>0&&(a.checks||[]).every(c=>c.done)),pct:arr.some(a=>(a.checks||[]).length>0&&(a.checks||[]).every(c=>c.done))?100:0,color:"#F9C74F"},
+  ];
+  missions.forEach(m=>{
+    html+='<div class="mission-card '+(m.done?"done":"")+'">'+
+      '<div class="mission-icon">'+m.icon+'</div>'+
+      '<div class="mission-info"><div class="mission-name">'+m.name+'</div>'+
+      '<div class="mission-bar"><div class="mission-bar-fill" style="width:'+m.pct+'%;background:'+m.color+'"></div></div></div>'+
+      '<div class="mission-xp"><div class="mission-xp-val" style="color:'+(m.done?"#00C9A7":m.color)+'">+'+(m.done?"✓ Feito":""+m.xp+" XP")+'</div>'+
+      '<div class="mission-xp-pct">'+(m.done?"Feito!":m.pct+'%')+'</div></div></div>';
+  });
 
-  html+=filtered.map(function(item){
-    const ri=arr.indexOf(item);
-    const checks=item.checks||[];
-    const dc=checks.filter(c=>c.done).length;
-    const pct=checks.length?Math.round(dc/checks.length*100):0;
-    const sc=item.status||"todo";
-    const sl={todo:"⚪ Pendente",doing:"🟡 Em andamento",done:"🟢 Concluída"}[sc];
-    const bc={todo:"#555",doing:"#F9C74F",done:"#00C9A7"}[sc];
-    const cl=checks.map(function(c,ci){
-      return '<div class="check-item" onclick="toggleCheck('+ri+','+ci+')">'+
-        '<div class="check-box '+(c.done?"checked":"")+'>'+(c.done?"✓":"")+"</div>"+
-        '<span class="check-label '+(c.done?"done":"")+'">'+c.label+"</span></div>";
-    }).join("");
-    return '<div class="progress-card">'+
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'+
-      '<div><div class="saved-meta" style="margin:0">'+item.meta+'</div><div class="saved-date">'+(item.date||"")+"</div></div>"+
-      '<div style="text-align:right"><div style="font-size:22px;font-weight:700;color:#FF6B35">'+pct+'%</div><span class="track-badge '+sc+(sc==="done"?"-b":"")+'">'+sl+"</span></div></div>"+
-      '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+pct+"%;background:"+bc+'"></div></div>'+
-      (checks.length?'<div class="checklist">'+cl+"</div>":"")+
-      '<div class="track-btns">'+
-      '<button class="track-btn" onclick="setTrackStatus('+ri+',\"todo\")">⚪ Pendente</button>'+
-      '<button class="track-btn" onclick="setTrackStatus('+ri+',\"doing\")">🟡 Em andamento</button>'+
-      '<button class="track-btn" onclick="setTrackStatus('+ri+',\"done\")">🟢 Concluída</button>'+
-      "</div></div>";
-  }).join("");
+  // Dicas salvas com checklist
+  if(arr.length>0){
+    html+='<div class="missions-title" style="margin-top:24px">Suas dicas — marque o que executou</div>';
+    arr.forEach((item,ii)=>{
+      const checks=item.checks||[];
+      const dc=checks.filter(c=>c.done).length;
+      const ppct=checks.length?Math.round(dc/checks.length*100):0;
+      const sc=item.status||"todo";
+      const bcol={todo:"#555",doing:"#F9C74F",done:"#00C9A7"}[sc];
+      html+='<div class="mission-card" style="flex-direction:column;align-items:flex-start;gap:10px;border-left:3px solid '+bcol+'">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:6px">'+
+        '<div style="font-size:12px;color:#555;font-family:sans-serif">'+item.meta+'</div>'+
+        '<div style="font-size:18px;font-weight:700;color:#FF6B35">'+ppct+'%</div></div>'+
+        '<div class="xp-bar-wrap" style="width:100%;margin-bottom:4px"><div class="xp-bar-fill" style="width:'+ppct+'%;background:'+bcol+'"></div></div>'+
+        checks.map((c,ci)=>'<div style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:6px 8px;border-radius:8px;width:100%;transition:background .15s" onclick="toggleCheck('+ii+','+ci+')" onmouseover="this.style.background=\'rgba(255,255,255,0.04)\'" onmouseout="this.style.background=\'transparent\'">'+
+          '<div style="width:20px;height:20px;min-width:20px;border-radius:6px;border:2px solid '+(c.done?"#00C9A7":"rgba(255,255,255,0.2)")+';background:'+(c.done?"#00C9A7":"transparent")+';display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;color:#000;margin-top:1px">'+(c.done?"✓":"")+'</div>'+
+          '<span style="font-size:13px;color:'+(c.done?"#444":"#bbb")+'";font-family:sans-serif;line-height:1.5;'+(c.done?"text-decoration:line-through":"")+'">'+c.label+'</span>'+
+          '<span style="font-size:11px;color:#F9C74F;margin-left:auto;white-space:nowrap;font-family:sans-serif">+50 XP</span>'+
+        '</div>').join("")+
+      '</div>';
+    });
+  }
+
+  // Conquistas
+  const achievements=getAchievements();
+  const allAchievements=[
+    {id:"primeira_dica",emoji:"🎯",label:"1ª Dica"},
+    {id:"bronze",emoji:"🥉",label:"Bronze"},
+    {id:"prata",emoji:"🥈",label:"Prata"},
+    {id:"ouro",emoji:"🥇",label:"Ouro"},
+    {id:"consultor",emoji:"💬",label:"Consultou"},
+    {id:"diamante",emoji:"💎",label:"Diamante"},
+    {id:"mestre",emoji:"👑",label:"Mestre"},
+  ];
+  html+='<div class="achievements-title">Conquistas</div><div class="achievements-grid">';
+  allAchievements.forEach(a=>{
+    const unlocked=achievements.includes(a.id);
+    html+='<div class="achievement '+(unlocked?"unlocked":"locked")+'"><div class="achievement-emoji">'+a.emoji+'</div><div class="achievement-label">'+a.label+'</div></div>';
+  });
+  html+='</div>';
   container.innerHTML=html;
 }
+
 function toggleCheck(ii,ci){
   const arr=getUserSaved();if(!arr[ii]?.checks)return;
-  const wasUndone=!arr[ii].checks[ci].done;
-  arr[ii].checks[ci].done=!arr[ii].checks[ci].done;
+  const wasDone=arr[ii].checks[ci].done;
+  arr[ii].checks[ci].done=!wasDone;
   const all=arr[ii].checks.every(c=>c.done),any=arr[ii].checks.some(c=>c.done);
   arr[ii].status=all?"done":any?"doing":"todo";
-  setUserSaved(arr);renderTrack();updateSavedBtn();
-  if(wasUndone) notifyOwner("concluiu", arr[ii].checks[ci].label);
+  setUserSaved(arr);
+  if(!wasDone){
+    addXP(50,"Ação concluída! 🎯");
+    notifyOwner("concluiu",arr[ii].checks[ci].label);
+    if(all)addXP(100,"Bônus! Todas as ações completas! 🔥");
+  }
+  renderTrack();updateSavedBtn();
 }
-function setTrackStatus(i,s){const arr=getUserSaved();arr[i].status=s;setUserSaved(arr);renderTrack();updateSavedBtn();}
+
+// ── CONSULTOR ─────────────────────────────────────────────────────────────
+function initConsult(){
+  if(state.nicho){
+    document.getElementById("consult-nicho-label").textContent="Especialista em "+state.nicho+(state.city?" · "+state.city:"")+" · Online";
+  }
+  // Chips das dicas
+  const chipsEl=document.getElementById("dica-chips");
+  chipsEl.innerHTML="";
+  if(state.dicasData.length>0){
+    state.dicasData.forEach((d,i)=>{
+      const btn=document.createElement("button");
+      btn.className="dica-chip";
+      btn.textContent=(i+1)+". "+d.titulo.substring(0,35)+(d.titulo.length>35?"...":"");
+      btn.onclick=()=>{
+        document.querySelectorAll(".dica-chip").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("chat-input").value="Me ajude a aplicar a dica '"+d.titulo+"' no meu negócio de "+state.nicho;
+        sendChat();
+      };
+      chipsEl.appendChild(btn);
+    });
+  }
+  if(!consultInited&&chatHistory.length===0){
+    const greeting=state.nicho?
+      "Olá! Sou seu consultor especializado em "+state.nicho+(state.city?" na região de "+state.city:"")+". Tenho o contexto completo das suas dicas. Clique em uma delas acima para aprofundar, ou me faça qualquer pergunta sobre vendas!":
+      "Olá! Sou seu consultor de vendas. Gere suas dicas primeiro para que eu possa te ajudar com contexto personalizado. O que posso responder por enquanto?";
+    addAIMessage(greeting);
+    consultInited=true;
+  }
+}
+
+function addUserMessage(text){
+  chatHistory.push({role:"user",content:text});
+  const el=document.createElement("div");el.className="chat-msg-user";
+  el.innerHTML='<div class="chat-bubble-user">'+text+'</div>';
+  document.getElementById("chat-messages").appendChild(el);scrollChat();
+  document.getElementById("chat-suggest").style.display="none";
+}
+function addAIMessage(text){
+  chatHistory.push({role:"assistant",content:text});
+  const el=document.createElement("div");el.className="chat-msg-ai";
+  el.innerHTML='<div class="chat-avatar">⚡</div><div class="chat-bubble-ai">'+text+'</div>';
+  document.getElementById("chat-messages").appendChild(el);scrollChat();
+}
+function showTyping(){
+  const el=document.createElement("div");el.className="chat-msg-ai";el.id="typing-indicator";
+  el.innerHTML='<div class="chat-avatar">⚡</div><div class="chat-bubble-ai" style="display:flex;gap:5px;align-items:center;padding:14px 15px"><div class="chat-dot"></div><div class="chat-dot"></div><div class="chat-dot"></div></div>';
+  document.getElementById("chat-messages").appendChild(el);scrollChat();
+}
+function removeTyping(){const el=document.getElementById("typing-indicator");if(el)el.remove();}
+function scrollChat(){const msgs=document.getElementById("chat-messages");if(msgs)msgs.scrollTop=msgs.scrollHeight;}
+function sendSuggestion(btn){document.getElementById("chat-input").value=btn.textContent;sendChat();}
+
+async function sendChat(){
+  const input=document.getElementById("chat-input");
+  const text=input.value.trim();
+  if(!text)return;
+  input.value="";input.style.height="auto";
+  document.getElementById("chat-send-btn").disabled=true;
+  addUserMessage(text);
+  notifyOwner("chat",text);
+  showTyping();
+  addXP(5,"Consultou a IA!");
+  if(unlockAchievement("consultor")){}
+  try{
+    const res=await fetch("/api/consult",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({messages:chatHistory.filter(m=>m.role==="user"||m.role==="assistant"),nicho:state.nicho||"negócios",city:state.city||"",userName:currentUser?.name||"visitante"})});
+    const data=await res.json();
+    removeTyping();addAIMessage(data.text||"Erro ao responder. Tente novamente.");
+  }catch(e){removeTyping();addAIMessage("Erro de conexão. Verifique sua internet.");}
+  document.getElementById("chat-send-btn").disabled=false;
+}
+
+document.getElementById("chat-input")?.addEventListener("input",function(){this.style.height="auto";this.style.height=Math.min(this.scrollHeight,120)+"px";});
+document.getElementById("chat-input")?.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}});
 
 // ── EXPORT ────────────────────────────────────────────────────────────────
 function exportPDF(){if(!state.currentText)return;generatePDF(state.currentText,state.currentMeta);}
@@ -1219,102 +1256,6 @@ function shareWhatsApp(){
 }
 
 document.getElementById("auth-modal").addEventListener("click",function(e){if(e.target===this)closeAuth();});
-
-// ── CONSULTOR CHAT ────────────────────────────────────────────────────────
-let chatHistory=[];
-let consultInited=false;
-
-function initConsult(){
-  if(!state.nicho) return;
-  const sub=document.getElementById("consult-sub");
-  if(sub) sub.textContent="Especialista em "+state.nicho+(state.city?" · "+state.city:"");
-  if(!consultInited && chatHistory.length===0){
-    addAIMessage("Olá! Sou seu consultor especializado em "+state.nicho+". Pode perguntar sobre qualquer estratégia, dica ou desafio de vendas do seu negócio. O que quer aprofundar?");
-    consultInited=true;
-  }
-}
-
-function addUserMessage(text){
-  chatHistory.push({role:"user",content:text});
-  const el=document.createElement("div");
-  el.className="chat-msg-user";
-  el.innerHTML='<div class="chat-bubble-user">'+text+'</div>';
-  document.getElementById("chat-messages").appendChild(el);
-  scrollChat();
-  document.getElementById("chat-suggest").classList.add("hidden");
-}
-
-function addAIMessage(text){
-  chatHistory.push({role:"assistant",content:text});
-  const el=document.createElement("div");
-  el.className="chat-msg-ai";
-  el.innerHTML='<div class="chat-avatar">⚡</div><div class="chat-bubble-ai">'+text+'</div>';
-  document.getElementById("chat-messages").appendChild(el);
-  scrollChat();
-}
-
-function showTyping(){
-  const el=document.createElement("div");
-  el.className="chat-msg-ai";el.id="typing-indicator";
-  el.innerHTML='<div class="chat-avatar">⚡</div><div class="chat-typing"><div class="chat-dot"></div><div class="chat-dot"></div><div class="chat-dot"></div></div>';
-  document.getElementById("chat-messages").appendChild(el);
-  scrollChat();
-}
-
-function removeTyping(){
-  const el=document.getElementById("typing-indicator");
-  if(el) el.remove();
-}
-
-function scrollChat(){
-  const msgs=document.getElementById("chat-messages");
-  if(msgs) msgs.scrollTop=msgs.scrollHeight;
-}
-
-function sendSuggestion(btn){
-  document.getElementById("chat-input").value=btn.textContent;
-  sendChat();
-}
-
-async function sendChat(){
-  const input=document.getElementById("chat-input");
-  const text=input.value.trim();
-  if(!text) return;
-  input.value="";
-  input.style.height="auto";
-  document.getElementById("chat-send-btn").disabled=true;
-
-  addUserMessage(text);
-  notifyOwner("chat", text);
-  showTyping();
-
-  try{
-    const res=await fetch("/api/consult",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        messages:chatHistory.filter(m=>m.role==="user"||m.role==="assistant"),
-        nicho:state.nicho||"negócios",
-        city:state.city||"",
-        userName:currentUser?.name||"visitante"
-      })
-    });
-    const data=await res.json();
-    removeTyping();
-    addAIMessage(data.text||"Erro ao responder. Tente novamente.");
-  }catch(e){
-    removeTyping();
-    addAIMessage("Erro de conexão. Verifique sua internet.");
-  }
-  document.getElementById("chat-send-btn").disabled=false;
-}
-
-// Auto-resize textarea
-document.getElementById("chat-input")?.addEventListener("input",function(){
-  this.style.height="auto";
-  this.style.height=Math.min(this.scrollHeight,120)+"px";
-});
-document.getElementById("chat-input")?.addEventListener("keydown",function(e){
-  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}
-});
 </script>
 </body>
 </html>
