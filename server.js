@@ -260,36 +260,100 @@ app.post("/api/consult", async (req, res) => {
 - Modelo de venda: ${profile?.model||"?"}
 - Principais desafios: ${profile?.challenges||"?"}`;
 
-  // Busca dados do mercado local
-  let marketData = "";
-  try {
-    const mktRes = await callAI([{role:"user",content:`Mercado de "${nicho}" em "${city||"Brasil"}": cite 2-3 concorrentes típicos, 1 tendência atual e 1 dado real do setor. Máximo 4 linhas.`}], "", 250);
-    marketData = mktRes.content?.map(b=>b.text||"").join("")||"";
-  } catch(e) {}
-
   const sys = `Você é um consultor especialista em vendas para o segmento "${nicho||"negócios"}" ${city?"na cidade de "+city:"no Brasil"}.
 
 ${businessContext}
 
-DADOS DO MERCADO LOCAL:
-${marketData||"Use seu conhecimento do mercado brasileiro."}
+VOCÊ TEM ACESSO A DADOS EM TEMPO REAL via web_search. USE SEMPRE que o cliente perguntar sobre:
+- Concorrentes locais ou regionais
+- Preços de mercado atuais
+- Tendências do setor
+- Dados de empresas específicas
+- Qualquer informação que mude com o tempo
 
-REGRAS:
+REGRAS DE ATENDIMENTO:
 - Trate SEMPRE pelo primeiro nome: ${firstName}
 - ${empresa?`Referencie a empresa "${empresa}" quando relevante`:""}
 - Respostas diretas e práticas (máximo 4 parágrafos)
-- Cite concorrentes reais do setor ${nicho||""} na região ${city||""}
-- Use dados reais do mercado local
-- Linguagem de mentor experiente, nunca de robô
-- Se pergunta vaga, peça exemplo concreto
-- Nunca genérico — sempre específico para ${nicho||"o negócio"} em ${city||"Brasil"}`;
+- SEMPRE sugira um vídeo relevante ao final quando possível, no formato: 🎬 **Vídeo recomendado:** [título] — busque no YouTube: "[query de busca]"
+- Quando a resposta for extensa ou um relatório, ofereça: "📄 Posso gerar um PDF com este relatório completo — quer que eu prepare?"
+- Use linguagem de mentor experiente, nunca de robô
+- Cite dados reais encontrados na pesquisa
+- Nunca diga que não tem acesso a dados — USE a ferramenta de busca`;
 
   try {
-    const data = await callAI(messages, sys, 800);
-    const text = data.content?.map(b => b.text || "").join("") || "";
-    if (userName) notifyWhatsApp(`💬 ${firstName} está no chat!\nEmpresa: ${empresa||"?"}\nNicho: ${nicho||"?"}\nPergunta: "${(messages[messages.length-1]?.content||"").substring(0,80)}"`);
+    // Call Claude with web search tool enabled
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1200,
+        system: sys,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: messages,
+      }),
+    });
+    const data = await r.json();
+
+    // Extract text from all content blocks (including after tool use)
+    let text = "";
+    let searchUsed = false;
+    if (data.content) {
+      for (const block of data.content) {
+        if (block.type === "text") text += block.text;
+        if (block.type === "tool_use" && block.name === "web_search") searchUsed = true;
+      }
+    }
+
+    // If tool was used but response is incomplete, do a follow-up
+    if (searchUsed && !text) {
+      const followUp = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1200,
+          system: sys,
+          tools: [{ type: "web_search_20250305", name: "web_search" }],
+          messages: [...messages, { role: "assistant", content: data.content }],
+        }),
+      });
+      const followData = await followUp.json();
+      if (followData.content) {
+        for (const block of followData.content) {
+          if (block.type === "text") text += block.text;
+        }
+      }
+    }
+
+    if (!text) text = "Erro ao processar resposta. Tente novamente.";
+
+    // Notify owner
+    const lastMsg = messages[messages.length-1]?.content||"";
+    if (userName) notifyWhatsApp(`💬 ${firstName} está no chat!\nEmpresa: ${empresa||"?"}\nNicho: ${nicho||"?"}\nPergunta: "${lastMsg.substring(0,80)}"${searchUsed?" 🔍 (pesquisa web)":""}`).catch(()=>{});
+
+    res.json({ text, searchUsed });
+  } catch (err) {
+    console.error("Consult error:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GERAR PDF DO CONSULTOR ────────────────────────────────────────────────
+app.post("/api/consult-pdf", async (req, res) => {
+  if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
+  const { content, userName, empresa, nicho, city } = req.body;
+
+  const prompt = `Formate o seguinte conteúdo como um relatório executivo profissional em texto corrido, bem estruturado com seções claras, pronto para ser exportado como PDF. Inclua um título, data e contexto da empresa. Conteúdo: ${content}`;
+
+  try {
+    const data = await callAI([{ role: "user", content: prompt }], "", 1500);
+    const text = data.content?.map(b => b.text || "").join("") || content;
     res.json({ text });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    res.json({ text: content });
+  }
 });
 
 
