@@ -456,19 +456,28 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
 
 <!-- SAVED -->
 <div id="view-saved" class="page hidden">
-  <h2 class="page-title">Dicas Salvas</h2>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+    <h2 class="page-title" style="margin-bottom:0">Dicas Salvas</h2>
+    <button id="back-to-result-saved" onclick="showView('result')" class="hidden" style="background:transparent;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:sans-serif;">← Voltar às dicas</button>
+  </div>
   <div id="saved-container"></div>
 </div>
 
 <!-- PROGRESSO GAMIFICADO -->
 <div id="view-track" class="page hidden">
-  <h2 class="page-title">Meu Progresso</h2>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:10px">
+    <h2 class="page-title" style="margin-bottom:0">Meu Progresso</h2>
+    <button id="back-to-result-track" onclick="showView('result')" class="hidden" style="background:transparent;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:sans-serif;">← Voltar às dicas</button>
+  </div>
   <p class="page-sub">Execute as dicas, ganhe XP e evolua de nível.</p>
   <div id="track-container"></div>
 </div>
 
 <!-- CONSULTOR -->
 <div id="view-consult" class="page hidden">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+    <button id="back-to-result-consult" onclick="showView('result')" class="hidden" style="background:transparent;border:1px solid rgba(255,107,53,0.35);color:#FF6B35;border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:sans-serif;">← Voltar às dicas</button>
+  </div>
   <div class="consult-header-bar">
     <div class="consult-avatar-lg">⚡</div>
     <div style="flex:1">
@@ -932,6 +941,10 @@ Gere exatamente 3 dicas estratégicas profundas e específicas para "${state.nic
     document.getElementById("btn-track-nav").classList.remove("hidden");
     document.getElementById("btn-saved-nav").classList.remove("hidden");
     document.getElementById("xp-chip").style.display="flex";
+    // Mostra botão voltar nas outras telas
+    ["back-to-result-saved","back-to-result-track","back-to-result-consult"].forEach(id=>{
+      const el=document.getElementById(id);if(el)el.classList.remove("hidden");
+    });
 
     // XP por gerar dicas
     addXP(30,"Dicas geradas!");
