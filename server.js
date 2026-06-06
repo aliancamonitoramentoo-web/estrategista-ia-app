@@ -130,7 +130,17 @@ async function searchYouTube(query, maxResults = 3) {
     }
 
     // Filtra músicas e entretenimento
-    const blocked = ["música","music","song","letra","lyric","clipe","mc ","funk","sertanejo","pagode","gospel","novela","série","filme","trailer","gameplay","minecraft","roblox","shorts"];
+    const blocked = [
+      // Música e entretenimento
+      "música","music","song","letra","lyric","clipe","mc ","funk","sertanejo","pagode","gospel",
+      "novela","série","filme","trailer","gameplay","minecraft","roblox","shorts","cover",
+      // Conteúdo médico clínico (não é de vendas)
+      "caso clínico","relato de caso","cirurgia","procedimento","anatomia","diagnóstico",
+      "patologia","histologia","biópsia","laparoscopia","endoscopia","radiologia",
+      "ependimoma","holocorde","glioma","tumor","câncer","cancer","oncologia",
+      // Outros irrelevantes
+      "receita","culinária","viagem","moda","beleza tutorial","maquiagem tutorial"
+    ];
     
     return data.items
       .filter(item => {
@@ -168,12 +178,12 @@ app.post("/api/videos", async (req, res) => {
 
       // Monta queries específicas para cada papel do vídeo
       const queries = [
-        // Principal: direto ao tema da dica + nicho
-        `${dica.tema} ${sectorLabel} como fazer vendas`,
-        // Complementar 1: técnica relacionada
-        `técnica ${dica.tema} vendas empreendedorismo Brasil`,
-        // Complementar 2: case ou mentalidade
-        `case sucesso ${sectorLabel} vendas empreendedor Brasil`,
+        // Principal: direto ao tema da dica + nicho + vendas
+        `como vender ${sectorLabel} ${dica.tema} estratégia`,
+        // Complementar 1: técnica de vendas relacionada
+        `técnica vendas ${dica.tema} empreendedorismo negócios Brasil`,
+        // Complementar 2: case de sucesso empresarial
+        `empreendedor ${sectorLabel} case sucesso negócios crescimento`,
       ];
 
       const usedIds = new Set();
@@ -237,15 +247,38 @@ async function notifyWhatsApp(msg) {
 // ── CHAT DO CONSULTOR ─────────────────────────────────────────────────────
 app.post("/api/consult", async (req, res) => {
   if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
-  const { messages, nicho, city, userName } = req.body;
+  const { messages, nicho, city, userName, profile } = req.body;
+
+  // Pega primeiro nome
+  const firstName = (userName||"").split(" ")[0] || "amigo";
+
+  // Busca dados do negócio na internet via web search
+  const businessContext = profile ? `
+PERFIL DO CLIENTE:
+- Nome: ${firstName}
+- Nicho: ${nicho||"?"}
+- Cidade: ${city||"Brasil"}
+- Porte: ${profile.size||"?"}
+- Ticket médio: ${profile.ticket||"?"}
+- Modelo de venda: ${profile.model||"?"}
+- Desafios: ${profile.challenges||"?"}
+` : `- Nome: ${firstName}
+- Nicho: ${nicho||"?"}
+- Cidade: ${city||"Brasil"}`;
 
   const sys = `Você é um consultor especialista em vendas para o segmento "${nicho||"negócios"}" ${city?"na cidade de "+city:"no Brasil"}.
-Seu papel é responder dúvidas práticas de vendas de forma direta, humana e específica para esse nicho.
-- Respostas curtas e acionáveis (máximo 4 parágrafos)
-- Cite exemplos reais do setor sempre que possível
-- Use linguagem de mentor, não de robô
-- Se a pergunta for vaga, peça um exemplo concreto
-- Nunca dê conselhos genéricos`;
+
+${businessContext}
+
+REGRAS DE ATENDIMENTO:
+- Trate o cliente sempre pelo primeiro nome: ${firstName}
+- Respostas diretas e práticas (máximo 4 parágrafos)
+- Cite exemplos reais de empresas do setor ${nicho||""}
+- Considere o contexto específico da cidade ${city||""}
+- Mencione concorrentes típicos do setor quando relevante
+- Use linguagem de mentor experiente, não de robô
+- Se a pergunta for vaga, pergunte um exemplo concreto
+- Nunca dê conselhos genéricos — sempre específico para ${nicho||"o negócio"} em ${city||"Brasil"}`;
 
   try {
     const data = await callAI(messages, sys, 800);
