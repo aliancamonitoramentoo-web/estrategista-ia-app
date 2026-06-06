@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>VendaMais — Dicas de Vendas com IA</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:#09090E;color:#EDEBE6;font-family:'Georgia','Times New Roman',serif;min-height:100vh;display:flex;flex-direction:column}
@@ -1368,4 +1369,129 @@ function shareWhatsApp(){
 document.getElementById("auth-modal").addEventListener("click",function(e){if(e.target===this)closeAuth();});
 </script>
 </body>
-</html>
+</html>function addAIMessageEnhanced(data){
+  const text = data.texto || data.text || "";
+  const searchUsed = data.searchUsed || false;
+  const chart = data.chart || null;
+  const video = data.video || null;
+  const oferecer_pdf = data.oferecer_pdf || false;
+
+  chatHistory.push({role:"assistant", content: text});
+
+  const wrap = document.createElement("div");
+  wrap.style.cssText = "display:flex;gap:10px;align-items:flex-start;width:100%;margin-bottom:4px";
+
+  const avatar = document.createElement("div");
+  avatar.className = "chat-avatar";
+  avatar.textContent = "⚡";
+
+  const inner = document.createElement("div");
+  inner.style.cssText = "flex:1;min-width:0;display:flex;flex-direction:column;gap:8px";
+
+  // Badge tempo real
+  if(searchUsed){
+    const badge = document.createElement("div");
+    badge.className = "chat-search-badge";
+    badge.innerHTML = "🔍 Dados em tempo real";
+    inner.appendChild(badge);
+  }
+
+  // Texto principal
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble-ai";
+  bubble.style.cssText = "border-radius:0 16px 16px 16px;max-width:100%";
+  bubble.textContent = text;
+  inner.appendChild(bubble);
+
+  // Gráfico inline
+  if(chart && chart.labels && chart.valores && chart.tipo !== null){
+    const chartWrap = document.createElement("div");
+    chartWrap.style.cssText = "background:var(--color-background-primary);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px";
+    const chartTitle = document.createElement("div");
+    chartTitle.style.cssText = "font-size:11px;color:#555;font-family:sans-serif;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px";
+    chartTitle.textContent = chart.titulo || "Análise do mercado";
+    const chartId = "chart-" + Date.now();
+    const canvasWrap = document.createElement("div");
+    canvasWrap.style.cssText = "position:relative;width:100%;height:180px";
+    const canvas = document.createElement("canvas");
+    canvas.id = chartId;
+    canvas.setAttribute("role","img");
+    canvas.setAttribute("aria-label", chart.titulo || "Gráfico de análise");
+    canvasWrap.appendChild(canvas);
+    chartWrap.appendChild(chartTitle);
+    chartWrap.appendChild(canvasWrap);
+    inner.appendChild(chartWrap);
+
+    // Render chart after DOM insert
+    setTimeout(()=>{
+      const ctx = document.getElementById(chartId);
+      if(!ctx) return;
+      const tipo = chart.tipo === "pizza" ? "pie" : (chart.tipo || "bar");
+      new Chart(ctx, {
+        type: tipo,
+        data: {
+          labels: chart.labels,
+          datasets:[{
+            label: chart.titulo || "",
+            data: chart.valores,
+            backgroundColor: tipo === "line"
+              ? "rgba(255,107,53,0.1)"
+              : chart.labels.map((_,i)=> i===chart.valores.indexOf(Math.max(...chart.valores))?"#FF6B35":"rgba(255,107,53,0.4)"),
+            borderColor: "#FF6B35",
+            borderWidth: tipo === "line" ? 2 : 0,
+            fill: tipo === "line",
+            tension: 0.4,
+            borderRadius: tipo === "bar" ? 4 : 0,
+          }]
+        },
+        options:{
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins:{
+            legend:{ display: tipo === "pie" },
+          },
+          scales: tipo !== "pie" ? {
+            y:{ grid:{ color:"rgba(255,255,255,0.05)" }, ticks:{ color:"#555", font:{size:10} } },
+            x:{ grid:{ display:false }, ticks:{ color:"#555", font:{size:10} } }
+          } : {}
+        }
+      });
+    }, 100);
+  }
+
+  // Vídeo com thumbnail clicável
+  if(video && video.id){
+    const videoLink = document.createElement("a");
+    videoLink.href = "https://youtube.com/watch?v=" + video.id;
+    videoLink.target = "_blank";
+    videoLink.className = "video-pill";
+    videoLink.style.cssText = "display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;text-decoration:none;transition:all .2s";
+    videoLink.innerHTML =
+      '<div class="video-pill-thumb" style="width:72px;height:48px;border-radius:6px;overflow:hidden;flex-shrink:0;position:relative;background:#111">' +
+        '<img src="https://img.youtube.com/vi/'+video.id+'/mqdefault.jpg" style="width:100%;height:100%;object-fit:cover" loading="lazy"/>' +
+        '<div class="video-pill-play" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3)">' +
+          '<span style="width:26px;height:26px;background:#FF6B35;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#000">▶</span>' +
+        '</div></div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-size:10px;color:#FF6B35;font-family:sans-serif;margin-bottom:3px">🎬 VÍDEO RECOMENDADO</div>' +
+        '<div style="font-size:12px;color:#ccc;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(video.titulo||"Vídeo relacionado")+'</div>' +
+        '<div style="font-size:11px;color:#555;font-family:sans-serif;margin-top:2px">'+(video.canal||"")+' · Abre no YouTube ↗</div>' +
+      '</div>';
+    inner.appendChild(videoLink);
+  }
+
+  // Botão PDF
+  if(oferecer_pdf || text.length > 500){
+    lastAIResponse = text;
+    const pdfBtn = document.createElement("button");
+    pdfBtn.className = "chat-pdf-btn";
+    pdfBtn.innerHTML = "📄 Gerar PDF deste relatório";
+    pdfBtn.onclick = generateConsultPDF;
+    inner.appendChild(pdfBtn);
+  }
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(inner);
+  document.getElementById("chat-messages").appendChild(wrap);
+  scrollChat();
+}
