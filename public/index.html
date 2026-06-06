@@ -311,6 +311,7 @@ footer{text-align:center;padding:18px;color:#222;font-size:12px;font-family:sans
       <div class="gate-form-title">Acesso 100% gratuito</div>
       <div id="gate-error" class="gate-error"></div>
       <input class="gate-input" id="gate-name" type="text" placeholder="Seu nome completo" autocomplete="name"/>
+      <input class="gate-input" id="gate-empresa" type="text" placeholder="Nome da sua empresa (ex: Padaria do João)" autocomplete="organization"/>
       <input class="gate-input" id="gate-phone" type="tel" placeholder="WhatsApp: (81) 99999-9999" autocomplete="tel"/>
       <input class="gate-input" id="gate-email" type="email" placeholder="Seu melhor e-mail" autocomplete="email"/>
       <button class="gate-btn" onclick="submitGate()">Quero minhas dicas gratuitas →</button>
@@ -676,6 +677,7 @@ function updateUserUI(){
 
 function submitGate(){
   const name=document.getElementById("gate-name").value.trim();
+  const empresa=document.getElementById("gate-empresa").value.trim();
   const phone=document.getElementById("gate-phone").value.trim();
   const email=document.getElementById("gate-email").value.trim();
   const errEl=document.getElementById("gate-error");
@@ -684,13 +686,14 @@ function submitGate(){
   if(!email||!email.includes("@")){errEl.textContent="Informe um e-mail válido.";errEl.style.display="block";return;}
   errEl.style.display="none";
   const leads=JSON.parse(localStorage.getItem("vm_leads")||"[]");
-  leads.push({name,phone,email,date:new Date().toISOString()});
+  leads.push({name,empresa,phone,email,date:new Date().toISOString()});
   localStorage.setItem("vm_leads",JSON.stringify(leads));
   const users=getUsers();
-  if(!users[email]){users[email]={name,phone,saved:[]};saveUsers(users);}
-  currentUser={email,name};
+  if(!users[email]){users[email]={name,empresa,phone,saved:[]};saveUsers(users);}
+  currentUser={email,name,empresa};
   localStorage.setItem("vm_user",JSON.stringify(currentUser));
-  fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,phone,email,nicho:"",city:""})}).catch(()=>{});
+  localStorage.setItem("vm_empresa",empresa);
+  fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,empresa,phone,email,nicho:"",city:""})}).catch(()=>{});
   localStorage.setItem("vm_gate_passed","1");
   document.getElementById("signup-gate").style.display="none";
   updateUserUI();
@@ -1249,10 +1252,12 @@ function initConsult(){
   }
   if(!consultInited&&chatHistory.length===0){
     const firstName=(currentUser?.name||"").split(" ")[0]||"";
+    const empresa=currentUser?.empresa||localStorage.getItem("vm_empresa")||"";
     const saudacao=firstName?"Olá, "+firstName+"!":"Olá!";
+    const nomeEmpresa=empresa?" da "+empresa:"";
     const greeting=state.nicho?
-      saudacao+" Sou seu consultor especializado em "+state.nicho+(state.city?" aqui em "+state.city:"")+". Já tenho o contexto do seu negócio e das suas dicas. Clique em uma delas acima para aprofundar, ou me pergunte qualquer coisa sobre vendas!":
-      saudacao+" Sou seu consultor de vendas. Gere suas dicas primeiro para que eu possa te ajudar com contexto personalizado do seu negócio!";
+      saudacao+" Sou seu consultor especializado em "+state.nicho+(state.city?" aqui em "+state.city:"")+nomeEmpresa+". Tenho o contexto completo do seu negócio e já estou pesquisando o mercado da sua região. Clique em uma das dicas acima para aprofundar, ou me pergunte qualquer coisa sobre vendas!":
+      saudacao+" Sou seu consultor de vendas"+(empresa?" da "+empresa:"")+". Gere suas dicas primeiro para que eu possa te ajudar com contexto personalizado!";
     addAIMessage(greeting);
     consultInited=true;
   }
@@ -1293,12 +1298,14 @@ async function sendChat(){
   if(unlockAchievement("consultor")){}
   try{
     const sz=SIZES.find(x=>x.id===state.size),mo=MODELS.find(x=>x.id===state.model),ti=TICKETS.find(x=>x.id===state.ticket);
+    const empresa=currentUser?.empresa||localStorage.getItem("vm_empresa")||"";
     const res=await fetch("/api/consult",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         messages:chatHistory.filter(m=>m.role==="user"||m.role==="assistant"),
         nicho:state.nicho||"negócios",
         city:state.city||"",
         userName:currentUser?.name||"visitante",
+        empresa:empresa,
         profile:{
           size:sz?.label||"",
           ticket:ti?.label||"",
