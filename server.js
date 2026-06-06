@@ -260,35 +260,48 @@ app.post("/api/consult", async (req, res) => {
 - Modelo de venda: ${profile?.model||"?"}
 - Principais desafios: ${profile?.challenges||"?"}`;
 
-  const sys = `Você é um consultor especialista em vendas para o segmento "${nicho||"negócios"}" ${city?"na cidade de "+city:"no Brasil"}.
+  const sys = `Você é um consultor especialista em vendas para "${nicho||"negócios"}" ${city?"em "+city:"no Brasil"}.
 
 ${businessContext}
 
-VOCÊ TEM ACESSO A DADOS EM TEMPO REAL via web_search. USE SEMPRE que o cliente perguntar sobre:
-- Concorrentes locais ou regionais
-- Preços de mercado atuais
-- Tendências do setor
-- Dados de empresas específicas
-- Qualquer informação que mude com o tempo
+VOCÊ TEM ACESSO A DADOS EM TEMPO REAL via web_search. USE SEMPRE para:
+- Concorrentes locais e regionais
+- Preços e tendências do mercado
+- Dados de empresas do setor
+- Qualquer informação atual
 
-REGRAS DE ATENDIMENTO:
-- Trate SEMPRE pelo primeiro nome: ${firstName}
-- ${empresa?`Referencie a empresa "${empresa}" quando relevante`:""}
-- Respostas diretas e práticas (máximo 4 parágrafos)
-- SEMPRE sugira um vídeo relevante ao final quando possível, no formato: 🎬 **Vídeo recomendado:** [título] — busque no YouTube: "[query de busca]"
-- Quando a resposta for extensa ou um relatório, ofereça: "📄 Posso gerar um PDF com este relatório completo — quer que eu prepare?"
-- Use linguagem de mentor experiente, nunca de robô
-- Cite dados reais encontrados na pesquisa
-- Nunca diga que não tem acesso a dados — USE a ferramenta de busca`;
+FORMATO DE RESPOSTA — retorne SEMPRE um JSON válido sem markdown:
+{
+  "texto": "resposta principal aqui, direta e prática, máximo 4 parágrafos",
+  "chart": {
+    "tipo": "bar" ou "line" ou "pizza" ou null,
+    "titulo": "título do gráfico",
+    "labels": ["label1","label2","label3"],
+    "valores": [10, 20, 30],
+    "cor": "#FF6B35"
+  },
+  "video": {
+    "id": "ID_YOUTUBE_11_CHARS",
+    "titulo": "título exato do vídeo",
+    "canal": "nome do canal"
+  },
+  "oferecer_pdf": true ou false
+}
+
+REGRAS:
+- Trate SEMPRE por: ${firstName}
+- chart: inclua quando houver dados numéricos (crescimento, comparativos, market share). null se não houver.
+- video: escolha um vídeo real do YouTube em português sobre o tema da resposta. ID de 11 chars que você tem certeza que existe.
+- oferecer_pdf: true quando a resposta for um relatório extenso
+- texto: nunca genérico, sempre específico para ${nicho} em ${city||"Brasil"}`;
 
   try {
-    // Call Claude with web search tool enabled
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1200,
+        max_tokens: 1400,
         system: sys,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: messages,
@@ -296,49 +309,83 @@ REGRAS DE ATENDIMENTO:
     });
     const data = await r.json();
 
-    // Extract text from all content blocks (including after tool use)
-    let text = "";
+    let rawText = "";
     let searchUsed = false;
+    let toolResults = [];
+
     if (data.content) {
       for (const block of data.content) {
-        if (block.type === "text") text += block.text;
-        if (block.type === "tool_use" && block.name === "web_search") searchUsed = true;
+        if (block.type === "text") rawText += block.text;
+        if (block.type === "tool_use") { searchUsed = true; toolResults.push(block); }
       }
     }
 
-    // If tool was used but response is incomplete, do a follow-up
-    if (searchUsed && !text) {
-      const followUp = await fetch("https://api.anthropic.com/v1/messages", {
+    // If search was used, get final response
+    if (searchUsed) {
+      const followMsgs = [...messages, { role: "assistant", content: data.content }];
+      
+      // Add tool results
+      if (toolResults.length > 0) {
+        followMsgs.push({
+          role: "user",
+          content: toolResults.map(t => ({
+            type: "tool_result",
+            tool_use_id: t.id,
+            content: "Resultados da busca processados. Agora forneça a resposta JSON completa com os dados encontrados."
+          }))
+        });
+      }
+
+      const follow = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
-          max_tokens: 1200,
+          max_tokens: 1400,
           system: sys,
           tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages: [...messages, { role: "assistant", content: data.content }],
+          messages: followMsgs,
         }),
       });
-      const followData = await followUp.json();
+      const followData = await follow.json();
       if (followData.content) {
+        rawText = "";
         for (const block of followData.content) {
-          if (block.type === "text") text += block.text;
+          if (block.type === "text") rawText += block.text;
         }
       }
     }
 
-    if (!text) text = "Erro ao processar resposta. Tente novamente.";
+    // Parse JSON response
+    let parsed = null;
+    try {
+      const clean = rawText.replace(/```json/g,"").replace(/```/g,"").trim();
+      parsed = JSON.parse(clean);
+    } catch(e) {
+      // Fallback: treat as plain text
+      parsed = { texto: rawText, chart: null, video: null, oferecer_pdf: false };
+    }
 
-    // Notify owner
-    const lastMsg = messages[messages.length-1]?.content||"";
-    if (userName) notifyWhatsApp(`💬 ${firstName} está no chat!\nEmpresa: ${empresa||"?"}\nNicho: ${nicho||"?"}\nPergunta: "${lastMsg.substring(0,80)}"${searchUsed?" 🔍 (pesquisa web)":""}`).catch(()=>{});
+    // Validate video ID exists
+    if (parsed.video?.id) {
+      try {
+        const vr = await fetch(`https://img.youtube.com/vi/${parsed.video.id}/mqdefault.jpg`, { method: "HEAD" });
+        const len = vr.headers.get("content-length");
+        if (!vr.ok || (len && parseInt(len) < 3000)) parsed.video = null;
+      } catch { parsed.video = null; }
+    }
 
-    res.json({ text, searchUsed });
+    const lastMsg = messages[messages.length-1]?.content || "";
+    notifyWhatsApp(`💬 ${firstName} está no chat!\nEmpresa: ${empresa||"?"}\nNicho: ${nicho||"?"}\nPergunta: "${lastMsg.substring(0,80)}"${searchUsed?" 🔍":""}`)
+      .catch(()=>{});
+
+    res.json({ ...parsed, searchUsed });
   } catch (err) {
     console.error("Consult error:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // ── GERAR PDF DO CONSULTOR ────────────────────────────────────────────────
 app.post("/api/consult-pdf", async (req, res) => {
