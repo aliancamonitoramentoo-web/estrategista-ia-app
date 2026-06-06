@@ -70,14 +70,14 @@ async function appendToSheet(row) {
 
 // ── SALVAR LEAD ───────────────────────────────────────────────────────────
 app.post("/api/lead", async (req, res) => {
-  const { name, phone, email, nicho, city } = req.body;
+  const { name, empresa, phone, email, nicho, city } = req.body;
   if (!name || !email) return res.status(400).json({ error: "Dados incompletos." });
 
   const date = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-  await appendToSheet([date, name, phone || "", email, nicho || "", city || ""]);
+  await appendToSheet([date, name, empresa || "", phone || "", email, nicho || "", city || ""]);
 
   // Notifica dono no WhatsApp
-  notifyWhatsApp(`🆕 Novo lead VendaMais!\nNome: ${name}\nWhatsApp: ${phone||"?"}\nEmail: ${email}\nNicho: ${nicho||"?"}\nCidade: ${city||"?"}`);
+  notifyWhatsApp(`🆕 Novo lead VendaMais!\nNome: ${name}\nEmpresa: ${empresa||"?"}\nWhatsApp: ${phone||"?"}\nEmail: ${email}\nNicho: ${nicho||"?"}\nCidade: ${city||"?"}`);
 
   res.json({ ok: true });
 });
@@ -247,52 +247,51 @@ async function notifyWhatsApp(msg) {
 // ── CHAT DO CONSULTOR ─────────────────────────────────────────────────────
 app.post("/api/consult", async (req, res) => {
   if (!KEY) return res.status(500).json({ error: "ANTHROPIC_API_KEY não configurada." });
-  const { messages, nicho, city, userName, profile } = req.body;
-
-  // Pega primeiro nome
+  const { messages, nicho, city, userName, empresa, profile } = req.body;
   const firstName = (userName||"").split(" ")[0] || "amigo";
 
-  // Busca dados do negócio na internet via web search
-  const businessContext = profile ? `
-PERFIL DO CLIENTE:
+  const businessContext = `PERFIL DO CLIENTE:
 - Nome: ${firstName}
+- Empresa: ${empresa||"não informada"}
 - Nicho: ${nicho||"?"}
 - Cidade: ${city||"Brasil"}
-- Porte: ${profile.size||"?"}
-- Ticket médio: ${profile.ticket||"?"}
-- Modelo de venda: ${profile.model||"?"}
-- Desafios: ${profile.challenges||"?"}
-` : `- Nome: ${firstName}
-- Nicho: ${nicho||"?"}
-- Cidade: ${city||"Brasil"}`;
+- Porte: ${profile?.size||"?"}
+- Ticket médio: ${profile?.ticket||"?"}
+- Modelo de venda: ${profile?.model||"?"}
+- Principais desafios: ${profile?.challenges||"?"}`;
+
+  // Busca dados do mercado local
+  let marketData = "";
+  try {
+    const mktRes = await callAI([{role:"user",content:`Mercado de "${nicho}" em "${city||"Brasil"}": cite 2-3 concorrentes típicos, 1 tendência atual e 1 dado real do setor. Máximo 4 linhas.`}], "", 250);
+    marketData = mktRes.content?.map(b=>b.text||"").join("")||"";
+  } catch(e) {}
 
   const sys = `Você é um consultor especialista em vendas para o segmento "${nicho||"negócios"}" ${city?"na cidade de "+city:"no Brasil"}.
 
 ${businessContext}
 
-REGRAS DE ATENDIMENTO:
-- Trate o cliente sempre pelo primeiro nome: ${firstName}
+DADOS DO MERCADO LOCAL:
+${marketData||"Use seu conhecimento do mercado brasileiro."}
+
+REGRAS:
+- Trate SEMPRE pelo primeiro nome: ${firstName}
+- ${empresa?`Referencie a empresa "${empresa}" quando relevante`:""}
 - Respostas diretas e práticas (máximo 4 parágrafos)
-- Cite exemplos reais de empresas do setor ${nicho||""}
-- Considere o contexto específico da cidade ${city||""}
-- Mencione concorrentes típicos do setor quando relevante
-- Use linguagem de mentor experiente, não de robô
-- Se a pergunta for vaga, pergunte um exemplo concreto
-- Nunca dê conselhos genéricos — sempre específico para ${nicho||"o negócio"} em ${city||"Brasil"}`;
+- Cite concorrentes reais do setor ${nicho||""} na região ${city||""}
+- Use dados reais do mercado local
+- Linguagem de mentor experiente, nunca de robô
+- Se pergunta vaga, peça exemplo concreto
+- Nunca genérico — sempre específico para ${nicho||"o negócio"} em ${city||"Brasil"}`;
 
   try {
     const data = await callAI(messages, sys, 800);
     const text = data.content?.map(b => b.text || "").join("") || "";
-
-    // Notifica dono que cliente está ativo
-    const lastName = messages[messages.length-1]?.content || "";
-    if (userName) {
-      notifyWhatsApp(`💬 VendaMais\n${userName} (${nicho||"?"}) está no chat!\nPergunta: "${lastName.substring(0,80)}"`);
-    }
-
+    if (userName) notifyWhatsApp(`💬 ${firstName} está no chat!\nEmpresa: ${empresa||"?"}\nNicho: ${nicho||"?"}\nPergunta: "${(messages[messages.length-1]?.content||"").substring(0,80)}"`);
     res.json({ text });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
+
 
 // ── NOTIFICAR PROGRESSO ───────────────────────────────────────────────────
 app.post("/api/notify", async (req, res) => {
@@ -301,9 +300,11 @@ app.post("/api/notify", async (req, res) => {
   let msg = "";
   if (type === "perfil_completo") {
     const p = profile || {};
+    const empresa = profile?.empresa || "";
     msg = `🎯 *VendaMais — Novo Lead Completo!*
 ━━━━━━━━━━━━━━━━━━━
 👤 Nome: ${userName}
+🏪 Empresa: ${empresa||"Não informada"}
 📍 Cidade: ${city||"Não informada"}
 🏢 Nicho: ${nicho||"?"}
 👥 Porte: ${p.size||"?"}
