@@ -887,33 +887,36 @@ async function generateTips(){
   document.getElementById("result-badges").innerHTML=[state.nichoLabel,state.city||null,sz?.label,mo?.label,ti?.label].filter(Boolean).map(t=>'<span class="badge">'+t+"</span>").join("");
   document.getElementById("loading-text").textContent="Pesquisando dados do mercado de "+state.nicho+(state.city?" em "+state.city:"")+"...";
 
-  const sys=`Você é um consultor sênior de vendas com 25 anos de experiência no mercado brasileiro.
+  const sys=`Você é um consultor sênior de vendas com 25 anos de experiência no mercado brasileiro. Você conhece como as maiores empresas de cada setor cresceram e usa isso para orientar pequenos e médios negócios.
 
-Gere EXATAMENTE 3 dicas de vendas. Uma de Marketing, uma de Vendas e uma de Network.
+Responda APENAS com um JSON válido, sem markdown, sem explicação, exatamente neste formato:
+{
+  "dica1": {
+    "tema": "Marketing",
+    "titulo": "título da dica de marketing aqui",
+    "texto": "4 a 5 linhas de texto aqui. Cite cases reais de grandes empresas do setor. Use dados e percentuais reais do mercado brasileiro. Considere a cidade/região. Linguagem de mentor direto.",
+    "acao": "ação específica para executar esta semana"
+  },
+  "dica2": {
+    "tema": "Vendas",
+    "titulo": "título da dica de vendas aqui",
+    "texto": "4 a 5 linhas de texto aqui com dados reais, exemplos concretos e contexto do mercado.",
+    "acao": "ação específica para executar esta semana"
+  },
+  "dica3": {
+    "tema": "Network",
+    "titulo": "título da dica de network aqui",
+    "texto": "4 a 5 linhas de texto aqui com dados reais, exemplos concretos e contexto do mercado.",
+    "acao": "ação específica para executar esta semana"
+  }
+}
 
-Use EXATAMENTE este formato, sem alterar nada:
-
-DICA1_TEMA: Marketing
-DICA1_TITULO: [título da dica aqui]
-DICA1_TEXTO: [4 a 5 linhas de texto aqui com dados reais, exemplos de grandes empresas do setor e contexto regional]
-DICA1_ACAO: [ação específica para executar esta semana]
-
-DICA2_TEMA: Vendas
-DICA2_TITULO: [título da dica aqui]
-DICA2_TEXTO: [4 a 5 linhas de texto aqui com dados reais, exemplos de grandes empresas do setor e contexto regional]
-DICA2_ACAO: [ação específica para executar esta semana]
-
-DICA3_TEMA: Network
-DICA3_TITULO: [título da dica aqui]
-DICA3_TEXTO: [4 a 5 linhas de texto aqui com dados reais, exemplos de grandes empresas do setor e contexto regional]
-DICA3_ACAO: [ação específica para executar esta semana]
-
-Regras:
-- Cite cases reais de grandes empresas do setor
-- Use dados e percentuais reais do mercado brasileiro
-- Considere a cidade/região informada
-- Linguagem direta de mentor, não de robô
-- NUNCA deixe os campos vazios`;
+REGRAS:
+- Retorne APENAS o JSON, nada mais
+- Nunca deixe campos vazios
+- Cite cases reais: padaria → Pão de Açúcar, Padaria Americana; segurança → Prosegur, G4S
+- Use dados reais do mercado brasileiro de 2025-2026
+- Considere a cidade e região informada`;
 
   const usr=`PERFIL:
 Nicho: ${state.nicho}
@@ -991,21 +994,47 @@ function renderConsultInvite(){
 
 // ── PARSER ────────────────────────────────────────────────────────────────
 function parseDicas(text){
+  const temas=["Marketing","Vendas","Network"];
+  try{
+    // Tenta JSON primeiro — formato mais confiável
+    const clean=text.replace(/```json|```/g,"").trim();
+    const json=JSON.parse(clean);
+    const dicas=[];
+    ["dica1","dica2","dica3"].forEach((key,i)=>{
+      const d=json[key];
+      if(d&&d.titulo)dicas.push({
+        tema:d.tema||temas[i],
+        titulo:d.titulo||"Dica "+(i+1),
+        texto:d.texto||"",
+        acao:d.acao||""
+      });
+    });
+    if(dicas.length>=2)return dicas;
+  }catch(e){}
+
+  // Fallback: formato DICA1_TEMA:
   const dicas=[];
-  const blocks=text.split(/\n(?=\[TEMA:)/);
-  blocks.forEach(block=>{
-    const tema=(block.match(/\[TEMA:\s*([^\]]+)\]/)||[])[1]?.trim()||"Estratégia";
-    const titulo=(block.match(/\[TITULO:\s*([^\]]+)\]/)||[])[1]?.trim()||"Dica de vendas";
-    const textoM=block.match(/\[TEXTO:\s*([\s\S]+?)\]\s*\[ACAO:/);
+  for(let n=1;n<=3;n++){
+    const tema=(text.match(new RegExp("DICA"+n+"_TEMA:\s*(.+)"))||[])[1]?.trim()||temas[n-1];
+    const titulo=(text.match(new RegExp("DICA"+n+"_TITULO:\s*(.+)"))||[])[1]?.trim()||"";
+    const textoM=text.match(new RegExp("DICA"+n+"_TEXTO:\s*([\s\S]+?)(?=DICA"+n+"_ACAO:|DICA"+(n+1)+"_TEMA:|$)"));
     const texto=textoM?textoM[1].trim():"";
-    const acao=(block.match(/\[ACAO:\s*([\s\S]+?)(?:\]|$)/)||[])[1]?.trim()||"";
+    const acaoM=text.match(new RegExp("DICA"+n+"_ACAO:\s*([\s\S]+?)(?=DICA"+(n+1)+"_TEMA:|$)"));
+    const acao=acaoM?acaoM[1].trim():"";
     if(titulo)dicas.push({tema,titulo,texto,acao});
-  });
-  if(!dicas.length){
-    const paras=text.split(/\n{2,}/).filter(p=>p.trim().length>30);
-    paras.slice(0,3).forEach((p,i)=>dicas.push({tema:["Marketing","Vendas","Network"][i]||"Estratégia",titulo:"Dica "+(i+1),texto:p.trim(),acao:""}));
   }
-  return dicas.slice(0,3);
+  if(dicas.length>=2)return dicas.slice(0,3);
+
+  // Fallback final: parágrafos
+  const paras=text.split("\n\n").filter(p=>p.trim().length>50);
+  const result=[];
+  paras.slice(0,3).forEach((p,i)=>{
+    const lines=p.split("\n").filter(l=>l.trim());
+    const titulo=lines[0].split("**").join("").replace(/^\d+[.)]\s*/,"").trim();
+    const texto=lines.slice(1).join(" ").trim();
+    result.push({tema:temas[i]||"Estratégia",titulo:titulo||"Dica "+(i+1),texto:texto||p.trim(),acao:""});
+  });
+  return result.slice(0,3);
 }
 
 // ── RENDER DICAS ──────────────────────────────────────────────────────────
@@ -1219,9 +1248,11 @@ function initConsult(){
     });
   }
   if(!consultInited&&chatHistory.length===0){
+    const firstName=(currentUser?.name||"").split(" ")[0]||"";
+    const saudacao=firstName?"Olá, "+firstName+"!":"Olá!";
     const greeting=state.nicho?
-      "Olá! Sou seu consultor especializado em "+state.nicho+(state.city?" na região de "+state.city:"")+". Tenho o contexto completo das suas dicas. Clique em uma delas acima para aprofundar, ou me faça qualquer pergunta sobre vendas!":
-      "Olá! Sou seu consultor de vendas. Gere suas dicas primeiro para que eu possa te ajudar com contexto personalizado. O que posso responder por enquanto?";
+      saudacao+" Sou seu consultor especializado em "+state.nicho+(state.city?" aqui em "+state.city:"")+". Já tenho o contexto do seu negócio e das suas dicas. Clique em uma delas acima para aprofundar, ou me pergunte qualquer coisa sobre vendas!":
+      saudacao+" Sou seu consultor de vendas. Gere suas dicas primeiro para que eu possa te ajudar com contexto personalizado do seu negócio!";
     addAIMessage(greeting);
     consultInited=true;
   }
@@ -1261,8 +1292,20 @@ async function sendChat(){
   addXP(5,"Consultou a IA!");
   if(unlockAchievement("consultor")){}
   try{
+    const sz=SIZES.find(x=>x.id===state.size),mo=MODELS.find(x=>x.id===state.model),ti=TICKETS.find(x=>x.id===state.ticket);
     const res=await fetch("/api/consult",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({messages:chatHistory.filter(m=>m.role==="user"||m.role==="assistant"),nicho:state.nicho||"negócios",city:state.city||"",userName:currentUser?.name||"visitante"})});
+      body:JSON.stringify({
+        messages:chatHistory.filter(m=>m.role==="user"||m.role==="assistant"),
+        nicho:state.nicho||"negócios",
+        city:state.city||"",
+        userName:currentUser?.name||"visitante",
+        profile:{
+          size:sz?.label||"",
+          ticket:ti?.label||"",
+          model:mo?.label||"",
+          challenges:state.challenges.join(", "),
+        }
+      })});
     const data=await res.json();
     removeTyping();addAIMessage(data.text||"Erro ao responder. Tente novamente.");
   }catch(e){removeTyping();addAIMessage("Erro de conexão. Verifique sua internet.");}
