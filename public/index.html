@@ -887,22 +887,33 @@ async function generateTips(){
   document.getElementById("result-badges").innerHTML=[state.nichoLabel,state.city||null,sz?.label,mo?.label,ti?.label].filter(Boolean).map(t=>'<span class="badge">'+t+"</span>").join("");
   document.getElementById("loading-text").textContent="Pesquisando dados do mercado de "+state.nicho+(state.city?" em "+state.city:"")+"...";
 
-  const sys=`Você é um consultor comercial sênior com 25 anos de experiência no mercado brasileiro, especialista em crescimento de vendas em diferentes setores e regiões do país. Você conhece profundamente como as maiores empresas de cada setor operam e usa isso para orientar pequenos e médios negócios.
+  const sys=`Você é um consultor sênior de vendas com 25 anos de experiência no mercado brasileiro.
 
-REGRAS ABSOLUTAS:
-1. CASES REAIS — cite como grandes empresas do setor resolveram o mesmo problema
-2. DADOS CONCRETOS — percentuais, tendências, números reais do mercado brasileiro
-3. REGIONAL — considere a realidade econômica e cultural da cidade/região informada
-4. ZERO GENERICIDADE — cada dica menciona situações e nomes concretos daquele nicho
-5. LINGUAGEM HUMANA — escreva como um mentor experiente, não como lista de tópicos
-6. AÇÃO IMEDIATA — cada dica termina com algo executável HOJE ou AMANHÃ
-7. O ÓBVIO DEVE SER DITO — não presuma que o empresário já sabe o básico
+Gere EXATAMENTE 3 dicas de vendas. Uma de Marketing, uma de Vendas e uma de Network.
 
-FORMATO para cada dica:
-[TEMA: Marketing/Vendas/Network]
-[TITULO: título forte e direto]
-[TEXTO: desenvolvimento de 4-5 linhas com dados reais e exemplos concretos]
-[ACAO: ação específica para executar esta semana]`;
+Use EXATAMENTE este formato, sem alterar nada:
+
+DICA1_TEMA: Marketing
+DICA1_TITULO: [título da dica aqui]
+DICA1_TEXTO: [4 a 5 linhas de texto aqui com dados reais, exemplos de grandes empresas do setor e contexto regional]
+DICA1_ACAO: [ação específica para executar esta semana]
+
+DICA2_TEMA: Vendas
+DICA2_TITULO: [título da dica aqui]
+DICA2_TEXTO: [4 a 5 linhas de texto aqui com dados reais, exemplos de grandes empresas do setor e contexto regional]
+DICA2_ACAO: [ação específica para executar esta semana]
+
+DICA3_TEMA: Network
+DICA3_TITULO: [título da dica aqui]
+DICA3_TEXTO: [4 a 5 linhas de texto aqui com dados reais, exemplos de grandes empresas do setor e contexto regional]
+DICA3_ACAO: [ação específica para executar esta semana]
+
+Regras:
+- Cite cases reais de grandes empresas do setor
+- Use dados e percentuais reais do mercado brasileiro
+- Considere a cidade/região informada
+- Linguagem direta de mentor, não de robô
+- NUNCA deixe os campos vazios`;
 
   const usr=`PERFIL:
 Nicho: ${state.nicho}
