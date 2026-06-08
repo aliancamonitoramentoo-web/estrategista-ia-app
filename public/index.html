@@ -1340,7 +1340,12 @@ async function sendChat(){
         }
       })});
     const data=await res.json();
-    removeTyping();addAIMessage(data.text||"Erro ao responder. Tente novamente.");
+    removeTyping();
+    if(data.texto||data.text){
+      addAIMessageEnhanced(data);
+    } else {
+      addAIMessage("Erro ao responder. Tente novamente.");
+    }
   }catch(e){removeTyping();addAIMessage("Erro de conexão. Verifique sua internet.");}
   document.getElementById("chat-send-btn").disabled=false;
 }
@@ -1379,6 +1384,33 @@ function shareWhatsApp(){
 }
 
 document.getElementById("auth-modal").addEventListener("click",function(e){if(e.target===this)closeAuth();});
+
+let lastAIResponse = "";
+
+async function generateConsultPDF(){
+  if(!lastAIResponse)return;
+  const btn=document.querySelector(".chat-pdf-btn");
+  if(btn){btn.textContent="⏳ Gerando...";btn.disabled=true;}
+  try{
+    const empresa=currentUser?.empresa||localStorage.getItem("vm_empresa")||"";
+    const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4"});
+    const W=doc.internal.pageSize.getWidth(),margin=20,maxW=W-margin*2;
+    doc.setFillColor(255,107,53);doc.rect(0,0,W,18,"F");
+    doc.setTextColor(0,0,0);doc.setFontSize(13);doc.setFont("helvetica","bold");
+    doc.text("VendaMais — Relatório do Consultor IA",margin,12);
+    doc.setFillColor(20,20,28);doc.rect(0,18,W,14,"F");
+    doc.setTextColor(150,150,150);doc.setFontSize(9);doc.setFont("helvetica","normal");
+    const meta=(empresa||currentUser?.name||"")+(state.nicho?" · "+state.nicho:"")+(state.city?" · "+state.city:"");
+    doc.text(meta,margin,27);doc.text("Gerado em "+new Date().toLocaleString("pt-BR"),W-margin,27,{align:"right"});
+    doc.setTextColor(220,220,210);doc.setFontSize(11);
+    const lines=doc.splitTextToSize(lastAIResponse,maxW);let y=44;
+    lines.forEach(line=>{if(y>270){doc.addPage();y=20;}doc.text(line,margin,y);y+=6.5;});
+    doc.setTextColor(255,107,53);doc.setFontSize(9);
+    doc.text("instagram.com/grupoalianca_monitoramento",margin,285);
+    doc.save("VendaMais-Consultor.pdf");
+  }catch(e){console.error(e);}
+  if(btn){btn.textContent="✅ PDF gerado!";setTimeout(()=>{btn.textContent="📄 Gerar PDF deste relatório";btn.disabled=false;},3000);}
+}
 
 function addAIMessageEnhanced(data){
   const text = data.texto || data.text || "";
@@ -1523,52 +1555,6 @@ function addAIMessageEnhanced(data){
   document.getElementById("chat-messages").appendChild(wrap);
   scrollChat();
 }
-
-    // Vídeo com thumbnail clicável
-  if(video && video.id){
-    const videoLink = document.createElement("a");
-    videoLink.href = "https://youtube.com/watch?v=" + video.id;
-    videoLink.target = "_blank";
-    videoLink.style.cssText = "display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;text-decoration:none;cursor:pointer";
-
-    // Thumb
-    const thumb = document.createElement("div");
-    thumb.style.cssText = "width:72px;height:48px;border-radius:6px;overflow:hidden;flex-shrink:0;position:relative;background:#111";
-    const img = document.createElement("img");
-    img.src = "https://img.youtube.com/vi/" + video.id + "/mqdefault.jpg";
-    img.style.cssText = "width:100%;height:100%;object-fit:cover";
-    img.loading = "lazy";
-    const playOverlay = document.createElement("div");
-    playOverlay.style.cssText = "position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3)";
-    const playBtn = document.createElement("div");
-    playBtn.style.cssText = "width:26px;height:26px;background:#FF6B35;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#000";
-    playBtn.textContent = "▶";
-    playOverlay.appendChild(playBtn);
-    thumb.appendChild(img);
-    thumb.appendChild(playOverlay);
-
-    // Info
-    const info = document.createElement("div");
-    info.style.cssText = "flex:1;min-width:0";
-    const label = document.createElement("div");
-    label.style.cssText = "font-size:10px;color:#FF6B35;font-family:sans-serif;margin-bottom:3px";
-    label.textContent = "🎬 VÍDEO RECOMENDADO";
-    const titulo = document.createElement("div");
-    titulo.style.cssText = "font-size:12px;color:#ccc;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis";
-    titulo.textContent = video.titulo || "Vídeo relacionado";
-    const canal = document.createElement("div");
-    canal.style.cssText = "font-size:11px;color:#555;font-family:sans-serif;margin-top:2px";
-    canal.textContent = (video.canal || "") + " · Abre no YouTube ↗";
-    info.appendChild(label);
-    info.appendChild(titulo);
-    info.appendChild(canal);
-
-    videoLink.appendChild(thumb);
-    videoLink.appendChild(info);
-    inner.appendChild(videoLink);
-  }
-
-  
 
 </script>
 </body>
