@@ -929,11 +929,13 @@ Responda APENAS com um JSON válido, sem markdown, sem explicação, exatamente 
 }
 
 REGRAS:
-- Retorne APENAS o JSON, nada mais
-- Nunca deixe campos vazios
-- Cite cases reais: padaria → Pão de Açúcar, Padaria Americana; segurança → Prosegur, G4S
+- Retorne APENAS o JSON puro, começando com { e terminando com }
+- NUNCA use markdown, NUNCA use blocos de codigo, NUNCA adicione texto antes ou depois
+- Nunca deixe campos vazios — texto deve ter no mínimo 3 frases
+- Cite cases reais: padaria → Pão de Açúcar, Bob's; segurança → Prosegur, G4S
 - Use dados reais do mercado brasileiro de 2025-2026
-- Considere a cidade e região informada`;
+- Considere a cidade e região informada
+- O JSON deve ser válido e parseável diretamente`;
 
   const usr=`PERFIL:
 Nicho: ${state.nicho}
@@ -1012,22 +1014,32 @@ function renderConsultInvite(){
 // ── PARSER ────────────────────────────────────────────────────────────────
 function parseDicas(text){
   const temas=["Marketing","Vendas","Network"];
-  try{
-    // Tenta JSON primeiro — formato mais confiável
-    const clean=text.replace(/```json|```/g,"").trim();
-    const json=JSON.parse(clean);
-    const dicas=[];
-    ["dica1","dica2","dica3"].forEach((key,i)=>{
-      const d=json[key];
-      if(d&&d.titulo)dicas.push({
-        tema:d.tema||temas[i],
-        titulo:d.titulo||"Dica "+(i+1),
-        texto:d.texto||"",
-        acao:d.acao||""
+  
+  // Tenta JSON — limpa de todas as formas possíveis
+  const attempts=[
+    text.trim(),
+    text.startsWith("```") ? text.split("\n").slice(1,-1).join("\n").trim() : "",
+    text.split("```json").join("").split("```").join("").trim(),
+    (text.match(/[{][\s\S]*[}]/)||[""])[0].trim()
+  ];
+  
+  for(const attempt of attempts){
+    try{
+      if(!attempt.startsWith("{"))continue;
+      const parsed=JSON.parse(attempt);
+      const dicas=[];
+      ["dica1","dica2","dica3"].forEach((key,i)=>{
+        const d=parsed[key];
+        if(d&&d.titulo&&d.texto)dicas.push({
+          tema:d.tema||temas[i],
+          titulo:d.titulo||"Dica "+(i+1),
+          texto:d.texto||"",
+          acao:d.acao||""
+        });
       });
-    });
-    if(dicas.length>=2)return dicas;
-  }catch(e){}
+      if(dicas.length>=2)return dicas;
+    }catch(e){}
+  }
 
   // Fallback: formato DICA1_TEMA:
   const dicas=[];
