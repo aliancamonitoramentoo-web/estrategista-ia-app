@@ -252,101 +252,55 @@ app.post("/api/consult", async (req, res) => {
 
   const businessContext = `PERFIL: Nome: ${firstName} | Empresa: ${empresa||"?"} | Nicho: ${nicho||"?"} | Cidade: ${city||"Brasil"} | Porte: ${profile?.size||"?"} | Ticket: ${profile?.ticket||"?"} | Modelo: ${profile?.model||"?"} | Desafios: ${profile?.challenges||"?"}`;
 
-  const sys = `Consultor de vendas para "${nicho||"negócios"}" em "${city||"Brasil"}". Trate por: ${firstName}. ${empresa?"Empresa: "+empresa+".":""} ${businessContext}
+  const sys = `Você é um consultor especialista em vendas para "${nicho||"negócios"}" em "${city||"Brasil"}". Trate SEMPRE por: ${firstName}. ${empresa?`Empresa: "${empresa}".`:""}
 
-Use web_search para concorrentes, mercado local e tendências.
+${businessContext}
 
-Responda APENAS com JSON:
-{"texto":"resposta direta máx 3 parágrafos","chart":null,"video":null,"oferecer_pdf":false}
+Você conhece profundamente o mercado brasileiro de ${nicho||"negócios"} e usa esse conhecimento para dar respostas específicas sobre concorrentes, preços e tendências de ${city||"Brasil"}.
 
-chart (ou null): {"tipo":"bar","titulo":"título","labels":["A","B","C"],"valores":[10,20,30]}
-video (ou null): {"id":"ID11CHARS","titulo":"título do vídeo","canal":"canal"}
-oferecer_pdf: true se resposta for relatório extenso`;
+Responda APENAS com JSON válido:
+{"texto":"resposta aqui máx 3 parágrafos diretos e práticos","chart":null,"video":null,"oferecer_pdf":false}
+
+chart quando tiver dados numéricos: {"tipo":"bar","titulo":"título","labels":["A","B","C"],"valores":[10,20,30]}
+video quando relevante: {"id":"ID11CHARS","titulo":"título exato","canal":"canal"}
+oferecer_pdf: true se for relatório extenso`;
 
   try {
-    // First call with web search
-    const r1 = await fetch("https://api.anthropic.com/v1/messages", {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 2000,
+        max_tokens: 1500,
         system: sys,
-        tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: messages,
       }),
     });
 
-    if (!r1.ok) {
-      const err = await r1.text();
-      console.error("API error:", r1.status, err);
-      return res.status(500).json({ error: "Erro na API: " + r1.status });
+    if (!r.ok) {
+      const err = await r.text();
+      console.error("API error:", r.status, err);
+      return res.status(500).json({ error: "Erro API: " + r.status });
     }
 
-    const d1 = await r1.json();
-    console.log("First call stop_reason:", d1.stop_reason);
+    const data = await r.json();
+    let rawText = data.content?.map(b => b.text || "").join("") || "";
 
-    let finalText = "";
-    let searchUsed = false;
-
-    // Extract text blocks
-    for (const block of (d1.content || [])) {
-      if (block.type === "text") finalText += block.text;
-      if (block.type === "tool_use") searchUsed = true;
+    if (!rawText) {
+      return res.status(500).json({ error: "Resposta vazia da API" });
     }
 
-    // If tool was used, do follow-up
-    if (searchUsed && d1.stop_reason === "tool_use") {
-      const toolUseBlocks = (d1.content || []).filter(b => b.type === "tool_use");
-      const toolResults = toolUseBlocks.map(b => ({
-        type: "tool_result",
-        tool_use_id: b.id,
-        content: "Dados encontrados. Agora responda a pergunta do cliente com base nas informações pesquisadas."
-      }));
-
-      const r2 = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1200,
-          system: sys,
-          tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages: [
-            ...messages,
-            { role: "assistant", content: d1.content },
-            { role: "user", content: toolResults }
-          ],
-        }),
-      });
-
-      if (!r2.ok) {
-        const err = await r2.text();
-        console.error("Follow-up error:", r2.status, err);
-      } else {
-        const d2 = await r2.json();
-        finalText = "";
-        for (const block of (d2.content || [])) {
-          if (block.type === "text") finalText += block.text;
-        }
-      }
-    }
-
-    if (!finalText) {
-      finalText = JSON.stringify({ texto: "Não consegui processar sua pergunta. Tente novamente.", chart: null, video: null, oferecer_pdf: false });
-    }
-
-    // Parse JSON response
+    // Parse JSON
     let parsed = null;
     try {
-      const clean = finalText.split("```json").join("").split("```").join("").trim();
+      const clean = rawText.split("```json").join("").split("```").join("").trim();
       const jsonStr = clean.startsWith("{") ? clean : (clean.match(/\{[\s\S]*\}/) || ["{}"])[0];
       parsed = JSON.parse(jsonStr);
     } catch(e) {
-      parsed = { texto: finalText, chart: null, video: null, oferecer_pdf: false };
+      parsed = { texto: rawText, chart: null, video: null, oferecer_pdf: false };
     }
 
-    // Validate video
+    // Validate video ID
     if (parsed.video?.id && parsed.video.id.length === 11) {
       try {
         const vr = await fetch(`https://img.youtube.com/vi/${parsed.video.id}/mqdefault.jpg`, { method: "HEAD" });
@@ -356,11 +310,11 @@ oferecer_pdf: true se resposta for relatório extenso`;
     } else { parsed.video = null; }
 
     const lastMsg = (messages[messages.length-1]?.content || "").substring(0, 80);
-    notifyWhatsApp(`💬 ${firstName} (${empresa||nicho||"?"}) perguntou: "${lastMsg}"${searchUsed?" 🔍":""}`).catch(()=>{});
+    notifyWhatsApp(`💬 ${firstName} (${empresa||nicho||"?"}) perguntou: "${lastMsg}"`).catch(()=>{});
 
-    res.json({ ...parsed, searchUsed });
+    res.json({ ...parsed, searchUsed: false });
   } catch (err) {
-    console.error("Consult error:", err.message, err.stack);
+    console.error("Consult error:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
