@@ -252,12 +252,16 @@ app.post("/api/consult", async (req, res) => {
 
   const businessContext = `PERFIL: Nome: ${firstName} | Empresa: ${empresa||"?"} | Nicho: ${nicho||"?"} | Cidade: ${city||"Brasil"} | Porte: ${profile?.size||"?"} | Ticket: ${profile?.ticket||"?"} | Modelo: ${profile?.model||"?"} | Desafios: ${profile?.challenges||"?"}`;
 
-  const sys = `Você é consultor especialista em vendas para "${nicho||"negócios"}" em "${city||"Brasil"}".
-${businessContext}
-Use web_search para buscar dados reais quando perguntarem sobre concorrentes, mercado local, preços ou tendências.
-Trate SEMPRE por: ${firstName}. ${empresa?`Empresa: "${empresa}".`:""}
-Responda em JSON: {"texto":"resposta aqui","chart":{"tipo":"bar","titulo":"título","labels":["A","B"],"valores":[10,20]},"video":{"id":"XXXXXXXXXXX","titulo":"título","canal":"canal"},"oferecer_pdf":false}
-chart pode ser null se não houver dados numéricos. video deve ter ID real de 11 chars do YouTube em português.`;
+  const sys = `Consultor de vendas para "${nicho||"negócios"}" em "${city||"Brasil"}". Trate por: ${firstName}. ${empresa?"Empresa: "+empresa+".":""} ${businessContext}
+
+Use web_search para concorrentes, mercado local e tendências.
+
+Responda APENAS com JSON:
+{"texto":"resposta direta máx 3 parágrafos","chart":null,"video":null,"oferecer_pdf":false}
+
+chart (ou null): {"tipo":"bar","titulo":"título","labels":["A","B","C"],"valores":[10,20,30]}
+video (ou null): {"id":"ID11CHARS","titulo":"título do vídeo","canal":"canal"}
+oferecer_pdf: true se resposta for relatório extenso`;
 
   try {
     // First call with web search
@@ -266,7 +270,7 @@ chart pode ser null se não houver dados numéricos. video deve ter ID real de 1
       headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1200,
+        max_tokens: 2000,
         system: sys,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: messages,
