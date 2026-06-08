@@ -250,138 +250,113 @@ app.post("/api/consult", async (req, res) => {
   const { messages, nicho, city, userName, empresa, profile } = req.body;
   const firstName = (userName||"").split(" ")[0] || "amigo";
 
-  const businessContext = `PERFIL DO CLIENTE:
-- Nome: ${firstName}
-- Empresa: ${empresa||"não informada"}
-- Nicho: ${nicho||"?"}
-- Cidade: ${city||"Brasil"}
-- Porte: ${profile?.size||"?"}
-- Ticket médio: ${profile?.ticket||"?"}
-- Modelo de venda: ${profile?.model||"?"}
-- Principais desafios: ${profile?.challenges||"?"}`;
+  const businessContext = `PERFIL: Nome: ${firstName} | Empresa: ${empresa||"?"} | Nicho: ${nicho||"?"} | Cidade: ${city||"Brasil"} | Porte: ${profile?.size||"?"} | Ticket: ${profile?.ticket||"?"} | Modelo: ${profile?.model||"?"} | Desafios: ${profile?.challenges||"?"}`;
 
-  const sys = `Você é um consultor especialista em vendas para "${nicho||"negócios"}" ${city?"em "+city:"no Brasil"}.
-
+  const sys = `Você é consultor especialista em vendas para "${nicho||"negócios"}" em "${city||"Brasil"}".
 ${businessContext}
-
-VOCÊ TEM ACESSO A DADOS EM TEMPO REAL via web_search. USE SEMPRE para:
-- Concorrentes locais e regionais
-- Preços e tendências do mercado
-- Dados de empresas do setor
-- Qualquer informação atual
-
-FORMATO DE RESPOSTA — retorne SEMPRE um JSON válido sem markdown:
-{
-  "texto": "resposta principal aqui, direta e prática, máximo 4 parágrafos",
-  "chart": {
-    "tipo": "bar" ou "line" ou "pizza" ou null,
-    "titulo": "título do gráfico",
-    "labels": ["label1","label2","label3"],
-    "valores": [10, 20, 30],
-    "cor": "#FF6B35"
-  },
-  "video": {
-    "id": "ID_YOUTUBE_11_CHARS",
-    "titulo": "título exato do vídeo",
-    "canal": "nome do canal"
-  },
-  "oferecer_pdf": true ou false
-}
-
-REGRAS:
-- Trate SEMPRE por: ${firstName}
-- chart: inclua quando houver dados numéricos (crescimento, comparativos, market share). null se não houver.
-- video: escolha um vídeo real do YouTube em português sobre o tema da resposta. ID de 11 chars que você tem certeza que existe.
-- oferecer_pdf: true quando a resposta for um relatório extenso
-- texto: nunca genérico, sempre específico para ${nicho} em ${city||"Brasil"}`;
+Use web_search para buscar dados reais quando perguntarem sobre concorrentes, mercado local, preços ou tendências.
+Trate SEMPRE por: ${firstName}. ${empresa?`Empresa: "${empresa}".`:""}
+Responda em JSON: {"texto":"resposta aqui","chart":{"tipo":"bar","titulo":"título","labels":["A","B"],"valores":[10,20]},"video":{"id":"XXXXXXXXXXX","titulo":"título","canal":"canal"},"oferecer_pdf":false}
+chart pode ser null se não houver dados numéricos. video deve ter ID real de 11 chars do YouTube em português.`;
 
   try {
-    const r = await fetch("https://api.anthropic.com/v1/messages", {
+    // First call with web search
+    const r1 = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1400,
+        max_tokens: 1200,
         system: sys,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: messages,
       }),
     });
-    const data = await r.json();
 
-    let rawText = "";
-    let searchUsed = false;
-    let toolResults = [];
-
-    if (data.content) {
-      for (const block of data.content) {
-        if (block.type === "text") rawText += block.text;
-        if (block.type === "tool_use") { searchUsed = true; toolResults.push(block); }
-      }
+    if (!r1.ok) {
+      const err = await r1.text();
+      console.error("API error:", r1.status, err);
+      return res.status(500).json({ error: "Erro na API: " + r1.status });
     }
 
-    // If search was used, get final response
-    if (searchUsed) {
-      const followMsgs = [...messages, { role: "assistant", content: data.content }];
-      
-      // Add tool results
-      if (toolResults.length > 0) {
-        followMsgs.push({
-          role: "user",
-          content: toolResults.map(t => ({
-            type: "tool_result",
-            tool_use_id: t.id,
-            content: "Resultados da busca processados. Agora forneça a resposta JSON completa com os dados encontrados."
-          }))
-        });
-      }
+    const d1 = await r1.json();
+    console.log("First call stop_reason:", d1.stop_reason);
 
-      const follow = await fetch("https://api.anthropic.com/v1/messages", {
+    let finalText = "";
+    let searchUsed = false;
+
+    // Extract text blocks
+    for (const block of (d1.content || [])) {
+      if (block.type === "text") finalText += block.text;
+      if (block.type === "tool_use") searchUsed = true;
+    }
+
+    // If tool was used, do follow-up
+    if (searchUsed && d1.stop_reason === "tool_use") {
+      const toolUseBlocks = (d1.content || []).filter(b => b.type === "tool_use");
+      const toolResults = toolUseBlocks.map(b => ({
+        type: "tool_result",
+        tool_use_id: b.id,
+        content: "Dados encontrados. Agora responda a pergunta do cliente com base nas informações pesquisadas."
+      }));
+
+      const r2 = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
-          max_tokens: 1400,
+          max_tokens: 1200,
           system: sys,
           tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages: followMsgs,
+          messages: [
+            ...messages,
+            { role: "assistant", content: d1.content },
+            { role: "user", content: toolResults }
+          ],
         }),
       });
-      const followData = await follow.json();
-      if (followData.content) {
-        rawText = "";
-        for (const block of followData.content) {
-          if (block.type === "text") rawText += block.text;
+
+      if (!r2.ok) {
+        const err = await r2.text();
+        console.error("Follow-up error:", r2.status, err);
+      } else {
+        const d2 = await r2.json();
+        finalText = "";
+        for (const block of (d2.content || [])) {
+          if (block.type === "text") finalText += block.text;
         }
       }
+    }
+
+    if (!finalText) {
+      finalText = JSON.stringify({ texto: "Não consegui processar sua pergunta. Tente novamente.", chart: null, video: null, oferecer_pdf: false });
     }
 
     // Parse JSON response
     let parsed = null;
     try {
-      const clean = rawText.replace(/```json/g,"").replace(/```/g,"").trim();
-      parsed = JSON.parse(clean);
+      const clean = finalText.split("```json").join("").split("```").join("").trim();
+      const jsonStr = clean.startsWith("{") ? clean : (clean.match(/\{[\s\S]*\}/) || ["{}"])[0];
+      parsed = JSON.parse(jsonStr);
     } catch(e) {
-      // Fallback: treat as plain text
-      parsed = { texto: rawText, chart: null, video: null, oferecer_pdf: false };
+      parsed = { texto: finalText, chart: null, video: null, oferecer_pdf: false };
     }
 
-    // Validate video ID exists
-    if (parsed.video?.id) {
+    // Validate video
+    if (parsed.video?.id && parsed.video.id.length === 11) {
       try {
         const vr = await fetch(`https://img.youtube.com/vi/${parsed.video.id}/mqdefault.jpg`, { method: "HEAD" });
-        const len = vr.headers.get("content-length");
-        if (!vr.ok || (len && parseInt(len) < 3000)) parsed.video = null;
+        const len = parseInt(vr.headers.get("content-length") || "9999");
+        if (!vr.ok || len < 3000) parsed.video = null;
       } catch { parsed.video = null; }
-    }
+    } else { parsed.video = null; }
 
-    const lastMsg = messages[messages.length-1]?.content || "";
-    notifyWhatsApp(`💬 ${firstName} está no chat!\nEmpresa: ${empresa||"?"}\nNicho: ${nicho||"?"}\nPergunta: "${lastMsg.substring(0,80)}"${searchUsed?" 🔍":""}`)
-      .catch(()=>{});
+    const lastMsg = (messages[messages.length-1]?.content || "").substring(0, 80);
+    notifyWhatsApp(`💬 ${firstName} (${empresa||nicho||"?"}) perguntou: "${lastMsg}"${searchUsed?" 🔍":""}`).catch(()=>{});
 
     res.json({ ...parsed, searchUsed });
   } catch (err) {
-    console.error("Consult error:", err.message);
+    console.error("Consult error:", err.message, err.stack);
     res.status(500).json({ error: err.message });
   }
 });
