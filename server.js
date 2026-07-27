@@ -176,40 +176,30 @@ app.post("/api/videos", async (req, res) => {
       const key = "dica" + (i + 1);
       const dica = dicas[i];
 
-      // Monta queries específicas para cada papel do vídeo
-      const queries = [
-        // Principal: direto ao tema da dica + nicho + vendas
-        `como vender ${sectorLabel} ${dica.tema} estratégia`,
-        // Complementar 1: técnica de vendas relacionada
-        `técnica vendas ${dica.tema} empreendedorismo negócios Brasil`,
-        // Complementar 2: case de sucesso empresarial
-        `empreendedor ${sectorLabel} case sucesso negócios crescimento`,
-      ];
+      // UMA única busca por dica (antes eram 3 = 9 por geração).
+      // Isso reduz o consumo da cota da API do YouTube em ~66%,
+      // evitando que o app caia no fallback fixo após poucos usos no dia.
+      const query = `${sectorLabel} ${dica.tema} vendas estratégia dicas`;
+      const videos = await searchYouTube(query, 6);
 
       const usedIds = new Set();
 
-      for (let q = 0; q < queries.length; q++) {
-        const videos = await searchYouTube(queries[q], 5);
-        const filtered = videos.filter(v => !usedIds.has(v.id));
-
-        if (filtered.length > 0) {
-          const v = filtered[0];
-          v.role = roles[q];
-          usedIds.add(v.id);
-          result[key].push(v);
-          console.log(`✅ ${key} [${roles[q]}]: ${v.title} — ${v.channel}`);
-        }
+      // Pega os 3 melhores resultados dessa única busca
+      for (const v of videos) {
+        if (result[key].length >= 3) break;
+        if (usedIds.has(v.id)) continue;
+        v.role = roles[result[key].length];
+        usedIds.add(v.id);
+        result[key].push(v);
+        console.log(`✅ ${key} [${v.role}]: ${v.title} — ${v.channel}`);
       }
 
-      // Completa com fallback se necessário
+      // Completa com fallback só se a busca não trouxe resultado suficiente
       while (result[key].length < 3) {
-        const fb = {...FALLBACK[result[key].length]};
-        if (!usedIds.has(fb.id)) {
-          result[key].push(fb);
-          usedIds.add(fb.id);
-        } else {
-          break;
-        }
+        const fb = { ...FALLBACK[result[key].length] };
+        if (usedIds.has(fb.id)) break;
+        result[key].push(fb);
+        usedIds.add(fb.id);
       }
     }
 
